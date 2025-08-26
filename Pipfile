@@ -5,8 +5,9 @@ name = "pypi"
 
 [packages]
 flask = "*"
-flask-sqlalchemy = "*"
 telebot = "*"
+sqlalchemy = "*"
+flask-sqlalchemy = "*"
 
 [dev-packages]
 

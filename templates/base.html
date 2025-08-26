@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Diordiev Crafts{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <a href="/" class="header__logo">Diordiev Crafts</a>
+            <nav class="header__nav">
+                <ul>
+                    <li><a href="/shop/boxes">Wooden Boxes</a></li>
+                    <li><a href="/shop/bracelets">Bracelets</a></li>
+                    <li><a href="/shop/candles">Candles</a></li>
+                    <hr>
+                    <li><a href="/shop/new">Updates</a></li>
+                    <li><a href="/about">About Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Diordiev Crafts. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Diordiev Crafts page loaded.');
+        });
+    </script>
+</body>
+</html>

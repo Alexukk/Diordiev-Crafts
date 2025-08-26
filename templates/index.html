@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Diordiev Crafts - Handcrafted Goods{% endblock %}
+
+{% block content %}
+    <section class="hero-section">
+        <div class="hero-section__content">
+            <h1 class="hero-section__title">Handcrafted with Passion</h1>
+            <p class="hero-section__tagline">Discover the beauty of unique creations made with love</p>
+            <a href="/shop" class="button">Shop Now</a>
+        </div>
+    </section>
+
+    <section class="collection-section">
+        <div class="container">
+            <h2>Our Collection</h2>
+            <div class="categories-grid">
+                <a href="/shop/boxes" class="category-item">
+                    <img src="/static/img/boxes.png" alt="Wooden Boxes">
+                    <h4>Wooden Boxes</h4>
+                </a>
+                <a href="/shop/bracelets" class="category-item">
+                    <img src="/static/img/bracelets.png" alt="Beaded Bracelets">
+                    <h4>Bracelets</h4>
+                </a>
+                <a href="/shop/candles" class="category-item">
+                    <img src="/static/img/candles.png" alt="Handmade Candles">
+                    <h4>Candles</h4>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <h2 class="section-title">Our Story</h2>
+            <div class="about-content">
+                <img src="/static/img/working_space.png" alt="Craftsman working">
+                <div class="about-text">
+                    <p>Diordiev Crafts was born from a passion for creating beautiful, meaningful objects with a personal touch. Each item is meticulously handcrafted, using high-quality materials to ensure it is not just a product, but a piece of art that brings joy and warmth into your home.</p>
+                    <p>From the intricate details of our wooden boxes to the soothing scents of our candles, we believe in the magic of handmade goods. Thank you for supporting our craft!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="call-to-action">
+        <div class="container">
+            <p>Ready to find your perfect piece?</p>
+            <a href="/shop" class="button">Explore the Full Collection</a>
+        </div>
+    </section>
+{% endblock %}
