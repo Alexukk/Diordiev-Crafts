@@ -1,10 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<section class="admin-panel-page container">
+    <h2>Admin Dashboard</h2>
+
+    <div class="admin-grid">
+        <div class="admin-card">
+            <h3>Add Product</h3>
+            <p>Create a new product listing.</p>
+            <a href="#" class="admin-button">Go</a>
+        </div>
+
+        <div class="admin-card">
+            <h3>Manage Products</h3>
+            <p>View, edit, or delete existing products.</p>
+            <a href="#" class="admin-button">Go</a>
+        </div>
+
+        <div class="admin-card">
+            <h3>Add Post</h3>
+            <p>Write a new blog post.</p>
+            <a href="#" class="admin-button">Go</a>
+        </div>
+
+        <div class="admin-card">
+            <h3>Manage Posts</h3>
+            <p>View, edit, or delete existing posts.</p>
+            <a href="#" class="admin-button">Go</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

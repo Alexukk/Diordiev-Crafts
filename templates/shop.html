@@ -1,10 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Shop - Diordiev Crafts{% endblock %}
+
+{% block content %}
+    <section class="shop-page container">
+        <div class="shop-controls">
+            <h1 class="page-title">All Products</h1>
+
+            <div class="dropdown">
+                <button class="sort-button">
+                    <span>Sort</span>
+                    <span class="arrow">⩒</span>
+                </button>
+                <div class="dropdown-content">
+                    <div class="filter-group">
+                        <p class="filter-title">Price</p>
+                        <label>
+                            <input type="checkbox" name="sort_by" value="price_asc">
+                            Low to High
+                        </label>
+                        <label>
+                            <input type="checkbox" name="sort_by" value="price_desc">
+                            High to Low
+                        </label>
+                    </div>
+
+                    <div class="filter-group">
+                        <p class="filter-title">Category</p>
+                        <label>
+                            <input type="checkbox" name="category" value="boxes">
+                            Wooden Boxes
+                        </label>
+                        <label>
+                            <input type="checkbox" name="category" value="bracelets">
+                            Bracelets
+                        </label>
+                        <label>
+                            <input type="checkbox" name="category" value="candles">
+                            Candles
+                        </label>
+                    </div>
+
+                    <button class="apply-filters-button">Apply</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <img src="{{product.photo1}}" alt="{{ product.name }}">
+                <h4>{{ product.name }}</h4>
+                <p class="price">{{ product.price }}$</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sortButton = document.querySelector('.sort-button');
+        const dropdownContent = document.querySelector('.dropdown-content');
+
+        // Открытие/закрытие меню
+        sortButton.addEventListener('click', (event) => {
+            event.stopPropagation(); // Останавливаем всплытие события, чтобы не закрывалось сразу
+            dropdownContent.classList.toggle('show');
+        });
+
+        // Закрытие меню при клике в любом месте, кроме самого меню
+        document.addEventListener('click', (event) => {
+            if (!dropdownContent.contains(event.target) && !sortButton.contains(event.target)) {
+                dropdownContent.classList.remove('show');
+            }
+        });
+
+        // Обработка кнопки "Apply"
+        document.querySelector('.apply-filters-button').addEventListener('click', () => {
+            const checkboxes = dropdownContent.querySelectorAll('input[type="checkbox"]:checked');
+            const params = [];
+
+            checkboxes.forEach(checkbox => {
+                params.push(`${checkbox.name}=${checkbox.value}`);
+            });
+
+            window.location.href = `/shop?${params.join('&')}`;
+        });
+    });
+</script>
+{% endblock %}

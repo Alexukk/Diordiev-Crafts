@@ -14,15 +14,15 @@
 
     <header class="header">
         <div class="container">
-            <a href="/" class="header__logo">Diordiev Crafts</a>
+            <a href="{{ url_for('index') }}" class="header__logo">Diordiev Crafts</a>
             <nav class="header__nav">
                 <ul>
-                    <li><a href="/shop/boxes">Wooden Boxes</a></li>
-                    <li><a href="/shop/bracelets">Bracelets</a></li>
-                    <li><a href="/shop/candles">Candles</a></li>
+                    <li><a href="{{ url_for('shop', category='boxes') }}">Wooden Boxes</a></li>
+                    <li><a href="{{ url_for('shop', category='bracelets') }}">Bracelets</a></li>
+                    <li><a href="{{ url_for('shop', category='candles') }}">Candles</a></li>
                     <hr>
-                    <li><a href="/shop/new">Updates</a></li>
-                    <li><a href="/about">About Us</a></li>
+                    <li><a href="{{ url_for('shop') }}">Shop</a></li>
+                    <li><a href="{{ url_for('aboutUs') }}">About Us</a></li>
                 </ul>
             </nav>
         </div>
@@ -33,7 +33,12 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; 2024 Diordiev Crafts. All rights reserved.</p>
+        <div class="container footer-content">
+            <p>&copy; 2025 Diordiev Crafts. All rights reserved.</p>
+            <p class="creator-info">
+                Powered by <a href="https://github.com/Alexukk" target="_blank">Alexukk</a>
+            </p>
+        </div>
     </footer>
 
     <script>

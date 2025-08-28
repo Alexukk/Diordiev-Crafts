@@ -15,15 +15,15 @@
         <div class="container">
             <h2>Our Collection</h2>
             <div class="categories-grid">
-                <a href="/shop/boxes" class="category-item">
+                <a href="{{url_for('shop', category='boxes')}}" class="category-item">
                     <img src="/static/img/boxes.png" alt="Wooden Boxes">
                     <h4>Wooden Boxes</h4>
                 </a>
-                <a href="/shop/bracelets" class="category-item">
+                <a href="{{url_for('shop', category='bracelets')}}" class="category-item">
                     <img src="/static/img/bracelets.png" alt="Beaded Bracelets">
                     <h4>Bracelets</h4>
                 </a>
-                <a href="/shop/candles" class="category-item">
+                <a href="{{url_for('shop', category='candles')}}" class="category-item">
                     <img src="/static/img/candles.png" alt="Handmade Candles">
                     <h4>Candles</h4>
                 </a>

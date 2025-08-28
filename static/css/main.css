@@ -352,4 +352,306 @@ h2, h4 {
     .about-content-section {
         padding: 30px 0;
     }
+}/* Общие стили для всех ссылок */
+a {
+    color: inherit; /* Наследует цвет от родительского элемента */
+    text-decoration: none; /* Убирает подчеркивание */
+    transition: color 0.3s ease;
+}
+
+/* Стили для ссылок в шапке (header) */
+.header a {
+    color: var(--cream);
+}
+
+.header a:hover {
+    color: var(--medium-roast);
+}
+
+/* Стили для ссылок в футере (footer) */
+.footer a {
+    color: var(--cream);
+    text-decoration: none;
+    border-bottom: 1px solid transparent; /* Создает эффект подчеркивания при наведении */
+}
+
+.footer a:hover {
+    border-bottom: 1px solid var(--cream);
+}/* --- Shop Page Styles --- */
+.shop-page {
+    padding: 40px 0;
+}
+
+.shop-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative; /* Важно для мобильной версии */
+    z-index: 10; /* Поднимаем над контентом */
+}
+
+.page-title {
+    font-size: 2.5em;
+    font-family: var(--font-heading);
+    color: var(--dark-coffee);
+    margin: 0;
+}
+
+/* --- Dropdown Styles --- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.sort-button {
+    background-color: var(--medium-roast);
+    color: var(--cream);
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sort-button:hover {
+    background-color: var(--dark-coffee);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: var(--cream);
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 10;
+    border-radius: 5px;
+    padding: 10px;
+    top: calc(100% + 10px); /* Отступ от кнопки */
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Класс, который JS будет добавлять для отображения меню */
+.dropdown-content.show {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.filter-group {
+    margin-bottom: 15px;
+}
+
+.filter-group p.filter-title {
+    font-weight: 700;
+    margin: 0 0 5px;
+    color: var(--dark-coffee);
+}
+
+.filter-group label {
+    display: block;
+    font-size: 0.9em;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.apply-filters-button {
+    width: 100%;
+    padding: 8px;
+    background-color: var(--medium-roast);
+    color: var(--cream);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.apply-filters-button:hover {
+    background-color: var(--dark-coffee);
+}
+
+/* --- Mobile Adaptations --- */
+@media (max-width: 768px) {
+    .shop-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .page-title {
+        font-size: 2em;
+    }
+
+    .dropdown {
+        width: 100%; /* На мобильных занимает всю ширину */
+    }
+
+    .sort-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .dropdown-content {
+        position: static; /* На мобильных ведет себя как обычный блок */
+        width: 100%;
+        margin-top: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+}/* --- Login Page Styles --- */
+.login-page {
+    padding: 60px 0;
+    text-align: center;
+}
+
+.login-page h2 {
+    font-size: 2.5em;
+    font-family: var(--font-heading);
+    color: var(--dark-coffee);
+    margin-bottom: 30px;
+}
+
+.login-page form {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: var(--cream);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--dark-coffee);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--text-color);
+    border-radius: 4px;
+    box-sizing: border-box; /* To include padding in width */
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-group input {
+    width: auto;
+    margin: 0;
+}
+
+.flash-messages {
+    margin-bottom: 20px;
+}
+
+.flash-messages p {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.login-button {
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--medium-roast);
+    color: var(--cream);
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: var(--dark-coffee);
+}/* --- Admin Dashboard Styles --- */
+.admin-panel-page {
+    padding: 60px 0;
+    text-align: center;
+}
+
+.admin-panel-page h2 {
+    font-size: 2.5em;
+    font-family: var(--font-heading);
+    color: var(--dark-coffee);
+    margin-bottom: 30px;
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.admin-card {
+    background-color: var(--cream);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.admin-card h3 {
+    font-size: 1.5em;
+    font-family: var(--font-heading);
+    color: var(--dark-coffee);
+    margin: 0 0 10px;
+}
+
+.admin-card p {
+    font-size: 0.9em;
+    color: var(--text-color);
+    flex-grow: 1;
+}
+
+.admin-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--medium-roast);
+    color: var(--cream);
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.admin-button:hover {
+    background-color: var(--dark-coffee);
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 600px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
 }
