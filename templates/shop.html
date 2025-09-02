@@ -9,7 +9,7 @@
 
             <div class="dropdown">
                 <button class="sort-button">
-                    <span>Sort</span>
+                    <span>Sort & Filter</span>
                     <span class="arrow">⩒</span>
                 </button>
                 <div class="dropdown-content">
@@ -25,19 +25,51 @@
                         </label>
                     </div>
 
-                    <div class="filter-group">
-                        <p class="filter-title">Category</p>
+                    <div class="filter-group" data-category="woodenware">
+                        <p class="filter-title">Woodenware</p>
                         <label>
-                            <input type="checkbox" name="category" value="woodenware">
-                            Woodenware
+                            <input type="checkbox" name="type" value="boxes">
+                            Boxes
                         </label>
                         <label>
-                            <input type="checkbox" name="category" value="bracelets">
+                            <input type="checkbox" name="type" value="stands">
+                            Stands
+                        </label>
+                        <label>
+                            <input type="checkbox" name="type" value="figurines">
+                            Figurines
+                        </label>
+                    </div>
+
+                    <div class="filter-group" data-category="jewelry">
+                        <p class="filter-title">Jewelry</p>
+                        <label>
+                            <input type="checkbox" name="type" value="bracelets">
                             Bracelets
                         </label>
                         <label>
-                            <input type="checkbox" name="category" value="candles">
-                            Candles
+                            <input type="checkbox" name="type" value="earrings">
+                            Earrings
+                        </label>
+                        <label>
+                            <input type="checkbox" name="type" value="necklaces">
+                            Necklaces
+                        </label>
+                    </div>
+
+                    <div class="filter-group" data-category="candles">
+                        <p class="filter-title">Candles</p>
+                        <label>
+                            <input type="checkbox" name="type" value="soy">
+                            Soy
+                        </label>
+                        <label>
+                            <input type="checkbox" name="type" value="beeswax">
+                            Beeswax
+                        </label>
+                        <label>
+                            <input type="checkbox" name="type" value="scented">
+                            Scented
                         </label>
                     </div>
 
@@ -61,30 +93,38 @@
         const sortButton = document.querySelector('.sort-button');
         const dropdownContent = document.querySelector('.dropdown-content');
 
-        // Открытие/закрытие меню
         sortButton.addEventListener('click', (event) => {
-            event.stopPropagation(); // Останавливаем всплытие события, чтобы не закрывалось сразу
+            event.stopPropagation();
             dropdownContent.classList.toggle('show');
         });
 
-        // Закрытие меню при клике в любом месте, кроме самого меню
         document.addEventListener('click', (event) => {
             if (!dropdownContent.contains(event.target) && !sortButton.contains(event.target)) {
                 dropdownContent.classList.remove('show');
             }
         });
 
-        // Обработка кнопки "Apply"
+        // --- Обновленный JavaScript для кнопки "Apply" ---
         document.querySelector('.apply-filters-button').addEventListener('click', () => {
             const checkboxes = dropdownContent.querySelectorAll('input[type="checkbox"]:checked');
             const params = [];
+            let categoryAdded = false;
 
             checkboxes.forEach(checkbox => {
+                const filterGroup = checkbox.closest('.filter-group');
+                const category = filterGroup.getAttribute('data-category');
+
+                if (category && !categoryAdded) {
+                    params.push(`category=${category}`);
+                    categoryAdded = true;
+                }
+
                 params.push(`${checkbox.name}=${checkbox.value}`);
             });
 
             window.location.href = `/shop?${params.join('&')}`;
         });
+        // ---------------------------------------------------
     });
 </script>
 {% endblock %}

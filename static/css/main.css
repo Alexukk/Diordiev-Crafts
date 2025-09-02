@@ -773,6 +773,7 @@ a {
     .collection-section .categories-grid {
         grid-template-columns: 1fr;
     }
+
 }/* --- Стили для секции "Need help?" с карточками --- */
 .help-section {
     background-color: var(--cream); /* Светлый фон для секции */
@@ -861,4 +862,25 @@ a {
         width: 90%; /* Ширина карточек на мобильных */
         max-width: 300px; /* Максимальная ширина */
     }
+}.privacy-policy-section .nav-pills .nav-link {
+    color: var(--text-color); /* Цвет текста вкладок по умолчанию */
+    background-color: transparent; /* Прозрачный фон */
+    border: 1px solid #ffc107; /* Желтый контур (Bootstrap warning color) */
+    margin-bottom: 0.5rem; /* Отступ между вкладками */
+    border-radius: 0.25rem; /* Закругление углов */
+    padding: 0.75rem 1rem; /* Отступы внутри кнопки */
+    text-align: left; /* Выравнивание текста по левому краю */
+}
+
+/* Стиль для активной (выбранной) вкладки */
+.privacy-policy-section .nav-pills .nav-link.active {
+    color: #000; /* Цвет текста активной вкладки (черный или темный) */
+    background-color: #ffc107; /* Желтый фон активной вкладки */
+    border-color: #ffc107; /* Желтый контур активной вкладки */
+}
+
+/* Стиль для вкладки при наведении */
+.privacy-policy-section .nav-pills .nav-link:hover:not(.active) {
+    background-color: rgba(255, 193, 7, 0.1); /* Легкий желтый фон при наведении */
+    color: #000; /* Цвет текста при наведении */
 }
