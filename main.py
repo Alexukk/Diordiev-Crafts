@@ -35,6 +35,10 @@ def shop():
     # request to db
     return render_template('shop.html')
 
+@app.route('/privacy-policy')
+def privacy_policy():
+    return render_template('privacy_policy.html')
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():

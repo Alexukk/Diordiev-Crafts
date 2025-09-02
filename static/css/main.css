@@ -11,11 +11,17 @@
 body {
     font-family: var(--font-body);
     color: var(--text-color);
-    background-color: var(--latte);
+    background-color: var(--medium-roast);
     margin: 0;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
-
+main {
+    /* Добавь это правило */
+    flex-grow: 1;
+}
 .container {
     max-width: 1100px;
     margin: 0 auto;
@@ -765,5 +771,93 @@ a {
     }
     .collection-section .categories-grid {
         grid-template-columns: 1fr;
+    }
+}/* --- Стили для секции "Need help?" с карточками --- */
+.help-section {
+    background-color: var(--latte); /* Светлый фон для секции */
+    color: var(--text-color);
+}
+
+.help-section h1 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.help-section .lead {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+}
+
+.help-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.help-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.help-card .card-body {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Распределяем контент */
+    align-items: center; /* Центрируем по горизонтали */
+}
+
+.help-card .card-icon {
+    font-size: 3rem; /* Размер для будущих иконок */
+    color: var(--text-color); /* Цвет для иконок */
+    height: 3rem; /* Фиксированная высота для иконки */
+    width: 3rem; /* Фиксированная ширина для иконки */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.help-card .card-title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.help-card .card-text {
+    font-family: var(--font-body);
+    color: #6a6a6a;
+    margin-bottom: 1.5rem;
+}
+
+.help-card-button {
+    background-color: #e0ac78; /* Цвет кнопки, как на твоём сайте */
+    border-color: #e0ac78;
+    color: #fff;
+    font-family: var(--font-body);
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.help-card-button:hover {
+    background-color: #c0915d;
+    border-color: #c0915d;
+    color: #fff;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 767px) {
+    .help-section .row {
+        flex-direction: column; /* Карточки будут идти одна за другой на мобильных */
+        align-items: center; /* Центрируем карточки */
+    }
+    .help-section .col-md-4 {
+        width: 90%; /* Ширина карточек на мобильных */
+        max-width: 300px; /* Максимальная ширина */
     }
 }

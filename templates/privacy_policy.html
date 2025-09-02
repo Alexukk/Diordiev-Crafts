@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy{% endblock %}
+
+{% block content %}
+<section class="privacy-policy-section container mt-5">
+    <h2 class="text-center mb-4">Privacy Policy</h2>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="v-pills-data-collection-tab" data-bs-toggle="pill" data-bs-target="#v-pills-data-collection" type="button" role="tab" aria-controls="v-pills-data-collection" aria-selected="true">Data Collection</button>
+                <button class="nav-link" id="v-pills-data-usage-tab" data-bs-toggle="pill" data-bs-target="#v-pills-data-usage" type="button" role="tab" aria-controls="v-pills-data-usage" aria-selected="false">Data Usage</button>
+                <button class="nav-link" id="v-pills-data-security-tab" data-bs-toggle="pill" data-bs-target="#v-pills-data-security" type="button" role="tab" aria-controls="v-pills-data-security" aria-selected="false">Data Security</button>
+                <button class="nav-link" id="v-pills-your-rights-tab" data-bs-toggle="pill" data-bs-target="#v-pills-your-rights" type="button" role="tab" aria-controls="v-pills-your-rights" aria-selected="false">Your Rights</button>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-data-collection" role="tabpanel" aria-labelledby="v-pills-data-collection-tab" tabindex="0">
+                    <h3 class="mt-0">Data Collection</h3>
+                    <p>We collect information you provide directly to us, such as when you place an order, subscribe to our newsletter, or contact us. This information may include your name, email address, mailing address, and phone number.</p>
+                </div>
+                <div class="tab-pane fade" id="v-pills-data-usage" role="tabpanel" aria-labelledby="v-pills-data-usage-tab" tabindex="0">
+                    <h3 class="mt-0">Data Usage</h3>
+                    <p>We use the collected information to process your orders, provide customer support, send marketing communications (with your consent), and improve the quality of our services and products.</p>
+                </div>
+                <div class="tab-pane fade" id="v-pills-data-security" role="tabpanel" aria-labelledby="v-pills-data-security-tab" tabindex="0">
+                    <h3 class="mt-0">Data Security</h3>
+                    <p>We take all reasonable measures to protect your personal data from unauthorized access, alteration, disclosure, or destruction. We use secure servers and data encryption.</p>
+                </div>
+                <div class="tab-pane fade" id="v-pills-your-rights" role="tabpanel" aria-labelledby="v-pills-your-rights-tab" tabindex="0">
+                    <h3 class="mt-0">Your Rights</h3>
+                    <p>You have the right to access, correct, and delete your data, as well as the right to object to its processing. To exercise these rights, please contact us.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<hr>
+<section class="help-section text-center py-5">
+    <div class="container">
+        <h1>Need help?</h1>
+        <p class="lead">Contact us</p>
+        <div class="row mt-4 justify-content-center">
+
+            <div class="col-md-4 col-sm-6 mb-3">
+                <div class="card help-card h-100">
+                    <div class="card-body">
+                        <div class="card-icon mb-3">
+                            </div>
+                        <h5 class="card-title">WhatsApp</h5>
+                        <p class="card-text">contact in WhatsApp</p>
+                        <a href="https://wa.me/ВАШ_НОМЕР" target="_blank" class="btn btn-success help-card-button">Start chat</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 mb-3">
+                <div class="card help-card h-100">
+                    <div class="card-body">
+                        <div class="card-icon mb-3">
+                            </div>
+                        <h5 class="card-title">Email</h5>
+                        <p class="card-text">Email Us</p>
+                        <a href="mailto:ВАШ_EMAIL" class="btn btn-warning help-card-button">Email us</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 mb-3">
+                <div class="card help-card h-100">
+                    <div class="card-body">
+                        <div class="card-icon mb-3">
+                            </div>
+                        <h5 class="card-title">Telegram</h5>
+                        <p class="card-text">Contact in Telegram</p>
+                        <a href="https://t.me/ИМЯ_ПОЛЬЗОВАТЕЛЯ_ИЛИ_БОТА" target="_blank" class="btn btn-primary help-card-button">Start chat</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}
