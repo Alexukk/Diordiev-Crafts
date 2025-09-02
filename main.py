@@ -72,7 +72,7 @@ def create_post():
 
     # Теперь ты можешь быть уверен, что сюда попадет только админ
     if request.method == 'POST':
-        name = request.form.get('name')
+        title = request.form.get('title')
         price = request.form.get('price')
         text = request.form.get('text')
         photo1 = request.form.get('photo1')

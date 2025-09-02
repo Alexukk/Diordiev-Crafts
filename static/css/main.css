@@ -654,4 +654,116 @@ a {
     .admin-grid {
         grid-template-columns: 1fr;
     }
+}/* --- Обновлённые стили для секции Andrew's Wood --- */
+.hero-andrews-wood {
+    background-image: url('/static/img/main_page.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    /* Изменяем выравнивание, чтобы контент был внизу */
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    color: #fff;
+    text-align: center;
+    padding-bottom: 50px; /* Отступ снизу */
+}
+
+.hero-andrews-wood::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.hero-andrews-wood-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-andrews-wood h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 5em;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 0.2em;
+}
+
+.hero-andrews-wood p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5em;
+    font-weight: 400;
+}
+
+.hero-andrews-wood-button {
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 10px 30px;
+    margin-top: 30px;
+    text-transform: uppercase;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.hero-andrews-wood-button:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Стили для мобильных устройств */
+@media (max-width: 768px) {
+    .hero-andrews-wood {
+        padding-bottom: 30px; /* Уменьшаем отступ для мобильных */
+    }
+    .hero-andrews-wood h1 {
+        font-size: 3em;
+    }
+    .hero-andrews-wood p {
+        font-size: 1em;
+    }
+    .hero-andrews-wood-button {
+        padding: 8px 20px;
+    }
+    /* Дополнительные стили для центрирования на маленьких экранах */
+    .hero-andrews-wood-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}/* --- Стили для адаптивности (mobile-first) --- */
+@media (max-width: 768px) {
+    .hero-andrews-wood {
+        /* Урезаем высоту вдвое для мобильных */
+        height: 50vh;
+        padding-bottom: 30px;
+    }
+    .hero-andrews-wood h1 {
+        font-size: 2.5em;
+        margin-bottom: 0.5em;
+    }
+    .hero-andrews-wood p {
+        font-size: 1.1em;
+        padding: 0 15px;
+    }
+    .hero-andrews-wood-button {
+        padding: 8px 20px;
+        font-size: 1em;
+    }
+    .about-section .about-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .about-section .about-content img {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .collection-section .categories-grid {
+        grid-template-columns: 1fr;
+    }
 }

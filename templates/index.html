@@ -3,11 +3,11 @@
 {% block title %}Diordiev Crafts - Handcrafted Goods{% endblock %}
 
 {% block content %}
-    <section class="hero-section">
-        <div class="hero-section__content">
-            <h1 class="hero-section__title">Handcrafted with Passion</h1>
-            <p class="hero-section__tagline">Discover the beauty of unique creations made with love</p>
-            <a href="/shop" class="button">Shop Now</a>
+    <section class="hero-andrews-wood">
+        <div class="container hero-andrews-wood-content">
+            <h1>BRAND NAME</h1>
+            <p>Accessories which fits everyone</p>
+            <a href="{{ url_for('shop') }}" class="button hero-andrews-wood-button">Shop now</a>
         </div>
     </section>
 
@@ -15,17 +15,17 @@
         <div class="container">
             <h2>Our Collection</h2>
             <div class="categories-grid">
-                <a href="{{url_for('shop', category='boxes')}}" class="category-item">
-                    <img src="/static/img/boxes.png" alt="Wooden Boxes">
-                    <h4>Wooden Boxes</h4>
+                <a href="{{url_for('shop', category='woodenware')}}" class="category-item">
+                    <img src="/static/img/boxes.png" alt="Woodenware">
+                    <h4>Woodenware</h4>
                 </a>
-                <a href="{{url_for('shop', category='bracelets')}}" class="category-item">
-                    <img src="/static/img/bracelets.png" alt="Beaded Bracelets">
-                    <h4>Bracelets</h4>
+                <a href="{{url_for('shop', category='accessories')}}" class="category-item">
+                    <img src="/static/img/bracelets.png" alt="Accessories">
+                    <h4>Accessories</h4>
                 </a>
-                <a href="{{url_for('shop', category='candles')}}" class="category-item">
-                    <img src="/static/img/candles.png" alt="Handmade Candles">
-                    <h4>Candles</h4>
+                <a href="{{url_for('shop', category='other')}}" class="category-item">
+                    <img src="/static/img/candles.png" alt="Other">
+                    <h4>Other</h4>
                 </a>
             </div>
         </div>
