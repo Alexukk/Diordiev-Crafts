@@ -21,6 +21,7 @@ body {
 main {
     /* Добавь это правило */
     flex-grow: 1;
+    background-color: var(--latte);
 }
 .container {
     max-width: 1100px;
@@ -774,7 +775,7 @@ a {
     }
 }/* --- Стили для секции "Need help?" с карточками --- */
 .help-section {
-    background-color: var(--latte); /* Светлый фон для секции */
+    background-color: var(--cream); /* Светлый фон для секции */
     color: var(--text-color);
 }
 
