@@ -70,15 +70,18 @@ def aboutUs():
 
 @app.route('/shop', methods=['GET'])
 def shop():
-    # Запрос к БД для получения всех продуктов
-    products = Product.query.all()
-    return render_template('shop.html', products=products)
+
+    return render_template('shop.html', products=[])
 
 
 @app.route('/privacy-policy')
 def privacy_policy():
     return render_template('privacy_policy.html')
 
+@app.route('/posts')
+def posts():
+    all_posts = Post.query.order_by(Post.date.desc()).all()
+    return render_template('posts.html', posts=all_posts)
 
 # -------------------------Default routes logic ended--------------------------------#
 
@@ -109,6 +112,7 @@ def admin_panel():
         return redirect(url_for('login'))
     return render_template('panel.html')
 
+# -------------------------Adding product logic --------------------------------------#
 
 @app.route('/create-product', methods=['GET', 'POST'])
 def create_product():
@@ -121,11 +125,36 @@ def create_product():
             title = request.form.get('title')
             price = request.form.get('price')
             text = request.form.get('text')
-            photo1 = request.form.get('photo1')
-            photo2 = request.form.get('photo2')
-            photo3 = request.form.get('photo3')
+            category = request.form.get('category')
 
-            new_product = Product(title=title, price=price, text=text, photo1=photo1, photo2=photo2, photo3=photo3)
+            # Вспомогательная функция для сохранения файла
+            def save_and_get_path(file):
+                if file and file.filename:
+                    # Создаём уникальное имя файла
+                    filename = secure_filename(file.filename)
+                    timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
+                    filename_with_ts = f"{timestamp}_{filename}"
+
+                    # Сохраняем файл в правильную папку
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename_with_ts))
+
+                    # Возвращаем относительный путь для БД
+                    return os.path.join('uploads', 'products', filename_with_ts)
+                return None
+
+            photo_path1 = save_and_get_path(request.files.get('photo1'))
+            photo_path2 = save_and_get_path(request.files.get('photo2'))
+            photo_path3 = save_and_get_path(request.files.get('photo3'))
+
+            new_product = Product(
+                title=title,
+                price=price,
+                text=text,
+                photo1=photo_path1,
+                photo2=photo_path2,
+                photo3=photo_path3,
+                category=category
+            )
             db.session.add(new_product)
             db.session.commit()
 
@@ -133,18 +162,16 @@ def create_product():
             return redirect(url_for('shop'))
         except Exception as e:
             db.session.rollback()
+            print(e)
             flash(f'Error occurred while creating the product: {e}', 'error')
             return redirect(url_for('create_product'))
 
     return render_template('create_product.html')
 
 
-@app.route('/posts')
-def posts():
-    all_posts = Post.query.order_by(Post.date.desc()).all()
-    return render_template('posts.html', posts=all_posts)
 
 
+# -------------------------Create post logic --------------------------------------#
 @app.route('/create-post', methods=['GET', 'POST'])
 def create_post():
     if not session.get("logged_in"):
@@ -156,7 +183,7 @@ def create_post():
             title = request.form.get('title')
             text = request.form.get('text')
 
-            # 3. Обработка загруженного файла
+
             uploaded_file = request.files.get('photo')
             photo_path = None
             if uploaded_file and uploaded_file.filename:
@@ -180,6 +207,7 @@ def create_post():
     else:
         return render_template('create_post.html')
 
+# -------------------------Delete post logic --------------------------------------#
 
 @app.route('/delete-post', methods=['GET'])
 def delete_post_page():
@@ -221,7 +249,7 @@ def delete_post(post_id):
     return redirect(url_for('posts'))
 
 
-# -------------------------DB requests logic ended--------------------------------#
+# -------------------------ADMIN logic ended--------------------------------#
 # Убедись, что твоя база данных создается при запуске приложения
 with app.app_context():
     db.create_all()
