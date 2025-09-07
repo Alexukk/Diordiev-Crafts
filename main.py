@@ -4,6 +4,7 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 from datetime import datetime, timezone
+from werkzeug.utils import secure_filename
 
 load_dotenv()
 
@@ -13,6 +14,12 @@ app.secret_key = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DiordievCrafts.db'
 db = SQLAlchemy(app)
 
+UPLOAD_FOLDER = './static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Проверяем, существует ли папка, и создаем ее, если нет
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 # -------------------------DB MODELS logic started--------------------------------#
 
@@ -102,7 +109,7 @@ def admin_panel():
     return render_template('panel.html')
 
 
-@app.route('/admin-panel/create-product', methods=['GET', 'POST'])
+@app.route('/create-product', methods=['GET', 'POST'])
 def create_product():
     if not session.get("logged_in"):
         flash('You need to be logged in to create a product.', 'warning')
@@ -147,9 +154,19 @@ def create_post():
         try:
             title = request.form.get('title')
             text = request.form.get('text')
-            photo = request.form.get('photo')
 
-            new_post = Post(title=title, photo=photo, text=text)
+            # 3. Обработка загруженного файла
+            uploaded_file = request.files.get('photo')
+            photo_path = None
+            if uploaded_file and uploaded_file.filename:
+                # Делаем имя файла безопасным
+                filename = secure_filename(uploaded_file.filename)
+                # Сохраняем файл в папку загрузок
+                uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+                photo_path = filename
+
+            new_post = Post(title=title, photo=photo_path, text=text)
             db.session.add(new_post)
             db.session.commit()
 
@@ -169,7 +186,7 @@ def delete_post_page():
         flash('You need to be logged in to delete a post.', 'warning')
         return redirect(url_for('login'))
     all_posts = Post.query.order_by(Post.date.desc()).all()
-    return render_template('posts.html', posts=all_posts)
+    return render_template('delete_post.html', posts=all_posts)
 
 
 

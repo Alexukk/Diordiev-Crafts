@@ -1,21 +1,23 @@
 {% extends "base.html" %}
 
-{% block title %}Our Blog{% endblock %}
+{% block title %}Manage Posts{% endblock %}
 
 {% block content %}
 <section class="container mt-5">
-    <h1 class="text-center mb-4">Our Latest Posts</h1>
+    <h1 class="text-center mb-4">Manage Posts</h1>
+    <p class="text-center lead">You are currently logged in as an administrator. Use this page to delete posts.</p>
     <hr>
 
     {% if not posts %}
-        <p class="text-center lead mt-5">No posts found yet. Check back later!</p>
+        <p class="text-center lead mt-5">No posts found to manage.</p>
     {% else %}
         <div class="row">
             {% for post in posts %}
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="card h-100 shadow-sm">
                     {% if post.photo %}
-                        <img src="{{ post.photo }}" class="card-img-top" alt="{{ post.title }}">
+                       <img src="{{ url_for('static', filename='uploads/' + post.photo) }}" class="card-img-top" alt="{{ post.title }}">
+
                     {% endif %}
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ post.title }}</h5>
