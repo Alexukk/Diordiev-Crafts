@@ -31,6 +31,7 @@ class Product(db.Model):
     photo1 = db.Column(db.String, nullable=False)
     photo2 = db.Column(db.String, nullable=False)
     photo3 = db.Column(db.String, nullable=False)
+    category = db.Column(db.String(100), nullable=True)
 
     def __repr__(self):
         return f'<Product {self.id}>'
@@ -198,12 +199,23 @@ def delete_post(post_id):
 
     post_to_delete = Post.query.get_or_404(post_id)
 
+
+    photo_filename = post_to_delete.photo
+
     try:
         db.session.delete(post_to_delete)
         db.session.commit()
+        if photo_filename:
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], photo_filename)
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            else:
+                print(f"File not found: {file_path}")
+
         flash('Post deleted successfully!', 'success')
     except Exception as e:
         db.session.rollback()
+        print(f"Error during post or file deletion: {e}")
         flash(f'Error occurred while deleting the post: {e}', 'error')
 
     return redirect(url_for('posts'))
