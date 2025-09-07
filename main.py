@@ -9,13 +9,15 @@ from werkzeug.utils import secure_filename
 load_dotenv()
 
 app = Flask(__name__)
-app.permanent_session_lifetime = timedelta(days=2)
+app.permanent_session_lifetime = timedelta(hours=1)
 app.secret_key = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DiordievCrafts.db'
 db = SQLAlchemy(app)
 
-UPLOAD_FOLDER = './static/uploads'
+UPLOAD_FOLDER = './static/uploads/posts'
+PRODUCTS_FOLDER = './static/uploads/products'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['PRODUCTS_FILES'] = PRODUCTS_FOLDER
 
 # Проверяем, существует ли папка, и создаем ее, если нет
 if not os.path.exists(UPLOAD_FOLDER):
@@ -136,7 +138,7 @@ def create_product():
                     filename_with_ts = f"{timestamp}_{filename}"
 
                     # Сохраняем файл в правильную папку
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename_with_ts))
+                    file.save(os.path.join(app.config['PRODUCTS_FILES'], filename_with_ts))
 
                     # Возвращаем относительный путь для БД
                     return os.path.join('uploads', 'products', filename_with_ts)
