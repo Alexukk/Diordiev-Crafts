@@ -25,7 +25,7 @@
                         </label>
                     </div>
 
-                    <div class="filter-group" data-category="woodenware">
+                    <div class="filter-group" data-category="boxes">
                         <p class="filter-title">Woodenware</p>
                         <label>
                             <input type="checkbox" name="type" value="boxes">
@@ -80,11 +80,14 @@
         <hr>
         <div class="product-grid">
             {% for product in products %}
-            <div class="product-card">
-                <img src="{{product.photo1}}" alt="{{ product.name }}">
-                <h4>{{ product.name }}</h4>
-                <p class="price">{{ product.price }}$</p>
-            </div>
+            <div class="card" style="width: 18rem;">
+    <img src="{{ './static/' + product.photo1}}" class="card-img-top" alt="{{ product.title }}">
+    <div class="card-body">
+        <h5 class="card-title">{{ product.title }}</h5>
+        <p class="card-text">{{ product.price }}$</p>
+        <a href=" {{ url_for('shop', product_id=product.id) }}" class="btn btn-primary">More</a>
+    </div>
+</div>
             {% endfor %}
         </div>
     </section>
@@ -104,27 +107,21 @@
             }
         });
 
-        // --- Обновленный JavaScript для кнопки "Apply" ---
         document.querySelector('.apply-filters-button').addEventListener('click', () => {
             const checkboxes = dropdownContent.querySelectorAll('input[type="checkbox"]:checked');
             const params = [];
-            let categoryAdded = false;
 
             checkboxes.forEach(checkbox => {
-                const filterGroup = checkbox.closest('.filter-group');
-                const category = filterGroup.getAttribute('data-category');
-
-                if (category && !categoryAdded) {
-                    params.push(`category=${category}`);
-                    categoryAdded = true;
+                if (checkbox.name === 'type') {
+                    params.push(`type=${checkbox.value}`);
                 }
-
-                params.push(`${checkbox.name}=${checkbox.value}`);
+                if (checkbox.name === 'sort_by') {
+                    params.push(`sort_by=${checkbox.value}`);
+                }
             });
 
             window.location.href = `/shop?${params.join('&')}`;
         });
-        // ---------------------------------------------------
     });
 </script>
 {% endblock %}

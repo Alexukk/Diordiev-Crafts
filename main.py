@@ -4,6 +4,8 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 from datetime import datetime, timezone
+
+from unicodedata import category
 from werkzeug.utils import secure_filename
 
 load_dotenv()
@@ -14,8 +16,8 @@ app.secret_key = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DiordievCrafts.db'
 db = SQLAlchemy(app)
 
-UPLOAD_FOLDER = './static/uploads/posts'
-PRODUCTS_FOLDER = './static/uploads/products'
+UPLOAD_FOLDER = 'static/uploads/posts'
+PRODUCTS_FOLDER = 'static/uploads/products'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PRODUCTS_FILES'] = PRODUCTS_FOLDER
 
@@ -72,8 +74,23 @@ def aboutUs():
 
 @app.route('/shop', methods=['GET'])
 def shop():
+    sort_by = request.args.get('sort_by')
+    category = request.args.get('type')
 
-    return render_template('shop.html', products=[])
+    query = Product.query
+
+    if category:
+        query = query.filter_by(category=category)
+
+    if sort_by == 'price_asc':
+        query = query.order_by(Product.price.asc())
+    elif sort_by == 'price_desc':
+        query = query.order_by(Product.price.desc())
+
+
+    products = query.all()
+
+    return render_template('shop.html', products=products)
 
 
 @app.route('/privacy-policy')
