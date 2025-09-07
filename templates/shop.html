@@ -78,18 +78,23 @@
             </div>
         </div>
         <hr>
-        <div class="product-grid">
-            {% for product in products %}
-            <div class="card" style="width: 18rem;">
-    <img src="{{ './static/' + product.photo1}}" class="card-img-top" alt="{{ product.title }}">
-    <div class="card-body">
-        <h5 class="card-title">{{ product.title }}</h5>
-        <p class="card-text">{{ product.price }}$</p>
-        <a href=" {{ url_for('shop', product_id=product.id) }}" class="btn btn-primary">More</a>
-    </div>
-</div>
-            {% endfor %}
+        <div class="row g-4">
+    {% for product in products %}
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100">
+            <img src="{{ './static/' + product.photo1}}" class="card-img-top" alt="{{ product.title }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.title }}</h5>
+                  <hr>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <p class="card-text mb-0">{{ product.price }}$</p>
+                    <a href="{{ url_for('shop', product_id=product.id) }}" class="btn btn-success">More</a>
+                </div>
+            </div>
         </div>
+    </div>
+    {% endfor %}
+</div>
     </section>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
