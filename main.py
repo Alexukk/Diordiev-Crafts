@@ -80,7 +80,10 @@ def shop():
     query = Product.query
 
     if category:
-        query = query.filter_by(category=category)
+        print(f"Filtering by category: {category}")  # Use f-string for better debugging
+        query = query.filter_by(category=category.capitalize())
+    else:
+        print("No category filter applied.")
 
     if sort_by == 'price_asc':
         query = query.order_by(Product.price.asc())

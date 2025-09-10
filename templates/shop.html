@@ -86,6 +86,7 @@
               <div class="card-body">
                 <h5 class="card-title">{{ product.title }}</h5>
                   <hr>
+                  <p>{{ product.category }}</p>
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <p class="card-text mb-0">{{ product.price }}$</p>
                     <a href="{{ url_for('shop', product_id=product.id) }}" class="btn btn-success">More</a>
@@ -100,6 +101,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         const sortButton = document.querySelector('.sort-button');
         const dropdownContent = document.querySelector('.dropdown-content');
+        const applyButton = document.querySelector('.apply-filters-button');
 
         sortButton.addEventListener('click', (event) => {
             event.stopPropagation();
@@ -112,11 +114,11 @@
             }
         });
 
-        document.querySelector('.apply-filters-button').addEventListener('click', () => {
-            const checkboxes = dropdownContent.querySelectorAll('input[type="checkbox"]:checked');
+        applyButton.addEventListener('click', () => {
+            const checkedCheckboxes = dropdownContent.querySelectorAll('input[type="checkbox"]:checked');
             const params = [];
 
-            checkboxes.forEach(checkbox => {
+            checkedCheckboxes.forEach(checkbox => {
                 if (checkbox.name === 'type') {
                     params.push(`type=${checkbox.value}`);
                 }
@@ -125,7 +127,11 @@
                 }
             });
 
-            window.location.href = `/shop?${params.join('&')}`;
+            if (params.length > 0) {
+                window.location.href = `/shop?${params.join('&')}`;
+            } else {
+                window.location.href = `/shop`;
+            }
         });
     });
 </script>
