@@ -191,6 +191,52 @@ def create_product():
     return render_template('create_product.html')
 
 
+@app.route('/delete-product', methods=['GET'])
+def delete_product_page():
+    if not session.get("logged_in"):
+        flash('You need to be logged in to delete a product.', 'warning')
+        return redirect(url_for('login'))
+
+    all_products = Product.query.all()
+    return render_template('delete_product.html', products=all_products)
+
+
+@app.route('/delete-product/<int:product_id>', methods=['POST'])
+def delete_product(product_id):
+    if not session.get("logged_in"):
+        flash('You need to be logged in to delete a product.', 'warning')
+        return redirect(url_for('login'))
+
+    product_to_delete = Product.query.get_or_404(product_id)
+
+    photo_filenames = [
+        product_to_delete.photo1,
+        product_to_delete.photo2,
+        product_to_delete.photo3
+    ]
+
+    try:
+        # Сначала удаляем из БД
+        db.session.delete(product_to_delete)
+        db.session.commit()
+
+        # Затем удаляем файлы
+        for filename in photo_filenames:
+            if filename:
+                # Используем правильную переменную для пути к папке продуктов
+                file_path = os.path.join('./static/', filename)
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                else:
+                    print(f"File not found: {file_path}")
+
+        flash('Product deleted successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error during post or file deletion: {e}")
+        flash(f'Error occurred while deleting the product: {e}', 'error')
+
+    return redirect(url_for('delete_product_page'))
 
 
 # -------------------------Create post logic --------------------------------------#
