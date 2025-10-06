@@ -4,8 +4,6 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 from datetime import datetime, timezone
-
-from unicodedata import category
 from werkzeug.utils import secure_filename
 
 load_dotenv()
@@ -90,7 +88,6 @@ def shop():
     elif sort_by == 'price_desc':
         query = query.order_by(Product.price.desc())
 
-
     products = query.all()
 
     return render_template('shop.html', products=products)
@@ -105,6 +102,14 @@ def posts():
     all_posts = Post.query.order_by(Post.date.desc()).all()
     return render_template('posts.html', posts=all_posts)
 
+#@app.route('/product/<int:product_id>')
+#def product_detail(product_id):
+#    product = Product.query.get_or_404(product_id)
+#    return render_template('product.html', product=product)
+
+@app.route('/add-to-cart')
+def addToCart():
+    pass
 # -------------------------Default routes logic ended--------------------------------#
 
 # -------------------------ADMIN logic started--------------------------------#
