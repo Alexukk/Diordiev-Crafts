@@ -10,36 +10,58 @@
     <link rel="icon" type="image/png" href="/static/img/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Стилі для фіксованої кнопки внизу праворуч */
+        .fixed-bottom-right-btn {
+            position: fixed;
+            bottom: 20px;   /* Відступ від низу */
+            right: 20px;    /* Відступ від правого краю */
+            z-index: 1050;  /* Вищий z-index, щоб кнопка була поверх іншого контенту */
+            width: 60px;    /* Фіксована ширина */
+            height: 60px;   /* Фіксована висота */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Тінь для кращого вигляду */
+        }
+        /* Стиль для іконки всередині кнопки */
+        .fixed-bottom-right-btn img {
+            width: 24px; /* Розмір вашої PNG/SVG іконки */
+            height: 24px;
+            filter: invert(100%); /* Припускаємо, що іконка чорна, і ми робимо її білою для темного фону */
+        }
+    </style>
+
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{{ url_for('index') }}">BRAND NAME</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{{url_for('shop')}}">Shop</a>
-        </li>
-          <hr>
-        <li class="nav-item">
-          <a class="nav-link" href="{{url_for('aboutUs')}}">About Us</a>
-        </li>
-          <hr>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('privacy_policy') }}">Privacy policy</a>
-        </li>
-          <hr>
-          <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('posts') }}">Our Blog</a>
-        </li>
-          <hr>
-      </ul>
-    </div>
-  </div>
-</nav>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">BRAND NAME</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{url_for('shop')}}">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('aboutUs')}}">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('privacy_policy') }}">Privacy policy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('posts') }}">Our Blog</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
 
     <main>
         {% block content %}{% endblock %}
@@ -55,12 +77,18 @@
         </div>
     </footer>
 
+
+{% if request.endpoint != 'Cart' %}
+    <a href="{{ url_for('Cart') }}" class="fixed-bottom-right-btn btn btn-dark rounded-circle">
+        <img src="{{ url_for('static', filename='img/shopping-cart.png') }}" alt="Cart" title="Go to Cart">
+    </a>
+{% endif %}
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             console.log('Diordiev Crafts page loaded.');
         });
     </script>
-    <script src="https://cdn.lordicon.com/lordicon-1.3.0.js"></script>
 </body>
 </html>

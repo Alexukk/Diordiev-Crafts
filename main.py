@@ -75,6 +75,7 @@ def shop():
     sort_by = request.args.get('sort_by')
     category = request.args.get('type')
 
+
     query = Product.query
 
     if category:
@@ -110,6 +111,10 @@ def posts():
 @app.route('/add-to-cart')
 def addToCart():
     pass
+
+@app.route('/cart')
+def Cart():
+    return render_template('cart.html')
 # -------------------------Default routes logic ended--------------------------------#
 
 # -------------------------ADMIN logic started--------------------------------#
