@@ -33,7 +33,8 @@ class Product(db.Model):
     photo1 = db.Column(db.String, nullable=False)
     photo2 = db.Column(db.String, nullable=False)
     photo3 = db.Column(db.String, nullable=False)
-    category = db.Column(db.String(100), nullable=True)
+    category = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.String(30), nullable=False)
 
     def __repr__(self):
         return f'<Product {self.id}>'
@@ -158,6 +159,7 @@ def create_product():
             price = request.form.get('price')
             text = request.form.get('text')
             category = request.form.get('category')
+            status = request.form.get('status')
 
             # Вспомогательная функция для сохранения файла
             def save_and_get_path(file):
@@ -185,7 +187,8 @@ def create_product():
                 photo1=photo_path1,
                 photo2=photo_path2,
                 photo3=photo_path3,
-                category=category
+                category=category,
+                status=status
             )
             db.session.add(new_product)
             db.session.commit()
