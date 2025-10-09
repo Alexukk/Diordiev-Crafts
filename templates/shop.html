@@ -4,17 +4,55 @@
 
 {% block head %}
     {{ super() }}
-    <style>
-        .product-img-container {
-            height: 350px; /* Фіксована висота контейнера */
-            overflow: hidden; /* Обрізає все, що виходить за межі */
+/* --- Аккуратная диагональная лента --- */
+.status-badge {
+    position: absolute;
+    top: 12px;
+    left: -32px;
+    width: 120px;              /* уже */
+    text-align: center;
+    transform: rotate(-45deg);
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 4px 0;
+    letter-spacing: 0.5px;
+    z-index: 20;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.badge-sale {
+    background-color: rgba(220, 53, 69, 0.85);
+    color: #fff;
+}
+
+.badge-soldout {
+    background-color: rgba(255, 193, 7, 0.9);
+    color: #000;
+}
+
+        .product-img-container .badge-sale {
+            background-color: rgba(220, 53, 69, 0.8) !important; /* красный */
+            color: #fff !important;
         }
-        .product-img-container .carousel-item img {
-            height: 100%; /* Зображення займає всю висоту контейнера */
-            width: 100%;
-            object-fit: cover; /* Забезпечує обрізання та покриття області */
+
+        .product-img-container .badge-soldout {
+            background-color: rgba(255, 193, 7, 0.85) !important; /* жёлтый */
+            color: #000 !important;
         }
-    </style>
+
+        /* --- 3. Тело карточки --- */
+        .card-body {
+            display: flex;
+            flex-direction: column;
+        }
+        .card-text {
+            flex-grow: 1;
+        }
+
 {% endblock %}
 
 {% block content %}
@@ -28,65 +66,31 @@
                     <span class="arrow">⩒</span>
                 </button>
                 <div class="dropdown-content">
-
                     <div class="filter-group">
                         <p class="filter-title">Price</p>
-                        <label>
-                            <input type="radio" name="sort_by" value="price_asc">
-                            Low to High
-                        </label>
-                        <label>
-                            <input type="radio" name="sort_by" value="price_desc">
-                            High to Low
-                        </label>
+                        <label><input type="radio" name="sort_by" value="price_asc"> Low to High</label>
+                        <label><input type="radio" name="sort_by" value="price_desc"> High to Low</label>
                     </div>
 
                     <div class="filter-group">
                         <p class="filter-title">Woodenware</p>
-                        <label>
-                            <input type="radio" name="type" value="Boxes">
-                            Boxes
-                        </label>
-                        <label>
-                            <input type="radio" name="type" value="Stands">
-                            Stands
-                        </label>
-                        <label>
-                            <input type="radio" name="type" value="Figurines">
-                            Figurines
-                        </label>
+                        <label><input type="radio" name="type" value="Boxes"> Boxes</label>
+                        <label><input type="radio" name="type" value="Stands"> Stands</label>
+                        <label><input type="radio" name="type" value="Figurines"> Figurines</label>
                     </div>
 
                     <div class="filter-group">
                         <p class="filter-title">Jewelry</p>
-                        <label>
-                            <input type="radio" name="type" value="Bracelets">
-                            Bracelets
-                        </label>
-                        <label>
-                            <input type="radio" name="type" value="Earrings">
-                            Earrings
-                        </label>
-                        <label>
-                            <input type="radio" name="type" value="Necklaces">
-                            Necklaces
-                        </label>
+                        <label><input type="radio" name="type" value="Bracelets"> Bracelets</label>
+                        <label><input type="radio" name="type" value="Earrings"> Earrings</label>
+                        <label><input type="radio" name="type" value="Necklaces"> Necklaces</label>
                     </div>
 
                     <div class="filter-group">
                         <p class="filter-title">Candles</p>
-                        <label>
-                            <input type="radio" name="type" value="Soy">
-                            Soy
-                        </label>
-                        <label>
-                            <input type="radio" name="type" value="Beeswax">
-                            Beeswax
-                        </label>
-                        <label>
-                            <input type="radio" name="type" value="Scented">
-                            Scented
-                        </label>
+                        <label><input type="radio" name="type" value="Soy"> Soy</label>
+                        <label><input type="radio" name="type" value="Beeswax"> Beeswax</label>
+                        <label><input type="radio" name="type" value="Scented"> Scented</label>
                     </div>
 
                     <button class="apply-filters-button w-100 mt-2 mb-2">Apply</button>
@@ -94,134 +98,121 @@
                 </div>
             </div>
         </div>
+
         <hr>
+
         <div class="row g-4">
-    {% for product in products %}
-    <div class="col-12 col-md-6 col-lg-4">
-        <div class="card h-100 shadow-sm">
+            {% for product in products %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="product-img-container">
 
-            <div class="product-img-container">
-                <div id="productCarousel_{{ product.id }}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
-
-                    <div class="carousel-inner">
-                        {% if product.photo1 %}
-                        <div class="carousel-item active">
-                            <img src="{{ './static/' + product.photo1}}" class="card-img-top" alt="{{ product.title }} 1">
-                        </div>
+                        {% if product.status == 'sale' %}
+                            <span class="status-badge badge-sale">Sale</span>
+                        {% elif product.status == 'sold' %}
+                            <span class="status-badge badge-soldout">Sold Out</span>
                         {% endif %}
 
-                        {% if product.photo2 %}
-                        <div class="carousel-item">
-                            <img src="{{ './static/' + product.photo2}}" class="card-img-top" alt="{{ product.title }} 2">
+                        <div id="productCarousel_{{ product.id }}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
+                            <div class="carousel-inner">
+                                {% if product.photo1 %}
+                                <div class="carousel-item active">
+                                    <img src="{{ './static/' + product.photo1}}" class="card-img-top" alt="{{ product.title }} 1">
+                                </div>
+                                {% endif %}
+                                {% if product.photo2 %}
+                                <div class="carousel-item">
+                                    <img src="{{ './static/' + product.photo2}}" class="card-img-top" alt="{{ product.title }} 2">
+                                </div>
+                                {% endif %}
+                                {% if product.photo3 %}
+                                <div class="carousel-item">
+                                    <img src="{{ './static/' + product.photo3}}" class="card-img-top" alt="{{ product.title }} 3">
+                                </div>
+                                {% endif %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel_{{ product.id }}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel_{{ product.id }}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                         </div>
-                        {% endif %}
-
-                        {% if product.photo3 %}
-                        <div class="carousel-item">
-                            <img src="{{ './static/' + product.photo3}}" class="card-img-top" alt="{{ product.title }} 3">
-                        </div>
-                        {% endif %}
                     </div>
 
-                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel_{{ product.id }}" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel_{{ product.id }}" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                    <div class="card-body">
+                        <h5 class="card-title mb-1">{{ product.title }}</h5>
+                        <p class="text-muted small mb-2">{{ product.category }}</p>
+                        <p class="card-text text-muted small">{{ product.text|truncate(80) }}</p>
 
-                </div>
-            </div> <div class="card-body d-flex flex-column">
-                <h5 class="card-title mb-1">{{ product.title }}</h5>
-                <p class="text-muted small mb-2">{{ product.category }}</p>
-
-                <p class="card-text flex-grow-1 text-muted small">{{ product.text|truncate(80) }}</p>
-
-                <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
-                    <h4 class="text-success mb-0">{{ product.price }}$</h4>
-                    <a href="{{ url_for('addToCart', product_id=product.id) }}" class="btn btn-success">Add to cart</a>
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
+                            <h4 class="text-success mb-0">{{ product.price }}$</h4>
+                            {% if product.status == 'sold' %}
+                                <button class="btn btn-outline-secondary" disabled>Sold Out</button>
+                            {% else %}
+                                <a href="{{ url_for('addToCart', product_id=product.id) }}" class="btn btn-success">Add to cart</a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-    </div>
-    {% endfor %}
-</div>
-
     </section>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const sortButton = document.querySelector('.sort-button');
-        const dropdownContent = document.querySelector('.dropdown-content');
-        const applyButton = document.querySelector('.apply-filters-button');
-        const resetButton = document.querySelector('.reset-filters-button');
 
-        const carousels = document.querySelectorAll('.carousel');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sortButton = document.querySelector('.sort-button');
+            const dropdownContent = document.querySelector('.dropdown-content');
+            const applyButton = document.querySelector('.apply-filters-button');
+            const resetButton = document.querySelector('.reset-filters-button');
+            const carousels = document.querySelectorAll('.carousel');
 
-        const pauseAllCarousels = () => {
-            carousels.forEach(carouselEl => {
-                if (window.bootstrap && bootstrap.Carousel.getInstance(carouselEl)) {
-                    bootstrap.Carousel.getInstance(carouselEl).pause();
+            const pauseAllCarousels = () => {
+                carousels.forEach(carouselEl => {
+                    if (window.bootstrap && bootstrap.Carousel.getInstance(carouselEl)) {
+                        bootstrap.Carousel.getInstance(carouselEl).pause();
+                    }
+                });
+            };
+
+            const cycleAllCarousels = () => {
+                carousels.forEach(carouselEl => {
+                    if (window.bootstrap && bootstrap.Carousel.getInstance(carouselEl)) {
+                        bootstrap.Carousel.getInstance(carouselEl).cycle();
+                    }
+                });
+            };
+
+            sortButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                dropdownContent.classList.toggle('show');
+                dropdownContent.classList.contains('show') ? pauseAllCarousels() : cycleAllCarousels();
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!dropdownContent.contains(event.target) && !sortButton.contains(event.target) && dropdownContent.classList.contains('show')) {
+                    dropdownContent.classList.remove('show');
+                    cycleAllCarousels();
                 }
             });
-        };
 
-        const cycleAllCarousels = () => {
-            carousels.forEach(carouselEl => {
-                if (window.bootstrap && bootstrap.Carousel.getInstance(carouselEl)) {
-                    bootstrap.Carousel.getInstance(carouselEl).cycle();
-                }
-            });
-        };
-
-        // 1. Управління каруселлю при відкритті/закритті фільтрів
-        sortButton.addEventListener('click', (event) => {
-            event.stopPropagation();
-            dropdownContent.classList.toggle('show');
-
-            if (dropdownContent.classList.contains('show')) {
-                pauseAllCarousels();
-            } else {
-                cycleAllCarousels();
-            }
-        });
-
-        // 2. Закриття фільтрів при кліку поза областю
-        document.addEventListener('click', (event) => {
-            if (!dropdownContent.contains(event.target) && !sortButton.contains(event.target) && dropdownContent.classList.contains('show')) {
-                dropdownContent.classList.remove('show');
-                cycleAllCarousels();
-            }
-        });
-
-        // 3. Логіка застосування фільтрів
-        applyButton.addEventListener('click', () => {
-            const checkedRadios = dropdownContent.querySelectorAll('input[type="radio"]:checked');
-            const params = [];
-
-            checkedRadios.forEach(radio => {
-                params.push(`${radio.name}=${radio.value}`);
+            applyButton.addEventListener('click', () => {
+                const checkedRadios = dropdownContent.querySelectorAll('input[type="radio"]:checked');
+                const params = [];
+                checkedRadios.forEach(radio => params.push(`${radio.name}=${radio.value}`));
+                window.location.href = params.length ? `/shop?${params.join('&')}` : `/shop`;
             });
 
-            if (params.length > 0) {
-                window.location.href = `/shop?${params.join('&')}`;
-            } else {
+            resetButton.addEventListener('click', () => {
                 window.location.href = `/shop`;
-            }
-        });
+            });
 
-        // 4. Скидання фільтрів
-        resetButton.addEventListener('click', () => {
-            window.location.href = `/shop`;
+            carousels.forEach(carouselEl => {
+                if (window.bootstrap) new bootstrap.Carousel(carouselEl);
+            });
         });
-
-        // 5. Ініціалізація каруселей
-        carousels.forEach(carouselEl => {
-            if (window.bootstrap) {
-                new bootstrap.Carousel(carouselEl);
-            }
-        });
-    });
-</script>
+    </script>
 {% endblock %}

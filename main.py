@@ -213,6 +213,14 @@ def delete_product_page():
     all_products = Product.query.all()
     return render_template('delete_product.html', products=all_products)
 
+@app.route('/change_status/<int:product_id>', methods=['POST'])
+def change_status(product_id):
+    new_status = request.form.get('status')
+    product = Product.query.get_or_404(product_id)
+    product.status = new_status
+    db.session.commit()
+    return redirect(url_for('delete_product_page'))
+
 
 @app.route('/delete-product/<int:product_id>', methods=['POST'])
 def delete_product(product_id):
