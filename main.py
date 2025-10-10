@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request, session, url_for, flash
+from flask import Flask, redirect, render_template, request, session, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import timedelta
 from dotenv import load_dotenv
@@ -109,14 +109,59 @@ def posts():
 #    product = Product.query.get_or_404(product_id)
 #    return render_template('product.html', product=product)
 
-@app.route('/add-to-cart')
-def addToCart():
+@app.route('/checkout')
+def checkout():
     pass
+# -------------------------Default routes logic ended--------------------------------#
+
+# -------------------------Сart routes logic Started--------------------------------#
 
 @app.route('/cart')
 def Cart():
     return render_template('cart.html')
-# -------------------------Default routes logic ended--------------------------------#
+
+
+@app.route('/api/get-cart-details', methods=['POST'])
+def get_cart_details():
+    """
+    Приймає список ID товарів з localStorage (JSON)
+    і повертає повну інформацію про ці товари з БД.
+    """
+    try:
+        # 1. Отримання JSON-даних від JS
+        data = request.get_json()
+        # Очікуємо, що data['product_ids'] буде списком [1, 5, 2]
+        product_ids = data.get('product_ids', [])
+
+        if not product_ids:
+            return jsonify({'products': []}), 200
+
+        # 2. Запит до бази даних
+        # Використовуємо .filter(Product.id.in_(product_ids)) для отримання всіх
+        # продуктів одним запитом. Це дуже ефективно.
+        products_from_db = Product.query.filter(Product.id.in_(product_ids)).all()
+
+        # 3. Серіалізація даних у JSON-формат
+        serialized_products = []
+        for product in products_from_db:
+            serialized_products.append({
+                'id': product.id,
+                'title': product.title,
+                'price': product.price,  # Актуальна ціна!
+                'category': product.category,
+                'status' : product.status,
+                'photo_url': product.photo1  # Назву файлу для подальшого використання у JS
+            })
+
+        return jsonify({'products': serialized_products}), 200
+
+    except Exception as e:
+        print(f"Помилка API: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
+
+# -------------------------Cart routes logic ended--------------------------------#
+
+
 
 # -------------------------ADMIN logic started--------------------------------#
 

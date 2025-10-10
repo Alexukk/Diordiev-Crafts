@@ -1,78 +1,348 @@
 {% extends "base.html" %}
 
-{% block title %}Shop - Diordiev Crafts{% endblock %}
-
-{% block head %}
-    {{ super() }}
-    <style>
-        .product-img-container {
-            height: 350px; /* Фіксована висота контейнера */
-            overflow: hidden; /* Обрізає все, що виходить за межі */
-        }
-        .product-img-container .carousel-item img {
-            height: 100%; /* Зображення займає всю висоту контейнера */
-            width: 100%;
-            object-fit: cover; /* Забезпечує обрізання та покриття області */
-        }
-    </style>
-{% endblock %}
+{% block title %}Shopping Cart - Diordiev Crafts{% endblock %}
 
 {% block content %}
 
-        <div class="row g-4">
-    {% for product in products %}
-    <div class="col-12 col-md-6 col-lg-4">
-        <div class="card h-100 shadow-sm">
+    <style>
+        /* Стилі для кнопки "Go to Shop" */
+        .diordiev-button {
+            /* Розміри та вирівнювання */
+            width: 250px !important; /* Трохи ширша, щоб вмістити текст та іконку */
+            height: 50px !important; /* Фіксована висота */
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px !important; /* Проміжок між текстом та іконкою */
+            cursor: pointer !important;
+            text-decoration: none !important; /* Видаляємо підкреслення посилання */
 
-            <div class="product-img-container">
-                <div id="productCarousel_{{ product.id }}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
+            /* Кольори та фон */
+            /* Основний колір #7A5C58. Трохи світліший для верхньої частини градієнта. */
+            background-image: linear-gradient(rgb(140, 120, 117), rgb(122, 92, 88)) !important; /* Відтінки вашого #7A5C58 */
+            border: none !important; /* Без рамки */
+            color: rgb(255, 255, 255) !important; /* Білий текст */
+            font-weight: 600 !important; /* Жирний текст */
+            font-size: 1.1rem !important; /* Розмір шрифту */
 
-                    <div class="carousel-inner">
-                        {% if product.photo1 %}
-                        <div class="carousel-item active">
-                            <img src="{{ './static/' + product.photo1}}" class="card-img-top" alt="{{ product.title }} 1">
-                        </div>
-                        {% endif %}
+            /* Форма та тінь */
+            border-radius: 50px !important; /* Дуже заокруглені кути */
+            box-shadow: 1px 4px 0px #6A4F4C !important; /* Темніша тінь вашого кольору */
 
-                        {% if product.photo2 %}
-                        <div class="carousel-item">
-                            <img src="{{ './static/' + product.photo2}}" class="card-img-top" alt="{{ product.title }} 2">
-                        </div>
-                        {% endif %}
+            /* Ефект переходу */
+            transition-duration: .3s !important;
+        }
 
-                        {% if product.photo3 %}
-                        <div class="carousel-item">
-                            <img src="{{ './static/' + product.photo3}}" class="card-img-top" alt="{{ product.title }} 3">
-                        </div>
-                        {% endif %}
+        /* Стилі для іконки всередині кнопки */
+        .diordiev-button .diordiev-cartIcon {
+            width: 20px !important;
+            height: fit-content !important;
+        }
+
+        .diordiev-button .diordiev-cartIcon path {
+            fill: white !important; /* Білий колір іконки */
+        }
+
+        /* Ефект при натисканні */
+        .diordiev-button:active {
+            transform: translate(2px ,2px) !important; /* Зсув кнопки вниз і вправо */
+            box-shadow: 0px 1px 0px #6A4F4C !important; /* Тінь зменшується */
+        }
+
+        /* Вирівнювання кнопки по центру на сторінці */
+        #empty-cart-message .diordiev-button {
+            margin: 0 auto !important; /* Центрування кнопки */
+            display: flex !important; /* Щоб margin auto працював */
+        }
+    </style>
+
+    <section class="cart-page container my-5">
+        <h1 class="mb-4 text-center">Your Shopping Cart</h1>
+
+        <div id="empty-cart-message" class="text-center p-5 border rounded" style="display:none;">
+            <i class="bi bi-cart-x display-1 text-muted"></i>
+            <h3 class="mt-3">Your cart is empty.</h3>
+            <p class="text-muted">Looks like you haven't found anything yet! Let's go shopping.</p>
+
+            <a href="{{ url_for('shop') }}" class="diordiev-button mt-4" role="button">
+                Go to Shop
+                <svg class="diordiev-cartIcon" viewBox="0 0 576 512"><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"></path></svg>
+            </a>
+        </div>
+
+        <div id="cart-content-container">
+            <p class="text-muted text-center p-5" id="loading-message">Loading items...</p>
+        </div>
+
+        <div class="d-flex justify-content-end mb-3">
+            <button id="clear-cart-btn" class="btn btn-outline-danger btn-sm" style="display:none;">
+                <span aria-hidden="true">&times;</span> Clear Cart
+            </button>
+        </div>
+
+        <div id="cart-summary" class="row justify-content-end mt-5" style="display:none;">
+            <div class="col-md-6 col-lg-4">
+                <div class="p-4 border rounded bg-light shadow-sm">
+                    <h5 class="mb-3 border-bottom pb-2">Order Summary</h5>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Items Subtotal:</span>
+                        <strong id="cart-total-amount" class="fs-5 text-success">$0.00</strong>
                     </div>
 
-                    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel_{{ product.id }}" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel_{{ product.id }}" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                    <div class="d-flex justify-content-between text-muted small border-top pt-2">
+                        <span>Shipping:</span>
+                        <span>Calculated at checkout</span>
+                    </div>
 
-                </div>
-            </div> <div class="card-body d-flex flex-column">
-                <h5 class="card-title mb-1">{{ product.title }}</h5>
-                <p class="text-muted small mb-2">{{ product.category }}</p>
-
-                <p class="card-text flex-grow-1 text-muted small">{{ product.text|truncate(80) }}</p>
-
-                <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
-                    <h4 class="text-success mb-0">{{ product.price }}$</h4>
-                    <a href="{{ url_for('addToCart', product_id=product.id) }}" class="btn btn-success">Add to cart</a>
+                    <button id="checkout-btn" class="btn btn-success btn-lg w-100 mt-4">Proceed to Checkout</button>
                 </div>
             </div>
         </div>
-    </div>
-    {% endfor %}
-</div>
 
     </section>
 
+<script>
+    const CART_STORAGE_KEY = 'diordiev_cart';
+
+    // -------------------------------------------------------------
+    // ... (Весь JavaScript-код залишається без змін) ...
+    // -------------------------------------------------------------
+
+    function getCart() {
+        const cartData = localStorage.getItem(CART_STORAGE_KEY);
+        return cartData ? JSON.parse(cartData) : {};
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        updateCartCounter();
+    }
+
+    function updateCartCounter() {
+        const cart = getCart();
+        let totalItems = 0;
+
+        for (const id in cart) {
+            totalItems += cart[id].qty;
+        }
+
+        const cartCounter = document.getElementById('cart-counter');
+        if (cartCounter) {
+            cartCounter.textContent = totalItems > 0 ? totalItems : '';
+        }
+        return totalItems;
+    }
+
+    function changeQuantity(productId, action) {
+        let cart = getCart();
+        const id = String(productId);
+
+        if (!cart[id]) return;
+
+        if (action === 'increment') {
+            cart[id].qty += 1;
+        } else if (action === 'decrement') {
+            cart[id].qty -= 1;
+        }
+
+        if (cart[id].qty <= 0) {
+            delete cart[id];
+        }
+
+        saveCart(cart);
+        fetchAndRenderCart();
+    }
+
+    function clearCart() {
+        if (confirm('Are you sure you want to clear your cart completely?')) {
+            localStorage.removeItem(CART_STORAGE_KEY);
+            fetchAndRenderCart();
+        }
+    }
+
+    async function fetchAndRenderCart() {
+        const localCart = getCart();
+        const container = document.getElementById('cart-content-container');
+        const loadingMessage = document.getElementById('loading-message');
+        const cartSummary = document.getElementById('cart-summary');
+        const clearBtn = document.getElementById('clear-cart-btn');
+        const emptyMessage = document.getElementById('empty-cart-message');
+
+        const cartEmpty = Object.keys(localCart).length === 0;
+
+        if (cartEmpty) {
+            if (loadingMessage) loadingMessage.style.display = 'none';
+            if (cartSummary) cartSummary.style.display = 'none';
+            if (clearBtn) clearBtn.style.display = 'none';
+            if (container) container.innerHTML = '';
+            if (emptyMessage) emptyMessage.style.display = 'block';
+            return;
+        }
+
+        if (emptyMessage) emptyMessage.style.display = 'none';
+
+        if (clearBtn) {
+            clearBtn.style.display = 'block';
+        }
+        if (loadingMessage) {
+            loadingMessage.textContent = "Loading items...";
+            loadingMessage.style.display = 'block';
+        }
+
+        const productIds = Object.keys(localCart).map(id => parseInt(id));
+
+        try {
+            const response = await fetch('{{ url_for("get_cart_details") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ product_ids: productIds })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                renderCartTable(data.products, localCart, container);
+            } else {
+                container.innerHTML = `<p class="alert alert-danger">Error loading data: ${data.error || 'Unknown error'}</p>`;
+            }
+
+        } catch (error) {
+            container.innerHTML = `<p class="alert alert-danger">Connection error with server.</p>`;
+            console.error('Fetch error:', error);
+        }
+    }
+
+    function renderCartTable(serverProducts, localCart, container) {
+        let cartTotal = 0;
+
+        const loadingMessage = document.getElementById('loading-message');
+        if (loadingMessage) {
+            loadingMessage.style.display = 'none';
+        }
+
+        let html = `
+            <table class="table table-borderless align-middle shopping-cart-table">
+                <thead>
+                    <tr class="text-muted small border-bottom">
+                        <th scope="col" style="width: 40%;">Product</th>
+                        <th scope="col" class="text-center" style="width: 15%;">Price</th>
+                        <th scope="col" class="text-center" style="width: 25%;">Quantity</th>
+                        <th scope="col" class="text-end" style="width: 15%;">Subtotal</th>
+                        <th scope="col" style="width: 5%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        serverProducts.forEach(product => {
+            const item = localCart[String(product.id)];
+            if (!item) return;
+
+            const isSold = product.status && product.status.toLowerCase() === 'sold';
+
+            const itemPrice = product.price;
+            const itemSubtotal = itemPrice * item.qty;
+            cartTotal += itemSubtotal;
+
+            const rowClass = isSold ? 'table-warning' : '';
+            const disabledAttr = isSold ? 'disabled' : '';
+
+            html += `
+                <tr data-product-id="${product.id}" class="${rowClass} border-bottom">
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="{{ url_for('static', filename='') }}${product.photo_url}"
+                                 alt="${product.title}"
+                                 class="img-fluid rounded me-3"
+                                 style="width: 80px; height: 80px; object-fit: cover;">
+                            <div>
+                                <h6 class="mb-0 fw-bold">${product.title}</h6>
+                                <span class="text-muted small">${product.category}</span>
+
+                                ${isSold ? '<span class="badge bg-danger mt-1">SOLD OUT! Cannot change quantity.</span>' : ''}
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center fw-bold text-success">$${itemPrice.toFixed(2)}</td>
+                    <td class="text-center">
+                        <div class="input-group input-group-sm justify-content-center" style="width: 120px; margin: 0 auto;">
+                            <button class="btn btn-outline-secondary quantity-btn"
+                                    data-action="decrement" data-product-id="${product.id}"
+                                    ${disabledAttr}>
+                                —
+                            </button>
+                            <input type="text" class="form-control text-center bg-white" value="${item.qty}"
+                                   readonly style="max-width: 40px; border-color: #ced4da;">
+                            <button class="btn btn-outline-secondary quantity-btn"
+                                    data-action="increment" data-product-id="${product.id}"
+                                    ${disabledAttr}>
+                                +
+                            </button>
+                        </div>
+                    </td>
+                    <td class="text-end item-subtotal fs-5 fw-bold">$${itemSubtotal.toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger remove-item-btn" data-product-id="${product.id}">
+                            &times;
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+
+        const totalAmountElement = document.getElementById('cart-total-amount');
+        if (totalAmountElement) {
+            totalAmountElement.textContent = `$${cartTotal.toFixed(2)}`;
+        }
+
+        const cartSummary = document.getElementById('cart-summary');
+        if (cartSummary) {
+            cartSummary.style.display = 'flex';
+        }
+
+        attachCartEventListeners();
+    }
+
+    function attachCartEventListeners() {
+        document.querySelectorAll('.remove-item-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const id = e.currentTarget.dataset.productId;
+                let cart = getCart();
+                delete cart[id];
+                saveCart(cart);
+                fetchAndRenderCart();
+            });
+        });
+
+        document.querySelectorAll('.quantity-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                if (e.currentTarget.hasAttribute('disabled')) return;
+
+                const id = e.currentTarget.dataset.productId;
+                const action = e.currentTarget.dataset.action;
+                changeQuantity(id, action);
+            });
+        });
+
+        const clearBtn = document.getElementById('clear-cart-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', clearCart);
+        }
+
+        const checkoutBtn = document.getElementById('checkout-btn');
+        if (checkoutBtn) {
+             checkoutBtn.addEventListener('click', () => {
+                 window.location.href = "{{ url_for('checkout') }}";
+             });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchAndRenderCart);
+</script>
 {% endblock %}
