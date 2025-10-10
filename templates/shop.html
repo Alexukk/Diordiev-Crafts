@@ -4,6 +4,7 @@
 
 {% block head %}
     {{ super() }}
+
 /* --- Аккуратная диагональная лента --- */
 .status-badge {
     position: absolute;
@@ -52,6 +53,7 @@
         .card-text {
             flex-grow: 1;
         }
+
 
 {% endblock %}
 
@@ -117,17 +119,17 @@
                             <div class="carousel-inner">
                                 {% if product.photo1 %}
                                 <div class="carousel-item active">
-                                    <img src="{{ './static/' + product.photo1}}" class="card-img-top" alt="{{ product.title }} 1">
-                                </div>
+                                    <img src="{{ './static/' + product.photo1}}" class="card-img-top" alt="{{ product.title }}">
+                                     </div>
                                 {% endif %}
                                 {% if product.photo2 %}
                                 <div class="carousel-item">
-                                    <img src="{{ './static/' + product.photo2}}" class="card-img-top" alt="{{ product.title }} 2">
-                                </div>
+                                    <img src="{{ './static/' + product.photo2}}" class="card-img-top" alt="{{ product.title }}">
+                                 </div>
                                 {% endif %}
                                 {% if product.photo3 %}
                                 <div class="carousel-item">
-                                    <img src="{{ './static/' + product.photo3}}" class="card-img-top" alt="{{ product.title }} 3">
+                                    <img src="{{ './static/' + product.photo3}}" class="card-img-top" alt="{{ product.title }}">
                                 </div>
                                 {% endif %}
                             </div>
@@ -152,7 +154,14 @@
                             {% if product.status == 'sold' %}
                                 <button class="btn btn-outline-secondary" disabled>Sold Out</button>
                             {% else %}
-                                <a href="{{ url_for('addToCart', product_id=product.id) }}" class="btn btn-success">Add to cart</a>
+                                <button
+                                    class="btn btn-success add-to-cart-btn"
+                                    data-product-id="{{ product.id }}"
+                                    data-product-price="{{ product.price }}"
+                                    data-product-title="{{ product.title }}"
+                                >
+                                    Add to cart
+                                </button>
                             {% endif %}
                         </div>
                     </div>
@@ -163,12 +172,67 @@
     </section>
 
     <script>
+        const CART_STORAGE_KEY = 'diordiev_cart';
+
+        function getCart() {
+            const cartData = localStorage.getItem(CART_STORAGE_KEY);
+            return cartData ? JSON.parse(cartData) : {};
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+            updateCartCounter();
+        }
+
+        function updateCartCounter() {
+            const cart = getCart();
+            let totalItems = 0;
+
+            // Підраховуємо загальну кількість одиниць товару
+            for (const id in cart) {
+                totalItems += cart[id].qty;
+            }
+
+            // Оновлення лічильника в меню (припускаємо, що у вас є span з id="cart-counter" у base.html)
+            const cartCounter = document.getElementById('cart-counter');
+            if (cartCounter) {
+                cartCounter.textContent = totalItems > 0 ? totalItems : '';
+            }
+            return totalItems;
+        }
+
+        function addToCart(productId, price, title) {
+            let cart = getCart();
+            const id = String(productId);
+
+            if (cart[id]) {
+                cart[id].qty += 1;
+            } else {
+                cart[id] = {
+                    id: productId,
+                    title: title,
+                    price: parseFloat(price),
+                    qty: 1
+                };
+            }
+
+            saveCart(cart);
+            console.log(`"${title}" додано. В кошику: ${updateCartCounter()} шт.`);
+        }
+
+        // ==========================================================
+        // JS: ОБРОБНИК ПОДІЙ КНОПОК ТА ІНІЦІАЛІЗАЦІЯ
+        // ==========================================================
         document.addEventListener('DOMContentLoaded', () => {
+            // Ініціалізація лічильника кошика
+            updateCartCounter();
+
             const sortButton = document.querySelector('.sort-button');
             const dropdownContent = document.querySelector('.dropdown-content');
             const applyButton = document.querySelector('.apply-filters-button');
             const resetButton = document.querySelector('.reset-filters-button');
             const carousels = document.querySelectorAll('.carousel');
+            const cartButtons = document.querySelectorAll('.add-to-cart-btn'); // Отримання всіх кнопок кошика
 
             const pauseAllCarousels = () => {
                 carousels.forEach(carouselEl => {
@@ -186,6 +250,18 @@
                 });
             };
 
+            // Логіка кнопок "Add to cart"
+            cartButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const productId = button.dataset.productId;
+                    const productPrice = button.dataset.productPrice;
+                    const productTitle = button.dataset.productTitle;
+
+                    addToCart(productId, productPrice, productTitle);
+                });
+            });
+
+            // Логіка фільтрів (залишена без змін)
             sortButton.addEventListener('click', (event) => {
                 event.stopPropagation();
                 dropdownContent.classList.toggle('show');
