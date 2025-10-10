@@ -58,6 +58,46 @@
 {% endblock %}
 
 {% block content %}
+<style>
+/* ================================================= */
+/* ФІРМОВИЙ СТИЛЬ КНОПОК - ЛИШЕ ЗАМІНА КОЛЬОРУ */
+/* ================================================= */
+
+/* Використовуємо лише колір: #7A5C58 */
+.btn-diordiev-color {
+    color: #fff;
+    background-color: #7A5C58;
+    border-color: #7A5C58;
+    transition: background-color 0.2s, border-color 0.2s;
+    /* УВАГА: ВСІ СТИЛІ РОЗМІРУ ТА ВІДСТУПІВ ВИДАЛЕНО, щоб не конфліктувати з вашою розміткою */
+}
+
+.btn-diordiev-color:hover {
+    color: #fff;
+    background-color: #634a47; /* Трохи темніший при наведенні */
+    border-color: #634a47;
+}
+
+.btn-diordiev-color:focus, .btn-diordiev-color:active {
+    box-shadow: 0 0 0 0.25rem rgba(122, 92, 88, 0.5); /* Фірмова тінь при кліку */
+}
+
+/* Стиль для кнопки Sold Out (btn-outline-secondary), щоб вона теж була в кольорах бренду */
+.btn-outline-secondary {
+    color: #7A5C58;
+    border-color: #7A5C58;
+}
+.btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #7A5C58;
+    border-color: #7A5C58;
+}
+
+/* ================================================= */
+/* Кінець фірмового стилю кнопок */
+/* ================================================= */
+</style>
+
     <section class="shop-page container">
         <div class="shop-controls">
             <h1 class="page-title">All Products</h1>
@@ -151,18 +191,19 @@
 
                         <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
                             <h4 class="text-success mb-0">{{ product.price }}$</h4>
+
                             {% if product.status == 'sold' %}
                                 <button class="btn btn-outline-secondary" disabled>Sold Out</button>
                             {% else %}
                                 <button
-                                    class="btn btn-success add-to-cart-btn"
+                                    class="btn btn-diordiev-color add-to-cart-btn"
                                     data-product-id="{{ product.id }}"
                                     data-product-price="{{ product.price }}"
                                     data-product-title="{{ product.title }}"
                                 >
                                     Add to cart
                                 </button>
-                            {% endif %}
+                                {% endif %}
                         </div>
                     </div>
                 </div>
@@ -232,7 +273,9 @@
             const applyButton = document.querySelector('.apply-filters-button');
             const resetButton = document.querySelector('.reset-filters-button');
             const carousels = document.querySelectorAll('.carousel');
-            const cartButtons = document.querySelectorAll('.add-to-cart-btn'); // Отримання всіх кнопок кошика
+
+            // Тепер шукаємо кнопки за класом add-to-cart-btn
+            const cartButtons = document.querySelectorAll('.add-to-cart-btn');
 
             const pauseAllCarousels = () => {
                 carousels.forEach(carouselEl => {
@@ -256,6 +299,9 @@
                     const productId = button.dataset.productId;
                     const productPrice = button.dataset.productPrice;
                     const productTitle = button.dataset.productTitle;
+
+                    // Додаємо перевірку, щоб кнопка "Sold Out" не викликала addToCart
+                    if (button.hasAttribute('disabled')) return;
 
                     addToCart(productId, productPrice, productTitle);
                 });
