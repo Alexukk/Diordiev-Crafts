@@ -4,345 +4,280 @@
 
 {% block content %}
 
-    <style>
-        /* Стилі для кнопки "Go to Shop" */
-        .diordiev-button {
-            /* Розміри та вирівнювання */
-            width: 250px !important; /* Трохи ширша, щоб вмістити текст та іконку */
-            height: 50px !important; /* Фіксована висота */
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 10px !important; /* Проміжок між текстом та іконкою */
-            cursor: pointer !important;
-            text-decoration: none !important; /* Видаляємо підкреслення посилання */
+<style>
+/* ====== Базовые правки ====== */
+.cart-page { max-width: 1100px; margin: 0 auto; }
 
-            /* Кольори та фон */
-            /* Основний колір #7A5C58. Трохи світліший для верхньої частини градієнта. */
-            background-image: linear-gradient(rgb(140, 120, 117), rgb(122, 92, 88)) !important; /* Відтінки вашого #7A5C58 */
-            border: none !important; /* Без рамки */
-            color: rgb(255, 255, 255) !important; /* Білий текст */
-            font-weight: 600 !important; /* Жирний текст */
-            font-size: 1.1rem !important; /* Розмір шрифту */
+/* Позволяет таблице скроллиться по горизонтали на узких экранах */
+#cart-content-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 
-            /* Форма та тінь */
-            border-radius: 50px !important; /* Дуже заокруглені кути */
-            box-shadow: 1px 4px 0px #6A4F4C !important; /* Темніша тінь вашого кольору */
+/* Общие стили таблицы */
+.shopping-cart-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.shopping-cart-table th, .shopping-cart-table td { vertical-align: middle; }
 
-            /* Ефект переходу */
-            transition-duration: .3s !important;
-        }
+/* Картинка товара */
+.shopping-cart-table img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+}
 
-        /* Стилі для іконки всередині кнопки */
-        .diordiev-button .diordiev-cartIcon {
-            width: 20px !important;
-            height: fit-content !important;
-        }
+/* Кнопки +/- и инпут количества */
+.input-group .btn {
+  padding: 0.25rem 0.55rem;
+  min-width: 36px;
+  line-height: 1;
+}
+.input-group input.form-control {
+  max-width: 48px;
+  text-align: center;
+  padding: 0.25rem 0.35rem;
+}
 
-        .diordiev-button .diordiev-cartIcon path {
-            fill: white !important; /* Білий колір іконки */
-        }
+/* Кнопка удаления — чуть аккуратнее */
+.remove-item-btn {
+  line-height: 1;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
 
-        /* Ефект при натисканні */
-        .diordiev-button:active {
-            transform: translate(2px ,2px) !important; /* Зсув кнопки вниз і вправо */
-            box-shadow: 0px 1px 0px #6A4F4C !important; /* Тінь зменшується */
-        }
+/* Order summary карточка */
+#cart-summary .border {
+  border-radius: 10px;
+}
 
-        /* Вирівнювання кнопки по центру на сторінці */
-        #empty-cart-message .diordiev-button {
-            margin: 0 auto !important; /* Центрування кнопки */
-            display: flex !important; /* Щоб margin auto працював */
-        }
-    </style>
+/* ====== MOBILE LAYOUT (<=768px) ====== */
+@media (max-width: 768px) {
+  .shopping-cart-table thead { display: none; }
 
-    <section class="cart-page container my-5">
-        <h1 class="mb-4 text-center">Your Shopping Cart</h1>
+  /* Каждая строка — отдельная карточка */
+  .shopping-cart-table tbody tr {
+    display: block;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  }
 
-        <div id="empty-cart-message" class="text-center p-5 border rounded" style="display:none;">
-            <i class="bi bi-cart-x display-1 text-muted"></i>
-            <h3 class="mt-3">Your cart is empty.</h3>
-            <p class="text-muted">Looks like you haven't found anything yet! Let's go shopping.</p>
+  /* Ячейки как блоки внутри карточки */
+  .shopping-cart-table td {
+    display: block;
+    padding: 10px 12px;
+    border: none !important;
+  }
 
-            <a href="{{ url_for('shop') }}" class="diordiev-button mt-4" role="button">
-                Go to Shop
-                <svg class="diordiev-cartIcon" viewBox="0 0 576 512"><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"></path></svg>
-            </a>
-        </div>
+  /* 1) Верх — картинка + название/категория */
+  .shopping-cart-table td:first-child .d-flex {
+    gap: 12px;
+    align-items: center;
+  }
+  .shopping-cart-table td:first-child h6 {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .shopping-cart-table td:first-child .text-muted {
+    display: block;
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
 
-        <div id="cart-content-container">
-            <p class="text-muted text-center p-5" id="loading-message">Loading items...</p>
-        </div>
+  /* 2) Цена — отдельной строкой чуть ниже */
+  .shopping-cart-table td:nth-child(2) {
+    padding-top: 6px;
+    color: #198754; /* bootstrap success */
+    font-weight: 700;
+    font-size: 1rem;
+  }
 
-        <div class="d-flex justify-content-end mb-3">
-            <button id="clear-cart-btn" class="btn btn-outline-danger btn-sm" style="display:none;">
-                <span aria-hidden="true">&times;</span> Clear Cart
-            </button>
-        </div>
+  /* 3) Количество — кнопки крупнее и в ряд */
+  .shopping-cart-table td:nth-child(3) {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 6px;
+  }
+  .shopping-cart-table td:nth-child(3) .input-group {
+    width: auto;
+  }
+  .shopping-cart-table td:nth-child(3) .btn {
+    min-width: 40px;
+    padding: 0.3rem 0.6rem;
+  }
+  .shopping-cart-table td:nth-child(3) input.form-control {
+    max-width: 56px;
+  }
 
-        <div id="cart-summary" class="row justify-content-end mt-5" style="display:none;">
-            <div class="col-md-6 col-lg-4">
-                <div class="p-4 border rounded bg-light shadow-sm">
-                    <h5 class="mb-3 border-bottom pb-2">Order Summary</h5>
+  /* 4) Сумма и кнопка удаления — внизу */
+  .shopping-cart-table td:nth-child(4) {
+    padding-top: 8px;
+    font-weight: 700;
+    font-size: 1.03rem;
+    color: #000;
+  }
+  .shopping-cart-table td:nth-child(5) {
+    padding-top: 8px;
+    text-align: right;
+  }
+  .shopping-cart-table td:nth-child(5) .remove-item-btn {
+    background: transparent;
+    border: 1px solid rgba(220,53,69,0.12);
+    color: #dc3545;
+    padding: 6px 8px;
+    border-radius: 6px;
+  }
+}
 
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Items Subtotal:</span>
-                        <strong id="cart-total-amount" class="fs-5 text-success">$0.00</strong>
-                    </div>
+/* ====== VERY SMALL SCREENS (<=480px) ====== */
+@media (max-width: 480px) {
+  .shopping-cart-table img {
+    width: 64px;
+    height: 64px;
+  }
+  .diordiev-button {
+    height: 46px;
+    font-size: 1rem;
+  }
+  #cart-summary { margin-top: 14px; }
+}
 
-                    <div class="d-flex justify-content-between text-muted small border-top pt-2">
-                        <span>Shipping:</span>
-                        <span>Calculated at checkout</span>
-                    </div>
+/* Небольшая полировка бейджа sold */
+.badge.bg-danger {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  margin-top: 6px;
+  display: inline-block;
+}
+</style>
 
-                    <button id="checkout-btn" class="btn btn-success btn-lg w-100 mt-4">Proceed to Checkout</button>
+
+<section class="cart-page container my-5">
+    <h1 class="mb-4 text-center">Your Shopping Cart</h1>
+
+    <div id="empty-cart-message" class="text-center p-5 border rounded" style="display:none;">
+        <i class="bi bi-cart-x display-1 text-muted"></i>
+        <h3 class="mt-3">Your cart is empty.</h3>
+        <p class="text-muted">Looks like you haven't found anything yet! Let's go shopping.</p>
+
+        <a href="{{ url_for('shop') }}" class="diordiev-button mt-4">
+            Go to Shop
+            <svg class="diordiev-cartIcon" viewBox="0 0 576 512">
+                <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"></path>
+            </svg>
+        </a>
+    </div>
+
+    <div id="cart-content-container">
+        <p class="text-muted text-center p-5" id="loading-message">Loading items...</p>
+    </div>
+
+    <div class="d-flex justify-content-end mb-3">
+        <button id="clear-cart-btn" class="btn btn-outline-danger btn-sm" style="display:none;">
+            <span aria-hidden="true">&times;</span> Clear Cart
+        </button>
+    </div>
+
+    <div id="cart-summary" class="row justify-content-end mt-5" style="display:none;">
+        <div class="col-md-6 col-lg-4">
+            <div class="p-4 border rounded bg-light shadow-sm">
+                <h5 class="mb-3 border-bottom pb-2">Order Summary</h5>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Items Subtotal:</span>
+                    <strong id="cart-total-amount" class="fs-5 text-success">$0.00</strong>
                 </div>
+
+                <div class="d-flex justify-content-between text-muted small border-top pt-2">
+                    <span>Shipping:</span>
+                    <span>Calculated at checkout</span>
+                </div>
+
+                <button id="checkout-btn" class="btn btn-success btn-lg w-100 mt-4">Proceed to Checkout</button>
             </div>
         </div>
-
-    </section>
+    </div>
+</section>
 
 <script>
+    // JS остаётся без изменений
     const CART_STORAGE_KEY = 'diordiev_cart';
-
-    // -------------------------------------------------------------
-    // ... (Весь JavaScript-код залишається без змін) ...
-    // -------------------------------------------------------------
-
-    function getCart() {
-        const cartData = localStorage.getItem(CART_STORAGE_KEY);
-        return cartData ? JSON.parse(cartData) : {};
-    }
-
-    function saveCart(cart) {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-        updateCartCounter();
-    }
-
-    function updateCartCounter() {
-        const cart = getCart();
-        let totalItems = 0;
-
-        for (const id in cart) {
-            totalItems += cart[id].qty;
-        }
-
-        const cartCounter = document.getElementById('cart-counter');
-        if (cartCounter) {
-            cartCounter.textContent = totalItems > 0 ? totalItems : '';
-        }
-        return totalItems;
-    }
-
-    function changeQuantity(productId, action) {
-        let cart = getCart();
-        const id = String(productId);
-
-        if (!cart[id]) return;
-
-        if (action === 'increment') {
-            cart[id].qty += 1;
-        } else if (action === 'decrement') {
-            cart[id].qty -= 1;
-        }
-
-        if (cart[id].qty <= 0) {
-            delete cart[id];
-        }
-
-        saveCart(cart);
-        fetchAndRenderCart();
-    }
-
-    function clearCart() {
-        if (confirm('Are you sure you want to clear your cart completely?')) {
-            localStorage.removeItem(CART_STORAGE_KEY);
-            fetchAndRenderCart();
-        }
-    }
-
+    function getCart() { const d = localStorage.getItem(CART_STORAGE_KEY); return d ? JSON.parse(d) : {}; }
+    function saveCart(c) { localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(c)); updateCartCounter(); }
+    function updateCartCounter() { const c = getCart(); let t = 0; for (const i in c) t += c[i].qty; const el = document.getElementById('cart-counter'); if (el) el.textContent = t > 0 ? t : ''; return t; }
+    function changeQuantity(id, act) { let c = getCart(); id = String(id); if (!c[id]) return; act === 'increment' ? c[id].qty++ : c[id].qty--; if (c[id].qty <= 0) delete c[id]; saveCart(c); fetchAndRenderCart(); }
+    function clearCart() { if (confirm('Are you sure you want to clear your cart completely?')) { localStorage.removeItem(CART_STORAGE_KEY); fetchAndRenderCart(); } }
     async function fetchAndRenderCart() {
-        const localCart = getCart();
-        const container = document.getElementById('cart-content-container');
-        const loadingMessage = document.getElementById('loading-message');
-        const cartSummary = document.getElementById('cart-summary');
-        const clearBtn = document.getElementById('clear-cart-btn');
-        const emptyMessage = document.getElementById('empty-cart-message');
-
-        const cartEmpty = Object.keys(localCart).length === 0;
-
-        if (cartEmpty) {
-            if (loadingMessage) loadingMessage.style.display = 'none';
-            if (cartSummary) cartSummary.style.display = 'none';
-            if (clearBtn) clearBtn.style.display = 'none';
-            if (container) container.innerHTML = '';
-            if (emptyMessage) emptyMessage.style.display = 'block';
-            return;
-        }
-
-        if (emptyMessage) emptyMessage.style.display = 'none';
-
-        if (clearBtn) {
-            clearBtn.style.display = 'block';
-        }
-        if (loadingMessage) {
-            loadingMessage.textContent = "Loading items...";
-            loadingMessage.style.display = 'block';
-        }
-
-        const productIds = Object.keys(localCart).map(id => parseInt(id));
-
+        const lc = getCart(), cont = document.getElementById('cart-content-container'), load = document.getElementById('loading-message'), sum = document.getElementById('cart-summary'), clr = document.getElementById('clear-cart-btn'), empty = document.getElementById('empty-cart-message');
+        if (Object.keys(lc).length === 0) { if (load) load.style.display='none'; if (sum) sum.style.display='none'; if (clr) clr.style.display='none'; if (cont) cont.innerHTML=''; if (empty) empty.style.display='block'; return; }
+        if (empty) empty.style.display='none'; if (clr) clr.style.display='block'; if (load) { load.textContent="Loading items..."; load.style.display='block'; }
+        const ids = Object.keys(lc).map(i=>parseInt(i));
         try {
-            const response = await fetch('{{ url_for("get_cart_details") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ product_ids: productIds })
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                renderCartTable(data.products, localCart, container);
-            } else {
-                container.innerHTML = `<p class="alert alert-danger">Error loading data: ${data.error || 'Unknown error'}</p>`;
-            }
-
-        } catch (error) {
-            container.innerHTML = `<p class="alert alert-danger">Connection error with server.</p>`;
-            console.error('Fetch error:', error);
-        }
+            const r = await fetch('{{ url_for("get_cart_details") }}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({product_ids:ids})});
+            const data = await r.json();
+            if (r.ok) renderCartTable(data.products, lc, cont);
+            else cont.innerHTML=`<p class="alert alert-danger">Error loading data: ${data.error||'Unknown error'}</p>`;
+        } catch(e){ cont.innerHTML=`<p class="alert alert-danger">Connection error with server.</p>`; console.error(e); }
     }
-
-    function renderCartTable(serverProducts, localCart, container) {
-        let cartTotal = 0;
-
-        const loadingMessage = document.getElementById('loading-message');
-        if (loadingMessage) {
-            loadingMessage.style.display = 'none';
-        }
-
-        let html = `
-            <table class="table table-borderless align-middle shopping-cart-table">
-                <thead>
-                    <tr class="text-muted small border-bottom">
-                        <th scope="col" style="width: 40%;">Product</th>
-                        <th scope="col" class="text-center" style="width: 15%;">Price</th>
-                        <th scope="col" class="text-center" style="width: 25%;">Quantity</th>
-                        <th scope="col" class="text-end" style="width: 15%;">Subtotal</th>
-                        <th scope="col" style="width: 5%;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        serverProducts.forEach(product => {
-            const item = localCart[String(product.id)];
-            if (!item) return;
-
-            const isSold = product.status && product.status.toLowerCase() === 'sold';
-
-            const itemPrice = product.price;
-            const itemSubtotal = itemPrice * item.qty;
-            cartTotal += itemSubtotal;
-
-            const rowClass = isSold ? 'table-warning' : '';
-            const disabledAttr = isSold ? 'disabled' : '';
-
-            html += `
-                <tr data-product-id="${product.id}" class="${rowClass} border-bottom">
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <img src="{{ url_for('static', filename='') }}${product.photo_url}"
-                                 alt="${product.title}"
-                                 class="img-fluid rounded me-3"
-                                 style="width: 80px; height: 80px; object-fit: cover;">
-                            <div>
-                                <h6 class="mb-0 fw-bold">${product.title}</h6>
-                                <span class="text-muted small">${product.category}</span>
-
-                                ${isSold ? '<span class="badge bg-danger mt-1">SOLD OUT! Cannot change quantity.</span>' : ''}
-                            </div>
+    function renderCartTable(sp, lc, cont) {
+        let total=0;
+        const load=document.getElementById('loading-message'); if(load) load.style.display='none';
+        let html=`<table class="table table-borderless align-middle shopping-cart-table"><thead><tr class="text-muted small border-bottom"><th style="width:40%;">Product</th><th class="text-center" style="width:15%;">Price</th><th class="text-center" style="width:25%;">Quantity</th><th class="text-end" style="width:15%;">Subtotal</th><th style="width:5%;"></th></tr></thead><tbody>`;
+        sp.forEach(p=>{
+            const item=lc[String(p.id)];
+            if(!item) return;
+            const sold=p.status&&p.status.toLowerCase()==='sold';
+            const price=p.price, sub=price*item.qty; total+=sub;
+            html+=`<tr data-product-id="${p.id}" class="${sold?'table-warning':''} border-bottom">
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img src="{{ url_for('static', filename='') }}${p.photo_url}" alt="${p.title}" class="img-fluid rounded me-3">
+                        <div>
+                            <h6 class="mb-0 fw-bold">${p.title}</h6>
+                            <span class="text-muted small">${p.category}</span>
+                            ${sold?'<span class="badge bg-danger mt-1">SOLD OUT! Cannot change quantity.</span>':''}
                         </div>
-                    </td>
-                    <td class="text-center fw-bold text-success">$${itemPrice.toFixed(2)}</td>
-                    <td class="text-center">
-                        <div class="input-group input-group-sm justify-content-center" style="width: 120px; margin: 0 auto;">
-                            <button class="btn btn-outline-secondary quantity-btn"
-                                    data-action="decrement" data-product-id="${product.id}"
-                                    ${disabledAttr}>
-                                —
-                            </button>
-                            <input type="text" class="form-control text-center bg-white" value="${item.qty}"
-                                   readonly style="max-width: 40px; border-color: #ced4da;">
-                            <button class="btn btn-outline-secondary quantity-btn"
-                                    data-action="increment" data-product-id="${product.id}"
-                                    ${disabledAttr}>
-                                +
-                            </button>
-                        </div>
-                    </td>
-                    <td class="text-end item-subtotal fs-5 fw-bold">$${itemSubtotal.toFixed(2)}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-danger remove-item-btn" data-product-id="${product.id}">
-                            &times;
-                        </button>
-                    </td>
-                </tr>
-            `;
+                    </div>
+                </td>
+                <td class="text-center fw-bold text-success">$${price.toFixed(2)}</td>
+                <td class="text-center">
+                    <div class="input-group input-group-sm justify-content-center">
+                        <button class="btn btn-outline-secondary quantity-btn" data-action="decrement" data-product-id="${p.id}" ${sold?'disabled':''}>—</button>
+                        <input type="text" class="form-control text-center bg-white" value="${item.qty}" readonly>
+                        <button class="btn btn-outline-secondary quantity-btn" data-action="increment" data-product-id="${p.id}" ${sold?'disabled':''}>+</button>
+                    </div>
+                </td>
+                <td class="text-end item-subtotal fs-5 fw-bold">$${sub.toFixed(2)}</td>
+                <td><button class="btn btn-sm btn-outline-danger remove-item-btn" data-product-id="${p.id}">&times;</button></td>
+            </tr>`;
         });
-
-        html += `</tbody></table>`;
-        container.innerHTML = html;
-
-        const totalAmountElement = document.getElementById('cart-total-amount');
-        if (totalAmountElement) {
-            totalAmountElement.textContent = `$${cartTotal.toFixed(2)}`;
-        }
-
-        const cartSummary = document.getElementById('cart-summary');
-        if (cartSummary) {
-            cartSummary.style.display = 'flex';
-        }
-
+        html+=`</tbody></table>`;
+        cont.innerHTML=html;
+        const totalEl=document.getElementById('cart-total-amount'); if(totalEl) totalEl.textContent=`$${total.toFixed(2)}`;
+        const sum=document.getElementById('cart-summary'); if(sum) sum.style.display='flex';
         attachCartEventListeners();
     }
-
     function attachCartEventListeners() {
-        document.querySelectorAll('.remove-item-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const id = e.currentTarget.dataset.productId;
-                let cart = getCart();
-                delete cart[id];
-                saveCart(cart);
-                fetchAndRenderCart();
+        document.querySelectorAll('.remove-item-btn').forEach(btn=>{
+            btn.addEventListener('click',e=>{
+                const id=e.currentTarget.dataset.productId;
+                let c=getCart(); delete c[id]; saveCart(c); fetchAndRenderCart();
             });
         });
-
-        document.querySelectorAll('.quantity-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                if (e.currentTarget.hasAttribute('disabled')) return;
-
-                const id = e.currentTarget.dataset.productId;
-                const action = e.currentTarget.dataset.action;
-                changeQuantity(id, action);
+        document.querySelectorAll('.quantity-btn').forEach(btn=>{
+            btn.addEventListener('click',e=>{
+                if(e.currentTarget.hasAttribute('disabled')) return;
+                changeQuantity(e.currentTarget.dataset.productId,e.currentTarget.dataset.action);
             });
         });
-
-        const clearBtn = document.getElementById('clear-cart-btn');
-        if (clearBtn) {
-            clearBtn.addEventListener('click', clearCart);
-        }
-
-        const checkoutBtn = document.getElementById('checkout-btn');
-        if (checkoutBtn) {
-             checkoutBtn.addEventListener('click', () => {
-                 window.location.href = "{{ url_for('checkout') }}";
-             });
-        }
+        const clr=document.getElementById('clear-cart-btn'); if(clr) clr.addEventListener('click',clearCart);
+        const checkout=document.getElementById('checkout-btn'); if(checkout) checkout.addEventListener('click',()=>{ window.location.href="{{ url_for('checkout') }}"; });
     }
-
     document.addEventListener('DOMContentLoaded', fetchAndRenderCart);
 </script>
+
 {% endblock %}
