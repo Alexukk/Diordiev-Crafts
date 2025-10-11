@@ -133,7 +133,107 @@ def posts():
 
 @app.route('/checkout')
 def checkout():
-    pass
+    return render_template("checkout.html")
+
+
+@app.route('/submit_order', methods=['POST'])
+def submit_order():
+    # 1. Отримання даних JSON з фронтенду
+    try:
+        data = request.get_json()
+    except:
+        return jsonify({'error': 'Invalid JSON format'}), 400
+
+
+    if not all(k in data for k in ['full_name', 'phone', 'email', 'contact_way', 'cart_items']):
+        return jsonify({'error': 'Missing required fields (Name, Phone, Email, Contact Way or Cart Items)'}), 400
+
+    # Дані клієнта
+    full_name = data['full_name']
+    phone = data['phone']
+    email = data['email']
+    contact_way = data['contact_way']
+    cart_items = data['cart_items']
+
+    if not cart_items:
+        return jsonify({'error': 'Cart is empty.'}), 400
+
+
+    product_ids = [int(id) for id in cart_items.keys()]
+
+
+    products_map = {p.id: p for p in Product.query.filter(Product.id.in_(product_ids)).all()}
+
+
+    order_item_list = []
+    total_price = 0.0
+
+    for product_id_str, item_data in cart_items.items():
+        product_id = int(product_id_str)
+        amount = item_data.get('qty', 0)
+
+
+        if product_id not in products_map or amount <= 0:
+
+            continue
+
+        product = products_map[product_id]
+
+        item_subtotal = product.price * amount
+        total_price += item_subtotal
+
+
+        order_item = Order_item(
+            item_id=product.id,
+            amount=amount,
+
+        )
+        order_item_list.append(order_item)
+
+    if total_price == 0.0:
+        return jsonify({'error': 'Failed to calculate total price or cart contains invalid items.'}), 400
+
+
+    new_order = Order(
+        full_name=full_name,
+        email=email,
+        phone=phone,
+        contact_way=contact_way,
+        total_price=total_price,
+    )
+
+
+    try:
+        db.session.add(new_order)
+        db.session.flush()
+
+
+        for item in order_item_list:
+            item.order_id = new_order.id
+
+        db.session.add_all(order_item_list)
+
+
+        db.session.commit()
+
+
+        return jsonify({
+            'success': True,
+            'message': 'Order successfully placed.',
+            'order_id': new_order.id
+        }), 200
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error placing order: {e}")
+        return jsonify({'error': 'Server error: Failed to save the order to the database.'}), 500
+
+
+
+@app.route('/thank_you')
+def thank_you():
+    order_id = request.args.get('order_id', 'N/A')
+    return render_template('thankyou.html', order_id=order_id)
 # -------------------------Default routes logic ended--------------------------------#
 
 # -------------------------Сart routes logic Started--------------------------------#

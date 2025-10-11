@@ -83,7 +83,7 @@
     </footer>
 
 
-{% if request.endpoint != 'Cart' %}
+{% if request.endpoint != 'Cart' and request.endpoint != 'checkout' and request.endpoint != 'thank_you' %}
     <a href="{{ url_for('Cart') }}" class="fixed-bottom-right-btn btn btn-dark rounded-circle">
         <img src="{{ url_for('static', filename='img/shopping-cart.png') }}" alt="Cart" title="Go to Cart">
     </a>
