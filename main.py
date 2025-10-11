@@ -4,6 +4,8 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 from datetime import datetime, timezone
+
+from pygments.lexer import default
 from werkzeug.utils import secure_filename
 
 load_dotenv()
@@ -50,6 +52,26 @@ class Post(db.Model):
     def __repr__(self):
         return f'<Post {self.id}>'
 
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(150), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(30), nullable=False)
+    contact_way = db.Column(db.String(30), nullable=False)
+    date = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    status = db.Column(db.String(30), default='New')
+    items = db.relationship('Order_item', backref='order', lazy='dynamic')
+    total_price = db.Column(db.Float, nullable=False, default=0.0)
+
+class Order_item(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    item_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    amount = db.Column(db.Integer, nullable=False)
+
+    # ЗВ'ЯЗОК (relationship): Дозволяє отримати об'єкт Product для цього рядка.
+    product = db.relationship('Product', backref='order_lines', lazy=True)
 
 # -------------------------DB MODELS logic ended--------------------------------#
 

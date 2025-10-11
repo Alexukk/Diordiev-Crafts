@@ -13,25 +13,25 @@
 
     <style>
         {% block head %}{% endblock %}
-        /* Стилі для фіксованої кнопки внизу праворуч */
+
         .fixed-bottom-right-btn {
             position: fixed;
-            bottom: 20px;   /* Відступ від низу */
-            right: 20px;    /* Відступ від правого краю */
-            z-index: 1050;  /* Вищий z-index, щоб кнопка була поверх іншого контенту */
-            width: 70px;    /* Фіксована ширина */
-            height: 70px;   /* Фіксована висота */
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+            width: 70px;
+            height: 70px;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Тінь для кращого вигляду */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 
         }
-        /* Стиль для іконки всередині кнопки */
+
         .fixed-bottom-right-btn img {
-            width: 24px; /* Розмір вашої PNG/SVG іконки */
+            width: 24px;
             height: 24px;
-            filter: invert(100%); /* Припускаємо, що іконка чорна, і ми робимо її білою для темного фону */
+            filter: invert(100%);
         }
     </style>
 
@@ -55,6 +55,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('privacy_policy') }}">Privacy policy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('Cart') }}">Cart</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('posts') }}">Our Blog</a>

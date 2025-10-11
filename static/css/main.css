@@ -836,7 +836,7 @@ a {
 }
 
 .help-card-button {
-    background-color: #e0ac78; /* Цвет кнопки, как на твоём сайте */
+    background-color: #e0ac78;
     border-color: #e0ac78;
     color: #fff;
     font-family: var(--font-body);
@@ -875,13 +875,13 @@ a {
 /* Стиль для активной (выбранной) вкладки */
 .privacy-policy-section .nav-pills .nav-link.active {
     color: #000; /* Цвет текста активной вкладки (черный или темный) */
-    background-color: rgba(6, 68, 9, 1); /* Желтый фон активной вкладки */
+    background-color: #7A5C58; /* Желтый фон активной вкладки */
     border-color: rgba(9, 35, 0, 1); /* Желтый контур активной вкладки */
 }
 
 /* Стиль для вкладки при наведении */
 .privacy-policy-section .nav-pills .nav-link:hover:not(.active) {
-    background-color: rgba(86, 138, 66, 1); /* Легкий желтый фон при наведении */
+    background-color: #957B75; /* Легкий желтый фон при наведении */
     color: #000; /* Цвет текста при наведении */
 }.card-img-top {
     width: 100%;       /* Изображение займет всю ширину родительской карточки */
