@@ -47,5 +47,8 @@ Managing orders page:
 <img width="1280" height="612" alt="image" src="https://github.com/user-attachments/assets/64578af9-78a2-4696-a256-2258d3bf37f3" />
 
 
+Telegram notifier for administration:
+<img width="433" height="271" alt="image" src="https://github.com/user-attachments/assets/9db66408-8bb7-4ebe-b178-197942c14d95" />
+
 
 
