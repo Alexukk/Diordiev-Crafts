@@ -30,6 +30,17 @@
             <p>View, edit, or delete existing posts.</p>
             <a href="{{ url_for('delete_post_page') }}" class="admin-button">Go</a>
         </div>
+        <div class="admin-card">
+            <h3>Manage orders</h3>
+            <p>Open admin panel with all orders</p>
+            <a href="{{ url_for('admin_orders') }}" class="admin-button">Go</a>
+        </div>
+
+        <div class="admin-card">
+            <h3>Back to shop</h3>
+            <p>Come back to a shop page</p>
+            <a href="{{ url_for('shop') }}" class="admin-button">Go</a>
+        </div>
     </div>
 </section>
 {% endblock %}
