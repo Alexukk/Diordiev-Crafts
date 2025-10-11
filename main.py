@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime, timezone
 
-from pygments.lexer import default
+from bot import notifier
 from werkzeug.utils import secure_filename
 
 load_dotenv()
@@ -144,7 +144,6 @@ def submit_order():
     except:
         return jsonify({'error': 'Invalid JSON format'}), 400
 
-
     if not all(k in data for k in ['full_name', 'phone', 'email', 'contact_way', 'cart_items']):
         return jsonify({'error': 'Missing required fields (Name, Phone, Email, Contact Way or Cart Items)'}), 400
 
@@ -158,12 +157,9 @@ def submit_order():
     if not cart_items:
         return jsonify({'error': 'Cart is empty.'}), 400
 
-
     product_ids = [int(id) for id in cart_items.keys()]
 
-
     products_map = {p.id: p for p in Product.query.filter(Product.id.in_(product_ids)).all()}
-
 
     order_item_list = []
     total_price = 0.0
@@ -172,9 +168,7 @@ def submit_order():
         product_id = int(product_id_str)
         amount = item_data.get('qty', 0)
 
-
         if product_id not in products_map or amount <= 0:
-
             continue
 
         product = products_map[product_id]
@@ -182,17 +176,14 @@ def submit_order():
         item_subtotal = product.price * amount
         total_price += item_subtotal
 
-
         order_item = Order_item(
             item_id=product.id,
             amount=amount,
-
         )
         order_item_list.append(order_item)
 
     if total_price == 0.0:
         return jsonify({'error': 'Failed to calculate total price or cart contains invalid items.'}), 400
-
 
     new_order = Order(
         full_name=full_name,
@@ -202,11 +193,9 @@ def submit_order():
         total_price=total_price,
     )
 
-
     try:
         db.session.add(new_order)
         db.session.flush()
-
 
         for item in order_item_list:
             item.order_id = new_order.id
@@ -216,6 +205,12 @@ def submit_order():
 
         db.session.commit()
 
+
+        try:
+            notifier(new_order)
+        except Exception as telegram_error:
+
+            print(f"ATTENTION: Failed to send Telegram notification! Error: {telegram_error}")
 
         return jsonify({
             'success': True,
@@ -227,7 +222,6 @@ def submit_order():
         db.session.rollback()
         print(f"Error placing order: {e}")
         return jsonify({'error': 'Server error: Failed to save the order to the database.'}), 500
-
 
 
 @app.route('/thank_you')
