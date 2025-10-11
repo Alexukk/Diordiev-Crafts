@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Управление заказами - Admin{% endblock %}
+
+{% block content %}
+<style>
+    /* ================================================= */
+    /* АДМИН-СТИЛИ */
+    /* ================================================= */
+    .admin-container {
+        max-width: 1300px;
+        margin: 50px auto;
+    }
+
+    /* Стили для Select (статус) */
+    .status-select {
+        border-color: #7A5C58;
+        box-shadow: none !important;
+        cursor: pointer;
+        font-weight: 500;
+        width: 130px; /* Фиксированная ширина */
+    }
+    /* Цветовая индикация статусов */
+    .status-New { background-color: #7A5C58; color: white; }
+    .status-Contacted { background-color: #ffc107; color: #333; }
+    .status-Completed { background-color: #28a745; color: white; }
+    .status-Cancelled { background-color: #dc3545; color: white; }
+
+    .table-responsive { overflow-x: auto; }
+</style>
+
+<div class="container admin-container">
+    <h2 class="mb-4">Управление заказами</h2>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Дата</th>
+                    <th>Клиент</th>
+                    <th>Контакт (Связь)</th>
+                    <th>Итого</th>
+                    <th>Товары</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr id="order-row-{{ order.id }}">
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>
+                        {{ order.full_name }}<br>
+                        <small class="text-muted">{{ order.email }}</small>
+                    </td>
+                    <td>{{ order.phone }} ({{ order.contact_way }})</td>
+                    <td><b class="text-success">${{ "%.2f" | format(order.total_price) }}</b></td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#itemsModal{{ order.id }}">
+                            Посмотреть ({{ order.items.count() }})
+                        </a>
+                    </td>
+                    <td>
+                        <select class="form-select status-select status-{{ order.status }}"
+                                id="status-{{ order.id }}"
+                                data-order-id="{{ order.id }}"
+                                onchange="updateOrderStatus(this)">
+                            <option value="New" {% if order.status == 'New' %}selected{% endif %} class="status-New">Новый</option>
+                            <option value="Contacted" {% if order.status == 'Contacted' %}selected{% endif %} class="status-Contacted">Связались</option>
+                            <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %} class="status-Completed">Завершен</option>
+                            <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %} class="status-Cancelled">Отменен</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteOrder({{ order.id }})">Удалить</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% for order in orders %}
+    <div class="modal fade" id="itemsModal{{ order.id }}" tabindex="-1" aria-labelledby="itemsModalLabel{{ order.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemsModalLabel{{ order.id }}">Товары в Заказе #{{ order.id }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group">
+                        {% for item in order.items.all() %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ item.product.title if item.product else 'Товар удален' }}
+                            <span class="badge bg-secondary rounded-pill">{{ item.amount }} шт.</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    // =================================================
+    // JS: СМЕНА СТАТУСА ЧЕРЕЗ AJAX
+    // =================================================
+    async function updateOrderStatus(selectElement) {
+        const orderId = selectElement.dataset.orderId;
+        const newStatus = selectElement.value;
+        const oldClass = selectElement.className;
+
+        selectElement.disabled = true;
+
+        try {
+            const response = await fetch('{{ url_for("admin_update_status") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    order_id: orderId,
+                    status: newStatus
+                })
+            });
+
+            if (response.ok) {
+                // Успешное обновление: меняем класс для цвета
+                selectElement.className = `form-select status-select status-${newStatus}`;
+                alert(`Статус Заказа #${orderId} успешно изменен на "${newStatus}"!`);
+            } else {
+                const data = await response.json();
+                alert(`Ошибка при смене статуса: ${data.error}`);
+                // Возвращаем старый статус
+                selectElement.value = oldClass.split('status-')[1].trim();
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            alert('Произошла сетевая ошибка или ошибка сервера.');
+        } finally {
+            selectElement.disabled = false;
+        }
+    }
+
+    // =================================================
+    // JS: УДАЛЕНИЕ ЗАКАЗА ЧЕРЕЗ AJAX
+    // =================================================
+    async function deleteOrder(orderId) {
+        if (!confirm(`Вы уверены, что хотите удалить Заказ #${orderId}? Это действие является НЕОБОРОТНЫМ, и все данные будут потеряны.`)) {
+            return;
+        }
+
+        const row = document.getElementById(`order-row-${orderId}`);
+        const deleteBtn = row.querySelector('button.btn-outline-danger');
+        deleteBtn.disabled = true;
+
+        try {
+            // Маршрут для удаления, который вы реализовали на сервере
+            const response = await fetch(`{{ url_for("admin_delete_order", order_id=0) }}`.replace('0', orderId), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            if (response.ok) {
+                // Успешное удаление: удаляем строку из таблицы
+                row.remove();
+                alert(`Замовлення #${orderId} успішно видалено.`);
+            } else {
+                const data = await response.json();
+                alert(`Помилка видалення: ${data.error || 'Невідома помилка'}`);
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            alert('Помилка мережі при видаленні замовлення.');
+        } finally {
+            deleteBtn.disabled = false;
+        }
+    }
+</script>
+{% endblock %}

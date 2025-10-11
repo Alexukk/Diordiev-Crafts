@@ -61,7 +61,7 @@ class Order(db.Model):
     contact_way = db.Column(db.String(30), nullable=False)
     date = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     status = db.Column(db.String(30), default='New')
-    items = db.relationship('Order_item', backref='order', lazy='dynamic')
+    items = db.relationship('Order_item', backref='order', lazy='dynamic', cascade="all, delete-orphan")
     total_price = db.Column(db.Float, nullable=False, default=0.0)
 
 class Order_item(db.Model):
@@ -126,10 +126,7 @@ def posts():
     all_posts = Post.query.order_by(Post.date.desc()).all()
     return render_template('posts.html', posts=all_posts)
 
-#@app.route('/product/<int:product_id>')
-#def product_detail(product_id):
-#    product = Product.query.get_or_404(product_id)
-#    return render_template('product.html', product=product)
+
 
 @app.route('/checkout')
 def checkout():
@@ -230,6 +227,80 @@ def thank_you():
     return render_template('thankyou.html', order_id=order_id)
 # -------------------------Default routes logic ended--------------------------------#
 
+
+@app.route('/admin/orders')
+def admin_orders():
+    if not session.get("logged_in"):
+        flash('You need to be logged in to access the admin panel.', 'warning')
+        return redirect(url_for('login'))
+
+    orders = Order.query.order_by(Order.date.desc()).all()
+
+    return render_template('admin_orders.html', orders=orders)
+
+
+
+@app.route('/admin/update_status', methods=['POST'])
+
+
+def admin_update_status():
+    if not session.get("logged_in"):
+        flash('You need to be logged in to access the admin panel.', 'warning')
+        return redirect(url_for('login'))
+
+    data = request.get_json()
+    order_id = data.get('order_id')
+    new_status = data.get('status')
+
+    order = Order.query.get(order_id)
+
+    if not order:
+        return jsonify({'error': f'Заказ с ID {order_id} не найден'}), 404
+
+    valid_statuses = ['New', 'Contacted', 'Completed', 'Cancelled']
+    if new_status not in valid_statuses:
+        return jsonify({'error': 'Недопустимое значение статуса.'}), 400
+
+    old_status = order.status
+
+    try:
+
+        order.status = new_status
+        db.session.commit()
+
+
+        return jsonify({'success': True, 'status': new_status}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating order status: {e}")
+        return jsonify({'error': 'Ошибка сервера при обновлении статуса.'}), 500
+
+
+@app.route('/admin/delete_order/<int:order_id>', methods=['POST'])
+
+def admin_delete_order(order_id):
+    if not session.get("logged_in"):
+        flash('You need to be logged in to access the admin panel.', 'warning')
+        return redirect(url_for('login'))
+
+    order_to_delete = Order.query.get(order_id)
+
+    if not order_to_delete:
+        return jsonify({'error': f'Замовлення з ID {order_id} не знайдено'}), 404
+
+    try:
+        db.session.delete(order_to_delete)
+        db.session.commit()
+
+        return jsonify({'success': True, 'message': f'Замовлення #{order_id} успішно видалено.'}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Помилка видалення замовлення: {e}")
+        return jsonify({'error': f'Помилка сервера при видаленні замовлення: {e}'}), 500
+
+
 # -------------------------Сart routes logic Started--------------------------------#
 
 @app.route('/cart')
@@ -239,25 +310,18 @@ def Cart():
 
 @app.route('/api/get-cart-details', methods=['POST'])
 def get_cart_details():
-    """
-    Приймає список ID товарів з localStorage (JSON)
-    і повертає повну інформацію про ці товари з БД.
-    """
+
     try:
-        # 1. Отримання JSON-даних від JS
+
         data = request.get_json()
-        # Очікуємо, що data['product_ids'] буде списком [1, 5, 2]
+
         product_ids = data.get('product_ids', [])
 
         if not product_ids:
             return jsonify({'products': []}), 200
 
-        # 2. Запит до бази даних
-        # Використовуємо .filter(Product.id.in_(product_ids)) для отримання всіх
-        # продуктів одним запитом. Це дуже ефективно.
         products_from_db = Product.query.filter(Product.id.in_(product_ids)).all()
 
-        # 3. Серіалізація даних у JSON-формат
         serialized_products = []
         for product in products_from_db:
             serialized_products.append({
