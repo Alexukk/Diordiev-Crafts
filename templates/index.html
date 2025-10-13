@@ -3,6 +3,7 @@
 {% block title %}Diordiev Crafts - Handcrafted Goods{% endblock %}
 
 {% block content %}
+
     <section class="hero-andrews-wood">
         <div class="container hero-andrews-wood-content">
             <h1>Diordiev Crafts</h1>
@@ -31,6 +32,9 @@
         </div>
     </section>
 
+    {# ЦЕЙ БЛОК БУДЕ ВИКОРИСТАНИЙ ДЛЯ ВСТАВКИ TOAST #}
+    <div id="announcement"></div>
+
     <section class="about-section">
         <div class="container">
             <h2 class="section-title">Our Story</h2>
@@ -50,4 +54,75 @@
             <a href="/shop" class="button">Explore the Full Collection</a>
         </div>
     </section>
+
+
+<script>
+const loadAnnouncement = () => {
+    fetch("/api/get-announcement")
+        .then(response => {
+            if (!response.ok) {
+                // Викидаємо помилку, якщо HTTP статус не 200-299
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // ПЕРЕВІРКА: ОГОЛОШЕННЯ АКТИВНЕ?
+            // Оскільки ваш API тепер повертає об'єкт навіть при неактивності,
+            // ми перевіряємо, чи є дані та текст.
+            if (data && data.text) {
+
+                // ВАЖЛИВО: Toast повинен мати position: fixed, тому його краще
+                // вставити у <body>, а не в <div id="announcement">.
+                // Але ми використаємо ваш підхід, додавши фіксоване позиціонування
+                // до контейнера.
+
+                const blockHTML = `
+                    <div style="position: fixed; top: 70px; right: 20px; z-index: 99999;">
+                        <div class="toast show border-${data.color}" role="alert" aria-live="assertive" aria-atomic="true" id="announcementToast">
+
+                            <div class="toast-header bg-${data.color} text-white">
+                                <strong class="me-auto">Don't Miss Out!</strong>
+                                <small></small>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+
+                            <div class="toast-body">
+                                ${data.text}
+                            </div>
+                        </div>
+                    </div>`;
+
+                // ВИПРАВЛЕННЯ 1: Правильний синтаксис innerHTML і вставка в body
+                document.body.insertAdjacentHTML('beforeend', blockHTML);
+
+                // Ініціалізація Toast після вставки в DOM
+                const toastEl = document.getElementById('announcementToast');
+                if (toastEl && typeof bootstrap !== 'undefined') {
+                    const announcementToast = new bootstrap.Toast(toastEl, {
+                        autohide: true,
+                        delay: 10000
+                    });
+                    announcementToast.show();
+                }
+
+            }
+        })
+        .catch(error => {
+             // ВИПРАВЛЕННЯ 3: Обробка помилок мережі або парсингу
+             console.error("Помилка завантаження оголошення:", error);
+        });
+};
+
+
+document.addEventListener('DOMContentLoaded', function(){
+    try {
+        loadAnnouncement();
+        console.log("Запит на оголошення надіслано!");
+    } catch(error) {
+        console.error("Помилка під час ініціалізації DOM:", error);
+    }
+});
+</script>
+
 {% endblock %}

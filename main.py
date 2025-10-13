@@ -13,6 +13,8 @@ load_dotenv()
 app = Flask(__name__)
 app.permanent_session_lifetime = timedelta(hours=1)
 app.secret_key = os.getenv('SECRET_KEY')
+
+# --- ПІДКЛЮЧЕННЯ ДО SQLITE ЗБЕРЕЖЕНО ---
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DiordievCrafts.db'
 db = SQLAlchemy(app)
 
@@ -38,6 +40,10 @@ class Product(db.Model):
     category = db.Column(db.String(100), nullable=False)
     status = db.Column(db.String(30), nullable=False)
 
+    # ВИПРАВЛЕНО: Додано cascade для коректного видалення продуктів.
+    order_items = db.relationship('Order_item', backref='product', lazy='dynamic',
+                                  cascade="all, delete-orphan")
+
     def __repr__(self):
         return f'<Product {self.id}>'
 
@@ -61,6 +67,7 @@ class Order(db.Model):
     contact_way = db.Column(db.String(30), nullable=False)
     date = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     status = db.Column(db.String(30), default='New')
+    # ЦЕЙ CASCADE ВЖЕ БУВ ПРАВИЛЬНИЙ для видалення замовлень.
     items = db.relationship('Order_item', backref='order', lazy='dynamic', cascade="all, delete-orphan")
     total_price = db.Column(db.Float, nullable=False, default=0.0)
 
@@ -70,8 +77,16 @@ class Order_item(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     amount = db.Column(db.Integer, nullable=False)
 
-    # ЗВ'ЯЗОК (relationship): Дозволяє отримати об'єкт Product для цього рядка.
-    product = db.relationship('Product', backref='order_lines', lazy=True)
+class Announcement(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, nullable=True)  # Текст оголошення
+    is_active = db.Column(db.Boolean, default=False)  # Прапорець: показувати чи ні
+    color = db.Column(db.String(30), default='danger')  # <-- ДОДАНО: Колір плашки (danger, success, info, warning)
+
+    def __repr__(self):
+        return f'<Announcement {self.id}>'
+
+    # Зв'язок 'product' видалено, оскільки він визначений у класі Product з backref='product'.
 
 # -------------------------DB MODELS logic ended--------------------------------#
 
@@ -85,7 +100,34 @@ def IsAdmin(username, password):
 # -------------------------Default routes logic started--------------------------------#
 @app.route('/')
 def index():
+
+    announcement = Announcement.query.first()
+
+    # ------------------ DEBUG ------------------
+    if announcement:
+        print(f"Announcement found! Active: {announcement.is_active}, Text: {announcement.text[:10]}...")
+    else:
+        print("Announcement NOT found in DB.")
+    # -------------------------------------------
     return render_template('index.html')
+
+@app.route('/api/get-announcement', methods=['GET'])
+def api_get_announcement():
+    try:
+        announcement = Announcement.query.first()
+        if announcement.is_active:
+            data = {
+                "text": announcement.text,
+                "color": announcement.color
+            }
+            return jsonify(data)
+        else:
+            return jsonify({})
+
+    except Exception as e:
+        print(e)
+        return {}
+
 
 
 @app.route('/about')
@@ -241,8 +283,6 @@ def admin_orders():
 
 
 @app.route('/admin/update_status', methods=['POST'])
-
-
 def admin_update_status():
     if not session.get("logged_in"):
         flash('You need to be logged in to access the admin panel.', 'warning')
@@ -301,6 +341,40 @@ def admin_delete_order(order_id):
         return jsonify({'error': f'Помилка сервера при видаленні замовлення: {e}'}), 500
 
 
+# ... Ваш існуючий код маршруту admin_announcement ...
+
+@app.route('/admin/announcement', methods=['GET', 'POST'])
+def admin_announcement():
+    if not session.get("logged_in"):
+        flash('You need to be logged in to access the admin panel.', 'warning')
+        return redirect(url_for('login'))
+
+    announcement = Announcement.query.first()
+    if not announcement:
+        # Встановлюємо default 'danger' при першому створенні
+        announcement = Announcement(text='', is_active=False, color='danger')
+        db.session.add(announcement)
+        db.session.commit()
+
+    if request.method == 'POST':
+        announcement.text = request.form.get('text', '').strip()
+        announcement.color = request.form.get('color', 'danger')  # <-- ЗМІНА ТУТ: Отримуємо колір
+
+        if not announcement.text:
+            announcement.is_active = False
+        else:
+            is_active_str = request.form.get('is_active')
+            announcement.is_active = (is_active_str == 'on')
+
+        try:
+            db.session.commit()
+            flash('Announcement settings updated successfully!', 'success')
+            return redirect(url_for('admin_announcement'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error updating announcement: {e}', 'error')
+
+    return render_template('announce_admin.html', announcement=announcement)
 # -------------------------Сart routes logic Started--------------------------------#
 
 @app.route('/cart')
@@ -462,7 +536,7 @@ def delete_product(product_id):
     ]
 
     try:
-        # Сначала удаляем из БД
+        # Сначала удаляем из БД (CASCADE позаботится о Order_item)
         db.session.delete(product_to_delete)
         db.session.commit()
 

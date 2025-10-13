@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Announcement - Admin{% endblock %}
+
+{% block content %}
+<style>
+    /* Додаткові стилі для адмінки, якщо потрібні, або використовуйте класи Bootstrap */
+    .admin-container {
+        max-width: 900px;
+        margin: 50px auto;
+    }
+</style>
+
+<div class="container admin-container mt-5">
+    <h2 class="mb-4">Manage Front Page Announcement</h2>
+
+    <div class="card p-4 shadow-sm">
+        <form method="POST" action="{{ url_for('admin_announcement') }}">
+            <div class="mb-3">
+                <label for="announcementText" class="form-label fw-bold">Announcement Text (Visible on Homepage)</label>
+                <textarea class="form-control" id="announcementText" name="text" rows="3" placeholder="Enter your sales announcement or important message here...">{{ announcement.text }}</textarea>
+                <div class="form-text">If this field is empty, the announcement will automatically hide.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="announcementColor" class="form-label fw-bold">Announcement Color Theme</label>
+                <select class="form-select" id="announcementColor" name="color">
+                    {# Bootstrap alert classes: alert-danger, alert-warning, etc. #}
+                    <option value="danger" {% if announcement.color == 'danger' %}selected{% endif %}>Red (Danger/Urgent)</option>
+                    <option value="warning" {% if announcement.color == 'warning' %}selected{% endif %}>Yellow (Warning/Attention)</option>
+                    <option value="info" {% if announcement.color == 'info' %}selected{% endif %}>Blue (Info/General)</option>
+                    <option value="success" {% if announcement.color == 'success' %}selected{% endif %}>Green (Success/Positive)</option>
+                    <option value="primary" {% if announcement.color == 'primary' %}selected{% endif %}>Dark Blue (Primary)</option>
+                    <option value="secondary" {% if announcement.color == 'secondary' %}selected{% endif %}>Grey (Secondary)</option>
+                </select>
+            </div>
+
+            <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" name="is_active" id="isActiveCheck"
+                       {% if announcement.is_active and announcement.text %}checked{% endif %}>
+                <label class="form-check-label fw-bold" for="isActiveCheck">
+                    Show Announcement on Homepage (Activate)
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="background-color: #7A5C58; border-color: #7A5C58;">Save Changes</button>
+        </form>
+    </div>
+
+    <h4 class="mt-5">Live Preview:</h4>
+    {% if announcement.is_active and announcement.text %}
+
+        <div class="alert alert-{{ announcement.color }} text-center p-3 fw-bold" role="alert" style="color: black;">
+            <p class="mb-0">{{ announcement.text }}</p>
+        </div>
+    {% else %}
+        <div class="alert alert-light text-center p-3" role="alert">
+            <p class="mb-0 text-muted">Announcement is currently hidden or empty.</p>
+        </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{{ url_for('admin_panel') }}" class="btn btn-outline-secondary">← Back to Admin Panel</a>
+    </div>
+</div>
+{% endblock %}
