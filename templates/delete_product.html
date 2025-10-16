@@ -48,15 +48,16 @@
                         <h5 class="card-title">{{ product.title }}</h5>
                         <hr>
                         <p>{{ product.category }}</p>
-
+                        <hr>
                         <div class="d-flex justify-content-between align-items-center mt-3">
-                            <p class="card-text mb-0">{{ product.price }}$</p>
+                            <p class="card-text mb-0">{{ product.price }}€</p>
                             <form action="{{ url_for('delete_product', product_id=product.id) }}" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                <button type="submit" class="btn btn-danger ">Delete</button>
+                                <a href="{{ url_for('editProductDetails', product_id=product.id) }}" class="btn btn-success">Edit post details</a>
                             </form>
                         </div>
 
-                        <!-- Дропдаун изменения статуса -->
+
                         <form action="{{ url_for('change_status', product_id=product.id) }}" method="post" class="mt-2">
                             <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
                                 <option value="common" {% if product.status == 'common' %}selected{% endif %}>Common</option>

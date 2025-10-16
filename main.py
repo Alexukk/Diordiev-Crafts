@@ -558,6 +558,34 @@ def delete_product(product_id):
     return redirect(url_for('delete_product_page'))
 
 
+@app.route('/admin/edit-product-details-<int:product_id>', methods=['POST', 'GET'])
+def editProductDetails(product_id):
+    if not session.get("logged_in"):
+        flash('You need to be logged in to access the admin panel.', 'warning')
+        return redirect(url_for('login'))
+
+    product = Product.query.get_or_404(product_id)
+
+    if request.method == 'GET':
+        return render_template('update_product.html', product=product)
+
+    try:
+        product.title = request.form.get('title')
+        product.text = request.form.get('text')
+        product.price = request.form.get('price')
+        product.category = request.form.get('category')
+        db.session.commit()
+
+        flash("Product updated successfully!", 'success')
+
+        return redirect(url_for('delete_product_page'))
+    except Exception as e:
+        db.session.rollback()
+        flash(f"An error occurred {e}")
+        print(e)
+        return render_template('update_product.html', product=product)
+
+
 # -------------------------Create post logic --------------------------------------#
 @app.route('/create-post', methods=['GET', 'POST'])
 def create_post():

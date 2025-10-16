@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Edit: {{ product.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Edit Product: "{{ product.title }}"</h2>
+
+    <div class="card p-4 shadow-sm">
+
+        <form method="POST" action="{{ url_for('editProductDetails', product_id=product.id) }}">
+
+            <div class="mb-3">
+                <label for="productTitle" class="form-label fw-bold">Title</label>
+                <input type="text" class="form-control" id="productTitle" name="title" value="{{ product.title }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="productDescription" class="form-label fw-bold">Description</label>
+                <textarea class="form-control" id="productDescription" name="text" rows="10" required>{{ product.text }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="productPrice" class="form-label fw-bold">Price (EUR)</label>
+                <input type="text" class="form-control" id="productPrice" name="price" value="{{ product.price | string }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" id="category" name="category" required>
+                    <optgroup label="Woodenware">
+                        <option value="Boxes" {% if product.category == 'Boxes' %}selected{% endif %}>Boxes</option>
+                        <option value="Stands" {% if product.category == 'Stands' %}selected{% endif %}>Stands</option>
+                        <option value="Figurines" {% if product.category == 'Figurines' %}selected{% endif %}>Figurines</option>
+                    </optgroup>
+
+                    <optgroup label="Jewelry">
+                        <option value="Bracelets" {% if product.category == 'Bracelets' %}selected{% endif %}>Bracelets</option>
+                        <option value="Earrings" {% if product.category == 'Earrings' %}selected{% endif %}>Earrings</option>
+                        <option value="Necklaces" {% if product.category == 'Necklaces' %}selected{% endif %}>Necklaces</option>
+                    </optgroup>
+
+                    <optgroup label="Candles">
+                        <option value="Soy" {% if product.category == 'Soy' %}selected{% endif %}>Soy</option>
+                        <option value="Beeswax" {% if product.category == 'Beeswax' %}selected{% endif %}>Beeswax</option>
+                        <option value="Scented" {% if product.category == 'Scented' %}selected{% endif %}>Scented</option>
+                    </optgroup>
+                </select>
+            </div>
+
+           <button type="submit" class="btn btn-primary me-2" style="background-color: #7A5C58; border-color: #7A5C58;">
+                Save Changes
+            </button>
+
+            <a href="{{ url_for('editProductDetails', product_id=product.id) }}" class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}
