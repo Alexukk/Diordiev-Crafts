@@ -1,48 +1,60 @@
 {% extends "base.html" %}
 
-{% block title %}Privacy Policy{% endblock %}
+{% block title %}Shop Policies{% endblock %}
 
 {% block content %}
 <section class="privacy-policy-section container mt-5">
-    <h2 class="text-center mb-4">Privacy Policy</h2>
+    <h2 class="text-center mb-4">Shop Policies & Information</h2>
     <hr>
     <div class="row">
         <div class="col-md-3">
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <button class="nav-link active" id="v-pills-data-collection-tab" data-bs-toggle="pill" data-bs-target="#v-pills-data-collection" type="button" role="tab" aria-controls="v-pills-data-collection" aria-selected="true">Data Collection</button>
-                <button class="nav-link" id="v-pills-data-usage-tab" data-bs-toggle="pill" data-bs-target="#v-pills-data-usage" type="button" role="tab" aria-controls="v-pills-data-usage" aria-selected="false">Data Usage</button>
-                <button class="nav-link" id="v-pills-data-security-tab" data-bs-toggle="pill" data-bs-target="#v-pills-data-security" type="button" role="tab" aria-controls="v-pills-data-security" aria-selected="false">Data Security</button>
-                <button class="nav-link" id="v-pills-your-rights-tab" data-bs-toggle="pill" data-bs-target="#v-pills-your-rights" type="button" role="tab" aria-controls="v-pills-your-rights" aria-selected="false">Your Rights</button>
+                <button class="nav-link active" id="v-pills-returns-tab" data-bs-toggle="pill" data-bs-target="#v-pills-returns" type="button" role="tab" aria-controls="v-pills-returns" aria-selected="true">Returning Policy</button>
+
+                <button class="nav-link" id="v-pills-shipping-tab" data-bs-toggle="pill" data-bs-target="#v-pills-shipping" type="button" role="tab" aria-controls="v-pills-shipping" aria-selected="false">Shipping & Delivery</button>
+
+                <button class="nav-link" id="v-pills-care-tab" data-bs-toggle="pill" data-bs-target="#v-pills-care" type="button" role="tab" aria-controls="v-pills-care" aria-selected="false">Product Care</button>
+
+                <button class="nav-link" id="v-pills-custom-tab" data-bs-toggle="pill" data-bs-target="#v-pills-custom" type="button" role="tab" aria-controls="v-pills-custom" aria-selected="false">Custom Orders</button>
             </div>
         </div>
+
         <div class="col-md-9">
             <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade show active" id="v-pills-data-collection" role="tabpanel" aria-labelledby="v-pills-data-collection-tab" tabindex="0">
-                    <h3 class="mt-0">Data Collection</h3>
-                    <p>We collect information you provide directly to us, such as when you place an order, subscribe to our newsletter, or contact us. This information may include your name, email address, mailing address, and phone number.</p>
+
+                <div class="tab-pane fade show active" id="v-pills-returns" role="tabpanel" aria-labelledby="v-pills-returns-tab" tabindex="0">
+                    <h3 class="mt-0">Returning Policy</h3>
+                    <p>Since each item is uniquely handcrafted, we generally do not accept returns or exchanges unless the item arrives damaged or defective. Please inspect your order upon reception and contact us immediately if the item is faulty, so that we can evaluate the issue and make it right.</p>
+                    <p>Returns based on simple change of mind are considered on a case-by-case basis and may be subject to a restocking fee. Custom or personalized items cannot be returned.</p>
                 </div>
-                <div class="tab-pane fade" id="v-pills-data-usage" role="tabpanel" aria-labelledby="v-pills-data-usage-tab" tabindex="0">
-                    <h3 class="mt-0">Data Usage</h3>
-                    <p>We use the collected information to process your orders, provide customer support, send marketing communications (with your consent), and improve the quality of our services and products.</p>
+
+                <div class="tab-pane fade" id="v-pills-shipping" role="tabpanel" aria-labelledby="v-pills-shipping-tab" tabindex="0">
+                    <h3 class="mt-0">Shipping & Delivery</h3>
+                    <p>All items are made-to-order. Our current processing time is 3-5 business days before shipping. Delivery times vary based on the destination. We provide tracking information for all orders once they are shipped.</p>
+                    <p>We are not responsible for delays caused by the postal service or customs procedures. Please ensure your shipping address is correct at the time of purchase to avoid delays.</p>
                 </div>
-                <div class="tab-pane fade" id="v-pills-data-security" role="tabpanel" aria-labelledby="v-pills-data-security-tab" tabindex="0">
-                    <h3 class="mt-0">Data Security</h3>
-                    <p>We take all reasonable measures to protect your personal data from unauthorized access, alteration, disclosure, or destruction. We use secure servers and data encryption.</p>
+
+                <div class="tab-pane fade" id="v-pills-care" role="tabpanel" aria-labelledby="v-pills-care-tab" tabindex="0">
+                    <h3 class="mt-0">Product Care Guidelines</h3>
+                    <p>To ensure the longevity of your handcrafted goods, avoid prolonged exposure to direct sunlight, extreme humidity, or water. For wooden items, a light rub with natural wood oil periodically will maintain the finish and color.</p>
+                    <p>Candles should be burned on a heat-resistant surface and kept away from drafts. Following these simple care tips will help keep your purchase beautiful for years to come.</p>
                 </div>
-                <div class="tab-pane fade" id="v-pills-your-rights" role="tabpanel" aria-labelledby="v-pills-your-rights-tab" tabindex="0">
-                    <h3 class="mt-0">Your Rights</h3>
-                    <p>You have the right to access, correct, and delete your data, as well as the right to object to its processing. To exercise these rights, please contact us.</p>
+
+                <div class="tab-pane fade" id="v-pills-custom" role="tabpanel" aria-labelledby="v-pills-custom-tab" tabindex="0">
+                    <h3 class="mt-0">Custom Orders</h3>
+                    <p>We love creating unique pieces just for you! If you have a specific design or personalization request, please contact us. Custom orders require a non-refundable deposit before work begins.</p>
+                    <p>Final approval of the design mock-up is required before production starts. Once production has begun, changes cannot be guaranteed and may incur additional charges.</p>
                 </div>
             </div>
         </div>
         <hr>
     </div>
 </section>
-<section class="help-section text-center py-5">
 
+<section class="help-section text-center py-5">
     <div class="container">
-        <h1>Need help?</h1>
-        <p class="lead">Contact us</p>
+        <h1>Questions About Your Order?</h1>
+        <p class="lead">Contact us directly</p>
         <hr>
         <div class="row mt-4 justify-content-center">
 

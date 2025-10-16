@@ -32,7 +32,7 @@
         </div>
     </section>
 
-    {# ЦЕЙ БЛОК БУДЕ ВИКОРИСТАНИЙ ДЛЯ ВСТАВКИ TOAST #}
+
     <div id="announcement"></div>
 
     <section class="about-section">
@@ -72,10 +72,7 @@ const loadAnnouncement = () => {
             // ми перевіряємо, чи є дані та текст.
             if (data && data.text) {
 
-                // ВАЖЛИВО: Toast повинен мати position: fixed, тому його краще
-                // вставити у <body>, а не в <div id="announcement">.
-                // Але ми використаємо ваш підхід, додавши фіксоване позиціонування
-                // до контейнера.
+
 
                 const blockHTML = `
                     <div style="position: fixed; top: 70px; right: 20px; z-index: 99999;">
@@ -93,10 +90,10 @@ const loadAnnouncement = () => {
                         </div>
                     </div>`;
 
-                // ВИПРАВЛЕННЯ 1: Правильний синтаксис innerHTML і вставка в body
+
                 document.body.insertAdjacentHTML('beforeend', blockHTML);
 
-                // Ініціалізація Toast після вставки в DOM
+
                 const toastEl = document.getElementById('announcementToast');
                 if (toastEl && typeof bootstrap !== 'undefined') {
                     const announcementToast = new bootstrap.Toast(toastEl, {
@@ -109,8 +106,7 @@ const loadAnnouncement = () => {
             }
         })
         .catch(error => {
-             // ВИПРАВЛЕННЯ 3: Обробка помилок мережі або парсингу
-             console.error("Помилка завантаження оголошення:", error);
+             console.error("An error while loading announcement: ", error);
         });
 };
 
@@ -118,9 +114,9 @@ const loadAnnouncement = () => {
 document.addEventListener('DOMContentLoaded', function(){
     try {
         loadAnnouncement();
-        console.log("Запит на оголошення надіслано!");
+        console.log("Request for an announcement sent!");
     } catch(error) {
-        console.error("Помилка під час ініціалізації DOM:", error);
+        console.error("Error while initializing DOM:", error);
     }
 });
 </script>

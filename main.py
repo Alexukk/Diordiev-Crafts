@@ -341,7 +341,6 @@ def admin_delete_order(order_id):
         return jsonify({'error': f'Помилка сервера при видаленні замовлення: {e}'}), 500
 
 
-# ... Ваш існуючий код маршруту admin_announcement ...
 
 @app.route('/admin/announcement', methods=['GET', 'POST'])
 def admin_announcement():
@@ -636,6 +635,31 @@ def delete_post(post_id):
 
     return redirect(url_for('posts'))
 
+
+@app.route('/admin/edit-post-details-<int:post_id>', methods=['POST', 'GET'])
+def editPostDetails(post_id):
+    if not session.get("logged_in"):
+        flash('You need to be logged in to access the admin panel.', 'warning')
+        return redirect(url_for('login'))
+
+    post = Post.query.get_or_404(post_id)
+
+    if request.method == 'GET':
+        return render_template('update_post.html', post=post)
+
+    try:
+        post.title = request.form.get('title')
+        post.text = request.form.get('text')
+
+        db.session.commit()
+
+        flash("Post updated successfully!", 'success')
+
+        return redirect(url_for('delete_post_page'))
+    except Exception as e:
+        db.session.rollback()
+        flash(f"An error occurred {e}")
+        return render_template('update_post.html', post=post)
 
 # -------------------------ADMIN logic ended--------------------------------#
 # Убедись, что твоя база данных создается при запуске приложения

@@ -4,7 +4,6 @@
 
 {% block content %}
 <style>
-    /* Додаткові стилі для адмінки, якщо потрібні, або використовуйте класи Bootstrap */
     .admin-container {
         max-width: 900px;
         margin: 50px auto;
@@ -13,6 +12,17 @@
 
 <div class="container admin-container mt-5">
     <h2 class="mb-4">Manage Front Page Announcement</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 
     <div class="card p-4 shadow-sm">
         <form method="POST" action="{{ url_for('admin_announcement') }}">
@@ -25,7 +35,6 @@
             <div class="mb-3">
                 <label for="announcementColor" class="form-label fw-bold">Announcement Color Theme</label>
                 <select class="form-select" id="announcementColor" name="color">
-                    {# Bootstrap alert classes: alert-danger, alert-warning, etc. #}
                     <option value="danger" {% if announcement.color == 'danger' %}selected{% endif %}>Red (Danger/Urgent)</option>
                     <option value="warning" {% if announcement.color == 'warning' %}selected{% endif %}>Yellow (Warning/Attention)</option>
                     <option value="info" {% if announcement.color == 'info' %}selected{% endif %}>Blue (Info/General)</option>
@@ -37,7 +46,7 @@
 
             <div class="form-check mb-4">
                 <input class="form-check-input" type="checkbox" name="is_active" id="isActiveCheck"
-                       {% if announcement.is_active and announcement.text %}checked{% endif %}>
+                       {% if announcement.is_active %}checked{% endif %}>
                 <label class="form-check-label fw-bold" for="isActiveCheck">
                     Show Announcement on Homepage (Activate)
                 </label>
@@ -48,9 +57,12 @@
     </div>
 
     <h4 class="mt-5">Live Preview:</h4>
-    {% if announcement.is_active and announcement.text %}
 
-        <div class="alert alert-{{ announcement.color }} text-center p-3 fw-bold" role="alert" style="color: black;">
+    {# Встановлюємо клас кольору тексту в залежності від кольору плашки #}
+    {% set text_color_class = 'text-white' if announcement.color in ['danger', 'primary'] else 'text-dark' %}
+
+    {% if announcement.is_active and announcement.text %}
+        <div class="alert alert-{{ announcement.color }} text-center p-3 fw-bold {{ text_color_class }}" role="alert">
             <p class="mb-0">{{ announcement.text }}</p>
         </div>
     {% else %}
