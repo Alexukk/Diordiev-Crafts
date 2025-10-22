@@ -281,16 +281,14 @@
 
             saveCart(cart);
 
-            // 1. Формуємо повідомлення
-            const total = updateCartCounter();
-            const message = `"${title}" додано до кошика! (Всього ${total} шт.)`;
 
-            // 2. Вставляємо повідомлення
+            const total = updateCartCounter();
+            const message = `"${title}" Added to cart! (Total ${total} pieces.)`;
+
             if (toastMessageElement) {
                 toastMessageElement.textContent = message;
             }
 
-            // 3. Показуємо тост
             if (addToCartToast && window.bootstrap) {
                 const toastBootstrap = bootstrap.Toast.getInstance(addToCartToast) || new bootstrap.Toast(addToCartToast);
                 toastBootstrap.show();
