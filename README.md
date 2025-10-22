@@ -26,7 +26,7 @@ After-order page:
 <img width="1903" height="883" alt="image" src="https://github.com/user-attachments/assets/4bb546a4-4a50-4f5b-a155-13dc9871f672" />
 
 Shop page:
-<img width="1916" height="908" alt="image" src="https://github.com/user-attachments/assets/35b077fe-9377-4786-9480-4993881de4d2" />
+<img width="1919" height="911" alt="image" src="https://github.com/user-attachments/assets/568e853d-f686-4691-924d-f6aa095a59a0" />
 
 Shop with different product status:
 <img width="1916" height="908" alt="image" src="https://github.com/user-attachments/assets/e62af688-afb2-49dc-8295-e241eedf5a4e" />
@@ -58,6 +58,7 @@ Toast announcement editing page:
 
 Telegram notifier for administration:
 <img width="433" height="271" alt="image" src="https://github.com/user-attachments/assets/9db66408-8bb7-4ebe-b178-197942c14d95" />
+
 
 
 
