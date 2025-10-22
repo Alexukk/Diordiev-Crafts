@@ -5,6 +5,41 @@
 {% block head %}
     {{ super() }}
 
+
+
+{% endblock %}
+
+{% block content %}
+<style>
+/* Використовуємо лише колір: #7A5C58 */
+.btn-diordiev-color {
+    color: #fff;
+    background-color: #7A5C58;
+    border-color: #7A5C58;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-diordiev-color:hover {
+    color: #fff;
+    background-color: #634a47; /* Трохи темніший при наведенні */
+    border-color: #634a47;
+}
+
+.btn-diordiev-color:focus, .btn-diordiev-color:active {
+    box-shadow: 0 0 0 0.25rem rgba(122, 92, 88, 0.5); /* Фірмова тінь при кліку */
+}
+
+/* Стиль для кнопки Sold Out (btn-outline-secondary) */
+.btn-outline-secondary {
+    color: #7A5C58;
+    border-color: #7A5C58;
+}
+.btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #7A5C58;
+    border-color: #7A5C58;
+}
+
 /* --- Аккуратная диагональная лента --- */
 .status-badge {
     position: absolute;
@@ -35,61 +70,34 @@
     color: #000;
 }
 
-        .product-img-container .badge-sale {
-            background-color: rgba(220, 53, 69, 0.8) !important; /* красный */
-            color: #fff !important;
-        }
-
-        .product-img-container .badge-soldout {
-            background-color: rgba(255, 193, 7, 0.85) !important; /* жёлтый */
-            color: #000 !important;
-        }
-
-        /* --- 3. Тело карточки --- */
-        .card-body {
-            display: flex;
-            flex-direction: column;
-        }
-        .card-text {
-            flex-grow: 1;
-        }
-
-
-{% endblock %}
-
-{% block content %}
-<style>
-
-
-/* Використовуємо лише колір: #7A5C58 */
-.btn-diordiev-color {
-    color: #fff;
-    background-color: #7A5C58;
-    border-color: #7A5C58;
-    transition: background-color 0.2s, border-color 0.2s;
-    /* УВАГА: ВСІ СТИЛІ РОЗМІРУ ТА ВІДСТУПІВ ВИДАЛЕНО, щоб не конфліктувати з вашою розміткою */
+.product-img-container .badge-sale {
+    background-color: rgba(220, 53, 69, 0.8) !important; /* красный */
+    color: #fff !important;
 }
 
-.btn-diordiev-color:hover {
-    color: #fff;
-    background-color: #634a47; /* Трохи темніший при наведенні */
-    border-color: #634a47;
+.product-img-container .badge-soldout {
+    background-color: rgba(255, 193, 7, 0.85) !important; /* жёлтый */
+    color: #000 !important;
 }
 
-.btn-diordiev-color:focus, .btn-diordiev-color:active {
-    box-shadow: 0 0 0 0.25rem rgba(122, 92, 88, 0.5); /* Фірмова тінь при кліку */
+/* --- 3. Тело карточки --- */
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+.card-text {
+    flex-grow: 1;
 }
 
-/* Стиль для кнопки Sold Out (btn-outline-secondary), щоб вона теж була в кольорах бренду */
-.btn-outline-secondary {
-    color: #7A5C58;
-    border-color: #7A5C58;
+/* СТИЛІ ДЛЯ ТОСТА */
+/* Контейнер для тостів: фіксуємо праворуч внизу */
+.toast-container-custom {
+    position: fixed;
+    bottom: 1.5rem; /* Відступ від низу */
+    right: 1.5rem; /* Відступ праворуч */
+    z-index: 1090; /* Вище, ніж модальні вікна Bootstrap (1050) */
 }
-.btn-outline-secondary:hover {
-    color: #fff;
-    background-color: #7A5C58;
-    border-color: #7A5C58;
-}
+
 
 /* ================================================= */
 /* Кінець фірмового стилю кнопок */
@@ -138,7 +146,6 @@
                 </div>
             </div>
         </div>
-
         <hr>
 
         <div class="row g-4">
@@ -210,8 +217,24 @@
         </div>
     </section>
 
+    <div class="toast-container-custom">
+        <div id="addToCartToast" class="toast align-items-center text-white border-0"
+             style="background-color: #7A5C58;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+            <div class="d-flex">
+                <div class="toast-body" id="toast-message">
+                    </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+
     <script>
         const CART_STORAGE_KEY = 'diordiev_cart';
+
+        // Змінні для керування тостом
+        let addToCartToast;
+        let toastMessageElement;
 
         function getCart() {
             const cartData = localStorage.getItem(CART_STORAGE_KEY);
@@ -240,6 +263,7 @@
             return totalItems;
         }
 
+        // ОНОВЛЕНА ФУНКЦІЯ: ТЕПЕР ПОКАЗУЄ TOAST
         function addToCart(productId, price, title) {
             let cart = getCart();
             const id = String(productId);
@@ -256,7 +280,21 @@
             }
 
             saveCart(cart);
-            console.log(`"${title}" додано. В кошику: ${updateCartCounter()} шт.`);
+
+            // 1. Формуємо повідомлення
+            const total = updateCartCounter();
+            const message = `"${title}" додано до кошика! (Всього ${total} шт.)`;
+
+            // 2. Вставляємо повідомлення
+            if (toastMessageElement) {
+                toastMessageElement.textContent = message;
+            }
+
+            // 3. Показуємо тост
+            if (addToCartToast && window.bootstrap) {
+                const toastBootstrap = bootstrap.Toast.getInstance(addToCartToast) || new bootstrap.Toast(addToCartToast);
+                toastBootstrap.show();
+            }
         }
 
         // ==========================================================
@@ -265,6 +303,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Ініціалізація лічильника кошика
             updateCartCounter();
+
+            // ІНІЦІАЛІЗАЦІЯ TOAST
+            addToCartToast = document.getElementById('addToCartToast');
+            toastMessageElement = document.getElementById('toast-message');
 
             const sortButton = document.querySelector('.sort-button');
             const dropdownContent = document.querySelector('.dropdown-content');
