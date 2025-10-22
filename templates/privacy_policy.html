@@ -2,19 +2,104 @@
 
 {% block title %}Shop Policies{% endblock %}
 
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
 {% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        /* Стилі для фірмового кольору */
+        .diordiev-color {
+            color: #7A5C58 !important;
+        }
+        .bg-diordiev-color {
+            background-color: #7A5C58 !important;
+            border-color: #7A5C58 !important;
+            color: #fff !important;
+        }
+        .bg-diordiev-color:hover {
+            background-color: #634a47 !important;
+            border-color: #634a47 !important;
+        }
+
+        /* Стилі для вертикальних вкладок (Tabs) */
+        .nav-pills .nav-link {
+            color: #7A5C58;
+            text-align: left;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: 1px solid #7A5C58; /* Додаємо рамку для контрасту */
+            transition: all 0.3s ease;
+        }
+
+        .nav-pills .nav-link:hover {
+            background-color: #f7f3f2; /* Light hover effect */
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: #7A5C58;
+            color: #fff;
+            box-shadow: 0 4px 6px rgba(122, 92, 88, 0.3);
+            border-color: #7A5C58;
+        }
+
+        /* Стилі для секції допомоги */
+        .help-section h1 {
+            color: #7A5C58;
+            font-weight: 300;
+        }
+
+        /* Стилі для карток допомоги */
+        .help-card {
+            border: 1px solid #7A5C58;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .help-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Стилі для іконок */
+        .card-icon i {
+            font-size: 2.5rem;
+            color: #7A5C58;
+        }
+
+        /* Перевизначення стандартних кольорів кнопок на фірмовий */
+        .help-card-button {
+            width: 100%;
+            border-radius: 6px;
+        }
+
+        /* Стилі для конкретних кнопок контактів */
+        .btn-success { /* WhatsApp */
+            background-color: #25D366;
+            border-color: #25D366;
+        }
+        .btn-warning { /* Email */
+            background-color: #FFC107;
+            border-color: #FFC107;
+        }
+        .btn-info { /* Telegram */
+            background-color: #0088CC;
+            border-color: #0088CC;
+        }
+    </style>
+
 <section class="privacy-policy-section container mt-5">
-    <h2 class="text-center mb-4">Shop Policies & Information</h2>
+    <h2 class="text-center mb-4 diordiev-color">Shop Policies & Information</h2>
     <hr>
     <div class="row">
         <div class="col-md-3">
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <button class="nav-link active" id="v-pills-returns-tab" data-bs-toggle="pill" data-bs-target="#v-pills-returns" type="button" role="tab" aria-controls="v-pills-returns" aria-selected="true">Returning Policy</button>
-
                 <button class="nav-link" id="v-pills-shipping-tab" data-bs-toggle="pill" data-bs-target="#v-pills-shipping" type="button" role="tab" aria-controls="v-pills-shipping" aria-selected="false">Shipping & Delivery</button>
-
                 <button class="nav-link" id="v-pills-care-tab" data-bs-toggle="pill" data-bs-target="#v-pills-care" type="button" role="tab" aria-controls="v-pills-care" aria-selected="false">Product Care</button>
-
                 <button class="nav-link" id="v-pills-custom-tab" data-bs-toggle="pill" data-bs-target="#v-pills-custom" type="button" role="tab" aria-controls="v-pills-custom" aria-selected="false">Custom Orders</button>
             </div>
         </div>
@@ -23,25 +108,25 @@
             <div class="tab-content" id="v-pills-tabContent">
 
                 <div class="tab-pane fade show active" id="v-pills-returns" role="tabpanel" aria-labelledby="v-pills-returns-tab" tabindex="0">
-                    <h3 class="mt-0">Returning Policy</h3>
+                    <h3 class="mt-0 diordiev-color">Returning Policy</h3>
                     <p>Since each item is uniquely handcrafted, we generally do not accept returns or exchanges unless the item arrives damaged or defective. Please inspect your order upon reception and contact us immediately if the item is faulty, so that we can evaluate the issue and make it right.</p>
                     <p>Returns based on simple change of mind are considered on a case-by-case basis and may be subject to a restocking fee. Custom or personalized items cannot be returned.</p>
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-shipping" role="tabpanel" aria-labelledby="v-pills-shipping-tab" tabindex="0">
-                    <h3 class="mt-0">Shipping & Delivery</h3>
+                    <h3 class="mt-0 diordiev-color">Shipping & Delivery</h3>
                     <p>All items are made-to-order. Our current processing time is 3-5 business days before shipping. Delivery times vary based on the destination. We provide tracking information for all orders once they are shipped.</p>
                     <p>We are not responsible for delays caused by the postal service or customs procedures. Please ensure your shipping address is correct at the time of purchase to avoid delays.</p>
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-care" role="tabpanel" aria-labelledby="v-pills-care-tab" tabindex="0">
-                    <h3 class="mt-0">Product Care Guidelines</h3>
+                    <h3 class="mt-0 diordiev-color">Product Care Guidelines</h3>
                     <p>To ensure the longevity of your handcrafted goods, avoid prolonged exposure to direct sunlight, extreme humidity, or water. For wooden items, a light rub with natural wood oil periodically will maintain the finish and color.</p>
                     <p>Candles should be burned on a heat-resistant surface and kept away from drafts. Following these simple care tips will help keep your purchase beautiful for years to come.</p>
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-custom" role="tabpanel" aria-labelledby="v-pills-custom-tab" tabindex="0">
-                    <h3 class="mt-0">Custom Orders</h3>
+                    <h3 class="mt-0 diordiev-color">Custom Orders</h3>
                     <p>We love creating unique pieces just for you! If you have a specific design or personalization request, please contact us. Custom orders require a non-refundable deposit before work begins.</p>
                     <p>Final approval of the design mock-up is required before production starts. Once production has begun, changes cannot be guaranteed and may incur additional charges.</p>
                 </div>
@@ -54,7 +139,7 @@
 <section class="help-section text-center py-5">
     <div class="container">
         <h1>Questions About Your Order?</h1>
-        <p class="lead">Contact us directly</p>
+        <p class="lead diordiev-color">Contact us directly</p>
         <hr>
         <div class="row mt-4 justify-content-center">
 
@@ -62,10 +147,11 @@
                 <div class="card help-card h-100">
                     <div class="card-body">
                         <div class="card-icon mb-3">
-                            </div>
+                            <i class="bi bi-whatsapp"></i>
+                        </div>
                         <h5 class="card-title">WhatsApp</h5>
                         <p class="card-text">contact in WhatsApp</p>
-                        <a href="https://wa.me/ВАШ_НОМЕР" target="_blank" class="btn btn-success help-card-button">Start chat</a>
+                        <a href="https://wa.me/+40728358363" target="_blank" class="btn btn-success help-card-button">Start chat</a>
                     </div>
                 </div>
             </div>
@@ -74,10 +160,11 @@
                 <div class="card help-card h-100">
                     <div class="card-body">
                         <div class="card-icon mb-3">
-                            </div>
+                            <i class="bi bi-envelope-fill"></i>
+                        </div>
                         <h5 class="card-title">Email</h5>
                         <p class="card-text">Email Us</p>
-                        <a href="mailto:ВАШ_EMAIL" class="btn btn-warning help-card-button">Email us</a>
+                        <a href="mailto:andriicorporation@gmail.com" class="btn btn-warning help-card-button">Email us</a>
                     </div>
                 </div>
             </div>
@@ -86,10 +173,11 @@
                 <div class="card help-card h-100">
                     <div class="card-body">
                         <div class="card-icon mb-3">
-                            </div>
+                            <i class="bi bi-telegram"></i>
+                        </div>
                         <h5 class="card-title">Telegram</h5>
                         <p class="card-text">Contact in Telegram</p>
-                        <a href="https://t.me/ИМЯ_ПОЛЬЗОВАТЕЛЯ_ИЛИ_БОТА" target="_blank" class="btn btn-info help-card-button">Start chat</a>
+                        <a href="https://t.me/EuRoLiuks" target="_blank" class="btn btn-info help-card-button">Start chat</a>
                     </div>
                 </div>
             </div>
