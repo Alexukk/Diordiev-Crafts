@@ -5,12 +5,8 @@
 {% block head %}
     {{ super() }}
 
-{% endblock %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-{% block content %}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <style>
         /* Стилі для фірмового кольору */
         .diordiev-color {
             color: #7A5C58 !important;
@@ -57,11 +53,16 @@
             border: 1px solid #7A5C58;
             border-radius: 12px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer; /* Додаємо курсор для картки Email */
         }
 
         .help-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        /* Спеціальний hover для картки Email, щоб виділити копіювання */
+        .help-card.email-card:hover {
+             border-color: #FFC107;
         }
 
         /* Стилі для іконок */
@@ -81,16 +82,42 @@
             background-color: #25D366;
             border-color: #25D366;
         }
-        .btn-warning { /* Email */
+        .btn-success:hover {
+            background-color: #1aae53;
+            border-color: #1aae53;
+        }
+
+        .btn-warning { /* Email - Копіювання*/
             background-color: #FFC107;
             border-color: #FFC107;
+        }
+        .btn-warning:hover {
+            background-color: #d4a001;
+            border-color: #d4a001;
         }
         .btn-info { /* Telegram */
             background-color: #0088CC;
             border-color: #0088CC;
         }
-    </style>
+        .btn-info:hover {
+            background-color: #0077b3;
+            border-color: #0077b3;
+        }
 
+        /* Стилі для спливаючого сповіщення */
+        #copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+
+{% endblock %}
+
+{% block content %}
 <section class="privacy-policy-section container mt-5">
     <h2 class="text-center mb-4 diordiev-color">Shop Policies & Information</h2>
     <hr>
@@ -157,14 +184,16 @@
             </div>
 
             <div class="col-md-4 col-sm-6 mb-3">
-                <div class="card help-card h-100">
+                <div class="card help-card h-100 email-card" onclick="copyEmailToClipboard('andriicorporation@gmail.com')">
                     <div class="card-body">
                         <div class="card-icon mb-3">
                             <i class="bi bi-envelope-fill"></i>
                         </div>
                         <h5 class="card-title">Email</h5>
-                        <p class="card-text">Email Us</p>
-                        <a href="mailto:andriicorporation@gmail.com" class="btn btn-warning help-card-button">Email us</a>
+                        <p class="card-text mb-2" id="email-address">andriicorporation@gmail.com</p>
+                        <button type="button" class="btn btn-warning help-card-button">
+                            Copy Email
+                        </button>
                     </div>
                 </div>
             </div>
@@ -185,4 +214,69 @@
         </div>
     </div>
 </section>
+
+<div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" id="copy-notification">
+    <div class="d-flex">
+        <div class="toast-body">
+            Email copied to clipboard!
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+
+<script>
+    // Функція для копіювання email та показу сповіщення
+    function copyEmailToClipboard(email) {
+        // Використання сучасного API Clipboard (рекомендовано)
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(email).then(() => {
+                showToastNotification();
+            }).catch(err => {
+                // Якщо не вдалося через API, використовуємо запасний метод
+                fallbackCopyTextToClipboard(email);
+            });
+        } else {
+            // Запасний метод для старих браузерів
+            fallbackCopyTextToClipboard(email);
+        }
+    }
+
+    function fallbackCopyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+
+        // Потрібно, щоб елемент був видимий для браузера
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            if (successful) {
+                showToastNotification();
+            }
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
+    }
+
+    function showToastNotification() {
+        // Ініціалізація та показ сповіщення Toast
+        var toastEl = document.getElementById('copy-notification');
+        // Перевірка, чи завантажена функція Toast від Bootstrap
+        if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+            var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            toast.show();
+        } else {
+             // Простий alert, якщо Bootstrap JS не завантажено
+             alert("Email copied: andriicorporation@gmail.com");
+        }
+    }
+</script>
+
 {% endblock %}
