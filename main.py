@@ -67,7 +67,6 @@ class Order(db.Model):
     contact_way = db.Column(db.String(30), nullable=False)
     date = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     status = db.Column(db.String(30), default='New')
-    # ЦЕЙ CASCADE ВЖЕ БУВ ПРАВИЛЬНИЙ для видалення замовлень.
     items = db.relationship('Order_item', backref='order', lazy='dynamic', cascade="all, delete-orphan")
     total_price = db.Column(db.Float, nullable=False, default=0.0)
 
@@ -157,6 +156,38 @@ def shop():
     products = query.all()
 
     return render_template('shop.html', products=products)
+
+
+@app.route('/api/product/<int:product_id>', methods=['GET'])
+def get_product_details(product_id):
+    """
+    Повертає повні деталі продукту для відображення у модальному вікні.
+    """
+    # 1. Знаходимо продукт, або повертаємо 404
+    product = Product.query.get(product_id)
+    if not product:
+        return jsonify({'error': 'Product not found'}), 404
+
+    # 2. Формуємо JSON-відповідь
+    # ВАЖЛИВО: Використовуємо .text як повний опис, оскільки у моделі немає full_text
+    # Ціна повинна бути перетворена на str для безпечної передачі
+    try:
+        price_str = f"{product.price:.2f}"
+    except:
+        price_str = str(product.price)  # Запасний варіант, якщо price не float/int
+
+    return jsonify({
+        'id': product.id,
+        'title': product.title,
+        'category': product.category,
+        'price': price_str,
+        'full_text': product.text,  # Використовуємо поле 'text' як повний опис
+        'status': product.status,
+        # Повертаємо відносні шляхи до фото
+        'photo1': product.photo1,
+        'photo2': product.photo2,
+        'photo3': product.photo3
+    })
 
 
 @app.route('/privacy-policy')
