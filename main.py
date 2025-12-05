@@ -200,6 +200,25 @@ def posts():
     return render_template('posts.html', posts=all_posts)
 
 
+@app.route('/api/post/<int:post_id>', methods=['GET'])
+def get_post_details(post_id):
+    post = Post.query.get(post_id)
+
+    if post is None:
+        return jsonify({'error': 'Post not found'}), 404
+
+    return jsonify({
+        'id': post.id,
+        'title': post.title,
+        'date': post.date.strftime('%Y-%m-%d'),  # Форматируем дату для JS
+        'photo': post.photo,  # Основное фото (для карусели)
+        # Предполагаем, что полное содержание находится в поле 'full_text' или 'text'
+        'full_text': post.full_text if hasattr(post, 'full_text') else post.text,
+        # Если есть дополнительные фото (опционально)
+        'photo2': post.photo2 if hasattr(post, 'photo2') else None,
+        'photo3': post.photo3 if hasattr(post, 'photo3') else None,
+    }), 200
+
 
 @app.route('/checkout')
 def checkout():
