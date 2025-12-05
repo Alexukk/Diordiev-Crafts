@@ -1,14 +1,80 @@
 {% extends "base.html" %}
 
-{% block title %}Our Blog{% endblock %}
+{% block title %}Our Blog - Diordiiev Crafts{% endblock %}
+
+{% block head %}
+{{ super() }}
+    /* ================================================= */
+    /* GENERAL BLOG STYLES */
+    /* ================================================= */
+    .blog-page {
+        padding-top: 40px;
+        padding-bottom: 60px;
+    }
+
+    /* Card Image consistency */
+    .card-img-top {
+        height: 250px;
+        object-fit: cover;
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+    }
+
+    .card {
+        border: 1px solid #f0f0f0; /* Subtle border */
+        transition: transform 0.3s, box-shadow 0.3s;
+        border-radius: 0.5rem;
+    }
+
+    .card:hover {
+        /* Enhanced hover effect using brand color */
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(122, 92, 88, 0.25);
+    }
+
+    .card-title {
+        color: #7A5C58; /* Brand text color */
+        font-weight: 700;
+        margin-bottom: 10px;
+        font-size: 1.4rem;
+    }
+
+    /* Date styling */
+    .card-text.small {
+        font-size: 0.9em;
+        margin-bottom: 15px;
+        color: #888;
+        border-bottom: 1px dashed #eee;
+        padding-bottom: 5px;
+    }
+
+    .post-content-preview {
+        /* Limit content preview height */
+        max-height: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 4; /* Limit content to 4 lines */
+        -webkit-box-orient: vertical;
+        padding-bottom: 10px;
+        color: #495057;
+        line-height: 1.6;
+        /* Ensure the post text block itself handles the preview,
+           as we are removing the Read More link */
+    }
+
+
+{% endblock %}
 
 {% block content %}
-<section class="container mt-5">
-    <h1 class="text-center mb-4">Our Latest Posts</h1>
-    <hr>
+<section class="blog-page container">
+    <h1 class="text-center mb-4"><i class="fa-solid fa-book-open-reader me-2"></i>Our Latest Posts</h1>
+    <hr class="mb-5">
 
     {% if not posts %}
-        <p class="text-center lead mt-5">No posts found yet. Check back later!</p>
+        <div class="alert alert-info text-center mt-5" role="alert">
+            <i class="fa-solid fa-circle-info me-2"></i>No posts found yet. Check back later!
+        </div>
     {% else %}
         <div class="row">
             {% for post in posts %}
@@ -21,11 +87,16 @@
                             <img src="{{ './static/uploads/posts/' + post.photo }}" class="card-img-top" alt="{{ post.title }}">
                         {% endif %}
                     {% endif %}
-                    <div class="card-body d-flex flex-column">
+                    <div class="p-4 d-flex flex-column h-100">
                         <h5 class="card-title">{{ post.title }}</h5>
-                        <p class="card-text text-muted small">{{ post.date.strftime('%Y-%m-%d') }}</p>
-                        <p class="card-text">{{ post.text }}</p>
-                    </div>
+
+                        <p class="card-text text-muted small"><i class="fa-regular fa-calendar me-1"></i>{{ post.date.strftime('%Y-%m-%d') }}</p>
+
+                        <div class="post-content-preview">
+                            <p class="card-text mb-0">{{ post.text }}</p>
+                        </div>
+
+                        </div>
                 </div>
             </div>
             {% endfor %}

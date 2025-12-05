@@ -1,45 +1,121 @@
 {% extends "base.html" %}
 
-{% block title %}Admin Dashboard{% endblock %}
+{% block title %}Admin Dashboard - Diordiiev Crafts{% endblock %}
 
 {% block content %}
+<style>
+    /* ================================================= */
+    /* ADMIN PANEL STYLES */
+    /* ================================================= */
+    .admin-panel-page {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+
+    .admin-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .admin-card {
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        border-top: 5px solid #7A5C58; /* Brand color highlight */
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .admin-card h3 {
+        color: #5A4744; /* Darker brand text */
+        font-weight: 700;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+    }
+
+    .admin-card p {
+        flex-grow: 1; /* Ensures buttons align at the bottom */
+        margin-bottom: 20px;
+        color: #6c757d;
+    }
+
+    /* Brand Button Style */
+    .admin-button {
+        display: block;
+        padding: 10px 20px;
+        background-color: #7A5C58;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+
+    .admin-button:hover {
+        background-color: #634a47;
+        color: white; /* Ensure text remains white */
+        text-decoration: none;
+    }
+
+    /* Icons styling */
+    .admin-card h3 i {
+        color: #7A5C58;
+        margin-right: 8px;
+    }
+</style>
+
 <section class="admin-panel-page container">
-    <h2>Admin Dashboard</h2>
+    <h2 class="text-center mb-5"><i class="fa-solid fa-gauge-high me-2"></i>Administrator Dashboard</h2>
+    <hr>
 
     <div class="admin-grid">
+
         <div class="admin-card">
-            <h3>Add Product</h3>
-            <p>Create a new product listing.</p>
-            <a href="{{ url_for('create_product')}}" class="admin-button">Go</a>
+            <h3><i class="fa-solid fa-box-open"></i>Add Product</h3>
+            <p>Create a new product listing in the shop inventory.</p>
+            <a href="{{ url_for('create_product')}}" class="admin-button">Go <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
         </div>
 
         <div class="admin-card">
-            <h3>Manage Products</h3>
-            <p>View, edit, or delete existing products.</p>
-            <a href="{{ url_for('delete_product_page') }}" class="admin-button">Go</a>
+            <h3><i class="fa-solid fa-list-check"></i>Manage Products</h3>
+            <p>View, edit product details, or delete existing products from the shop.</p>
+            <a href="{{ url_for('delete_product_page') }}" class="admin-button">Go <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
         </div>
 
         <div class="admin-card">
-            <h3>Add Post</h3>
-            <p>Write a new blog post.</p>
-            <a href="{{ url_for('create_post') }}" class="admin-button">Go</a>
+            <h3><i class="fa-solid fa-feather-pointed"></i>Add Post</h3>
+            <p>Write and publish a new blog entry or news article.</p>
+            <a href="{{ url_for('create_post') }}" class="admin-button">Go <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
         </div>
 
         <div class="admin-card">
-            <h3>Manage Posts</h3>
-            <p>View, edit, or delete existing posts.</p>
-            <a href="{{ url_for('delete_post_page') }}" class="admin-button">Go</a>
-        </div>
-        <div class="admin-card">
-            <h3>Manage orders</h3>
-            <p>Open admin panel with all orders</p>
-            <a href="{{ url_for('admin_orders') }}" class="admin-button">Go</a>
+            <h3><i class="fa-solid fa-file-pen"></i>Manage Posts</h3>
+            <p>View, edit details, or delete existing posts from the blog section.</p>
+            <a href="{{ url_for('delete_post_page') }}" class="admin-button">Go <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
         </div>
 
         <div class="admin-card">
-            <h3>Manage Announcement</h3>
-            <p>Announce something on a main page</p>
-            <a href="{{ url_for('admin_announcement') }}" class="admin-button">Go</a>
+            <h3><i class="fa-solid fa-truck-fast"></i>Manage Orders</h3>
+            <p>Access the panel to view, track, and process all customer orders.</p>
+            <a href="{{ url_for('admin_orders') }}" class="admin-button">Go <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
+        </div>
+
+        <div class="admin-card">
+            <h3><i class="fa-solid fa-bullhorn"></i>Manage Announcement</h3>
+            <p>Create or update the announcement displayed on the main page.</p>
+            <a href="{{ url_for('admin_announcement') }}" class="admin-button">Go <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
         </div>
     </div>
 </section>

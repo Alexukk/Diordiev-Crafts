@@ -2,9 +2,11 @@
 
 {% block title %}Edit: {{ post.title }}{% endblock %}
 
+
+
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">Edit Post: "{{ post.title }}"</h2>
+    <h2 class="mb-4"><i class="fa-solid fa-pen-to-square me-2"></i>Edit Post: "{{ post.title }}"</h2>
 
     <div class="card p-4 shadow-sm">
 
@@ -22,6 +24,7 @@
 
 
             <button type="submit" class="btn btn-primary me-2" style="background-color: #7A5C58; border-color: #7A5C58;">
+                <i class="fa-solid fa-floppy-disk me-1"></i>
                 Save Changes
             </button>
         </form>

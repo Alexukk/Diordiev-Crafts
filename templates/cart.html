@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Shopping Cart - Diordiev Crafts{% endblock %}
+{% block title %}Shopping Cart - Diordiiev Crafts{% endblock %}
 
 {% block content %}
 
 <style>
     /* ================================================= */
-    /* ПОВЕРНУТА ОРИГІНАЛЬНА КНОПКА "Go to Shop" */
+    /* CART CUSTOM BUTTON STYLES */
     /* ================================================= */
     .diordiev-button {
-        /* Фіксована ширина для десктопу, але адаптується на мобільному */
+        /* Fixed width for desktop, but adaptive on mobile */
         width: 250px !important;
         height: 50px !important;
         display: flex !important;
@@ -19,30 +19,22 @@
         cursor: pointer !important;
         text-decoration: none !important;
 
-        /* Кольори та фон */
+        /* Colors and background */
         background-image: linear-gradient(rgb(140, 120, 117), rgb(122, 92, 88)) !important;
         border: none !important;
         color: rgb(255, 255, 255) !important;
         font-weight: 600 !important;
         font-size: 1.1rem !important;
 
-        /* Форма та тінь */
+        /* Shape and shadow */
         border-radius: 50px !important;
         box-shadow: 1px 4px 0px #6A4F4C !important;
 
-        /* Ефект переходу */
+        /* Transition effect */
         transition-duration: .3s !important;
     }
 
-    .diordiev-button .diordiev-cartIcon {
-        width: 20px !important;
-        height: fit-content !important;
-    }
-
-    .diordiev-button .diordiev-cartIcon path {
-        fill: white !important;
-    }
-
+    /* SVG styles for the 'Go to Shop' button are removed as we use FA */
     .diordiev-button:active {
         transform: translate(2px ,2px) !important;
         box-shadow: 0px 1px 0px #6A4F4C !important;
@@ -53,10 +45,10 @@
         display: flex !important;
     }
 
-    /* ====== Кнопка удаления (мусорка) ====== */
+    /* ====== Delete button (trash can) - Using FA instead of custom SVG for simplicity and consistency ====== */
+    /* Retaining custom styles structure for visual effect */
     .bin-button {
       display: inline-flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       width: 45px;
@@ -67,16 +59,19 @@
       border: 2px solid rgb(255, 201, 201);
       transition: transform .18s ease, background-color .18s ease;
       padding: 4px;
+      color: white; /* Color for FA icon */
+      font-size: 1.2rem;
     }
     .bin-button:focus { outline: none; box-shadow: 0 0 0 3px rgba(255,95,95,0.12); }
-    .bin-bottom { width: 13px; height: auto; display:block; }
-    .bin-top { width: 15px; height: auto; display:block; transform-origin: right; transition: transform .18s ease; }
-    .bin-button:hover .bin-top { transform: rotate(45deg); }
+
+    /* Removed .bin-bottom and .bin-top as they rely on custom SVGs */
+
     .bin-button:hover { background-color: rgb(255, 0, 0); }
     .bin-button:active { transform: scale(0.95); }
 
+
     /* ================================================= */
-    /* СТИЛІ КНОПКИ 'PROCEED TO CHECKOUT' (diordiev-cta) */
+    /* 'PROCEED TO CHECKOUT' BUTTON STYLES (diordiev-cta) */
     /* ================================================= */
     .diordiev-cta {
         position: relative;
@@ -86,8 +81,9 @@
         border-radius: 50px;
         background: #7A5C58;
         cursor: pointer;
-        width: 100%; /* Забезпечує адаптивність */
+        width: 100%; /* Ensures responsiveness */
         text-align: center;
+        overflow: hidden; /* To handle pseudo-element transition */
     }
 
     .diordiev-cta:before {
@@ -112,20 +108,16 @@
         font-weight: 600;
         letter-spacing: 0.05em;
         z-index: 10;
+        margin-right: 10px; /* Space for icon */
     }
 
-    .diordiev-cta svg {
+    /* FA Icon adjustments */
+    .diordiev-cta .fa-arrow-right-long {
         position: relative;
-        top: 0;
-        margin-left: 10px;
-        fill: none;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke: white;
-        stroke-width: 2;
-        transform: translateX(-5px);
+        margin-left: -5px; /* Initial adjustment */
         transition: all 0.5s ease;
         z-index: 10;
+        color: white;
     }
 
     .diordiev-cta:hover:before {
@@ -138,8 +130,8 @@
         border-color: #6A4F4C;
     }
 
-    .diordiev-cta:hover svg {
-        transform: translateX(0);
+    .diordiev-cta:hover .fa-arrow-right-long {
+        transform: translateX(5px);
         transition: all 0.5s ease;
     }
 
@@ -151,7 +143,7 @@
     /* ====== Cart Page Layout ====== */
     .cart-page { max-width: 1100px; margin: 0 auto; }
 
-    /* ====== Таблица корзины ====== */
+    /* ====== Cart Table ====== */
     .shopping-cart-table { width: 100%; border-collapse: separate; border-spacing: 0; }
     .shopping-cart-table th, .shopping-cart-table td { vertical-align: middle; }
     .shopping-cart-table img {
@@ -163,7 +155,7 @@
     .shopping-cart-table .quantity-btn { min-width: 32px; }
     .shopping-cart-table input.form-control { max-width: 45px; text-align:center; }
 
-    /* ====== Mobile адаптация ====== */
+    /* ====== Mobile adaptation ====== */
     @media (max-width: 768px) {
         .shopping-cart-table thead { display: none; }
 
@@ -217,15 +209,15 @@
 
         .bin-button { width: 40px; height: 40px; }
 
-        /* Адаптація кнопки Clear Cart на мобільному */
+        /* Adaptation of Clear Cart button on mobile */
         #clear-cart-btn {
             font-size: 0.9rem !important;
             height: 40px !important;
         }
 
-        /* Адаптація Go to Shop на мобільному */
+        /* Adaptation of Go to Shop on mobile */
         #empty-cart-message .diordiev-button {
-            width: 100% !important; /* Розтягуємо на всю ширину контейнера */
+            width: 100% !important; /* Stretch to container width */
         }
 
     }
@@ -237,7 +229,7 @@
         .diordiev-cta span { font-size: 16px; }
     }
 
-    /* Небольшая полировка бейджа sold */
+    /* Small badge polishing sold */
     .badge.bg-danger {
       font-size: 0.75rem;
       padding: 0.25rem 0.5rem;
@@ -250,26 +242,25 @@
 </style>
 
 <section class="cart-page container my-5">
-    <h1 class="mb-4 text-center">Your Shopping Cart</h1>
+    <h1 class="mb-4 text-center"><i class="fa-solid fa-cart-shopping me-2"></i>Your Shopping Cart</h1>
 
     <div id="empty-cart-message" class="text-center p-5 border rounded" style="display:none;">
-        <i class="bi bi-cart-x display-1 text-muted"></i>
+        <i class="fa-solid fa-cart-xmark display-1 text-muted"></i>
         <h3 class="mt-3">Your cart is empty.</h3>
         <p class="text-muted">Looks like you haven't found anything yet! Let's go shopping.</p>
 
         <a href="{{ url_for('shop') }}" class="diordiev-button mt-4" role="button">
-            Go to Shop
-            <svg class="diordiev-cartIcon" viewBox="0 0 576 512"><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"></path></svg>
-        </a>
+            <i class="fa-solid fa-store me-2"></i>Go to Shop
+            </a>
     </div>
 
     <div id="cart-content-container">
-        <p class="text-muted text-center p-5" id="loading-message">Loading items...</p>
+        <p class="text-muted text-center p-5" id="loading-message"><i class="fa-solid fa-spinner fa-spin me-2"></i>Loading items...</p>
     </div>
 
     <div class="d-flex justify-content-between mb-3">
         <button id="clear-cart-btn" class="btn btn-outline-danger" style="display:none;">
-            <i class="bi bi-x-circle me-1"></i> Clear Cart
+            <i class="fa-solid fa-trash-arrow-up me-1"></i> Clear Cart
         </button>
     </div>
 
@@ -280,7 +271,7 @@
 
                 <div class="d-flex justify-content-between mb-2">
                     <span>Items Subtotal:</span>
-                    <strong id="cart-total-amount" class="fs-5 text-success">$0.00</strong>
+                    <strong id="cart-total-amount" class="fs-5 text-success">€0.00</strong>
                 </div>
 
                 <div class="d-flex justify-content-between text-muted small border-top pt-2">
@@ -290,11 +281,8 @@
 
                 <button id="checkout-btn" class="diordiev-cta mt-4">
                      <span>Proceed to Checkout</span>
-                     <svg viewBox="0 0 13 10" height="10px" width="15px">
-                        <path d="M1,5 L11,5"></path>
-                        <polyline points="8 1 12 5 8 9"></polyline>
-                    </svg>
-                </button>
+                     <i class="fa-solid fa-arrow-right-long"></i>
+                     </button>
             </div>
         </div>
     </div>
@@ -334,8 +322,9 @@
         fetchAndRenderCart();
     }
 
+    // TRANSLATED: Confirmation message
     function clearCart() {
-        if (confirm('Are you sure you want to clear your cart completely?')) {
+        if (confirm('Are you sure you want to clear your cart completely? This action cannot be undone.')) {
             localStorage.removeItem(CART_STORAGE_KEY);
             fetchAndRenderCart();
         }
@@ -358,7 +347,7 @@
             if (container) container.innerHTML = '';
             if (emptyMessage) emptyMessage.style.display = 'block';
 
-            // Забезпечуємо, що контейнер кнопок повертається до початкового стану, якщо кошик порожній
+            // Ensure button container reverts to initial state if cart is empty
             const buttonsContainer = document.querySelector('.d-flex.justify-content-between.mb-3');
             if (buttonsContainer) {
                 buttonsContainer.classList.remove('justify-content-between');
@@ -372,7 +361,7 @@
         if (clearBtn) {
             clearBtn.style.display = 'block';
 
-            // Забезпечуємо правильне вирівнювання: Clear Cart зліва, Summary справа
+            // Ensure correct alignment: Clear Cart left, Summary right
             const buttonsContainer = document.querySelector('.d-flex.justify-content-end.mb-3');
             if (buttonsContainer) {
                 buttonsContainer.classList.remove('justify-content-end');
@@ -452,43 +441,31 @@
                                 <h6 class="mb-0 fw-bold">${product.title}</h6>
                                 <span class="text-muted small">${product.category}</span>
 
-                                ${isSold ? '<span class="badge bg-danger mt-1">SOLD OUT! Cannot change quantity.</span>' : ''}
+                                ${isSold ? '<span class="badge bg-danger mt-1"><i class="fa-solid fa-tag me-1"></i>SOLD OUT! Cannot change quantity.</span>' : ''}
                             </div>
                         </div>
                     </td>
-                    <td class="text-center fw-bold text-success">$${itemPrice.toFixed(2)}</td>
+                    <td class="text-center fw-bold text-success">€${itemPrice.toFixed(2)}</td>
                     <td class="text-center">
                         <div class="input-group input-group-sm justify-content-center" style="width: 120px; margin: 0 auto;">
                             <button class="btn btn-outline-secondary quantity-btn"
                                     data-action="decrement" data-product-id="${product.id}"
                                     ${disabledAttr}>
-                                —
+                                <i class="fa-solid fa-minus"></i>
                             </button>
                             <input type="text" class="form-control text-center bg-white" value="${item.qty}"
                                    readonly style="max-width: 40px; border-color: #ced4da;">
                             <button class="btn btn-outline-secondary quantity-btn"
                                     data-action="increment" data-product-id="${product.id}"
                                     ${disabledAttr}>
-                                +
+                                <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
                     </td>
-                    <td class="text-end item-subtotal fs-5 fw-bold">$${itemSubtotal.toFixed(2)}</td>
+                    <td class="text-end item-subtotal fs-5 fw-bold">€${itemSubtotal.toFixed(2)}</td>
                     <td>
                         <button class="bin-button remove-item-btn" data-product-id="${product.id}" aria-label="Remove item">
-                          <svg class="bin-top" viewBox="0 0 39 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <line y1="5" x2="39" y2="5" stroke="white" stroke-width="4"></line>
-                            <line x1="12" y1="1.5" x2="26.0357" y2="1.5" stroke="white" stroke-width="3"></line>
-                          </svg>
-                          <svg class="bin-bottom" viewBox="0 0 33 39" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <mask id="path-1-inside-${product.id}" fill="white">
-                              <path d="M0 0H33V35C33 37.2091 31.2091 39 29 39H4C1.79086 39 0 37.2091 0 35V0Z"></path>
-                            </mask>
-                            <path d="M0 0H33H0ZM37 35C37 39.4183 33.4183 43 29 43H4C-0.418278 43 -4 39.4183 -4 35H4H29H37ZM4 43C-0.418278 43 -4 39.4183 -4 35V0H4V35V43ZM37 0V35C37 39.4183 33.4183 43 29 43V35V0H37Z"
-                                  fill="white" mask="url(#path-1-inside-${product.id})"></path>
-                            <path d="M12 6L12 29" stroke="white" stroke-width="4"></path>
-                            <path d="M21 6V29" stroke="white" stroke-width="4"></path>
-                          </svg>
+                          <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </td>
                 </tr>
@@ -501,7 +478,7 @@
 
         const totalAmountElement = document.getElementById('cart-total-amount');
         if (totalAmountElement) {
-            totalAmountElement.textContent = `$${cartTotal.toFixed(2)}`;
+            totalAmountElement.textContent = `€${cartTotal.toFixed(2)}`;
         }
 
         const cartSummary = document.getElementById('cart-summary');

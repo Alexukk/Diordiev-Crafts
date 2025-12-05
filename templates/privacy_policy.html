@@ -1,22 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}Shop Policies{% endblock %}
+{% block title %}Shop Policies - Diordiiev Crafts{% endblock %}
 
 {% block head %}
     {{ super() }}
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
         /* Стилі для фірмового кольору */
-        .diordiev-color {
+        .diordiiev-color {
             color: #7A5C58 !important;
         }
-        .bg-diordiev-color {
+        .bg-diordiiev-color {
             background-color: #7A5C58 !important;
             border-color: #7A5C58 !important;
             color: #fff !important;
         }
-        .bg-diordiev-color:hover {
+        .bg-diordiiev-color:hover {
             background-color: #634a47 !important;
             border-color: #634a47 !important;
         }
@@ -70,6 +70,23 @@
             font-size: 2.5rem;
             color: #7A5C58;
         }
+        /* Увеличение размера текста политики для читабельности */
+        .policy-text-content p, .policy-text-content li {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .policy-text-content ul {
+            padding-left: 20px;
+        }
+        .policy-text-content h4 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #5A4744;
+            font-weight: 600;
+            border-bottom: 1px dashed #7A5C5830;
+            padding-bottom: 5px;
+        }
+
 
         /* Перевизначення стандартних кольорів кнопок на фірмовий */
         .help-card-button {
@@ -119,42 +136,108 @@
 
 {% block content %}
 <section class="privacy-policy-section container mt-5">
-    <h2 class="text-center mb-4 diordiev-color">Shop Policies & Information</h2>
+    <h2 class="text-center mb-4 diordiiev-color">Shop Policies & Information</h2>
     <hr>
     <div class="row">
         <div class="col-md-3">
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <button class="nav-link active" id="v-pills-returns-tab" data-bs-toggle="pill" data-bs-target="#v-pills-returns" type="button" role="tab" aria-controls="v-pills-returns" aria-selected="true">Returning Policy</button>
-                <button class="nav-link" id="v-pills-shipping-tab" data-bs-toggle="pill" data-bs-target="#v-pills-shipping" type="button" role="tab" aria-controls="v-pills-shipping" aria-selected="false">Shipping & Delivery</button>
-                <button class="nav-link" id="v-pills-care-tab" data-bs-toggle="pill" data-bs-target="#v-pills-care" type="button" role="tab" aria-controls="v-pills-care" aria-selected="false">Product Care</button>
-                <button class="nav-link" id="v-pills-custom-tab" data-bs-toggle="pill" data-bs-target="#v-pills-custom" type="button" role="tab" aria-controls="v-pills-custom" aria-selected="false">Custom Orders</button>
+                <button class="nav-link active" id="v-pills-agreement-tab" data-bs-toggle="pill" data-bs-target="#v-pills-agreement" type="button" role="tab" aria-controls="v-pills-agreement" aria-selected="true"><i class="fa-solid fa-file-contract me-2"></i>User Agreement</button>
+                <button class="nav-link" id="v-pills-privacy-tab" data-bs-toggle="pill" data-bs-target="#v-pills-privacy" type="button" role="tab" aria-controls="v-pills-privacy" aria-selected="false"><i class="fa-solid fa-user-lock me-2"></i>Privacy Policy</button>
+
+                <button class="nav-link" id="v-pills-returns-tab" data-bs-toggle="pill" data-bs-target="#v-pills-returns" type="button" role="tab" aria-controls="v-pills-returns" aria-selected="false"><i class="fa-solid fa-rotate-left me-2"></i>Returning Policy</button>
+                <button class="nav-link" id="v-pills-shipping-tab" data-bs-toggle="pill" data-bs-target="#v-pills-shipping" type="button" role="tab" aria-controls="v-pills-shipping" aria-selected="false"><i class="fa-solid fa-truck-fast me-2"></i>Shipping & Delivery</button>
+                <button class="nav-link" id="v-pills-care-tab" data-bs-toggle="pill" data-bs-target="#v-pills-care" type="button" role="tab" aria-controls="v-pills-care" aria-selected="false"><i class="fa-solid fa-hand-holding-heart me-2"></i>Product Care</button>
+                <button class="nav-link" id="v-pills-custom-tab" data-bs-toggle="pill" data-bs-target="#v-pills-custom" type="button" role="tab" aria-controls="v-pills-custom" aria-selected="false"><i class="fa-solid fa-paintbrush me-2"></i>Custom Orders</button>
             </div>
         </div>
 
         <div class="col-md-9">
-            <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-content policy-text-content" id="v-pills-tabContent">
 
-                <div class="tab-pane fade show active" id="v-pills-returns" role="tabpanel" aria-labelledby="v-pills-returns-tab" tabindex="0">
-                    <h3 class="mt-0 diordiev-color">Returning Policy</h3>
-                    <p>Since each item is uniquely handcrafted, we generally do not accept returns or exchanges unless the item arrives damaged or defective. Please inspect your order upon reception and contact us immediately if the item is faulty, so that we can evaluate the issue and make it right.</p>
+                <div class="tab-pane fade show active" id="v-pills-agreement" role="tabpanel" aria-labelledby="v-pills-agreement-tab" tabindex="0">
+                    <h3 class="mt-0 diordiiev-color">User Agreement (Public Offer)</h3>
+                    <p>Dear Customer! Before making a purchase in the **Diordiiev Crafts** online store, please read the terms of this Agreement. This document defines the conditions for purchasing goods through our website and constitutes the terms of a public offer under Art. 633 of the Civil Code of Ukraine. **By placing an order, the Customer fully agrees to the terms of this Agreement.**</p>
+
+                    <h4>1. Ordering & Pricing</h4>
+                    <ul>
+                        <li>Orders can be placed via the website, phone, email, or official social media.</li>
+                        <li>The price stated on the website may be changed unilaterally by the Online Store.</li>
+                        <li>If a product becomes unavailable after ordering, our manager will notify you to confirm replacement, cancellation, or refund. If no response is received, the order will be automatically canceled.</li>
+                        <li>The Customer may refuse any product before it is shipped.</li>
+                    </ul>
+
+                    <h4>2. Payment Terms</h4>
+                    <ul>
+                        <li>Payment is made exclusively via **card-to-card transfer** (100% prepayment) to the Online Store's card details within **three business days** after order confirmation.</li>
+                        <li>If payment is not received within the specified time, the Online Store reserves the right to cancel the order.</li>
+                    </ul>
+
+                    <h4>3. Delivery and Acceptance</h4>
+                    <ul>
+                        <li>Delivery is carried out via Nova Poshta (branch, locker, or courier) or Ukrposhta.</li>
+                        <li>Orders are shipped within **1–3 business days** after payment confirmation. Sundays and public holidays are not business days.</li>
+                        <li>The Customer must inspect the goods for quantity, quality, and completeness upon receipt in the presence of the courier or at the pickup point.</li>
+                        <li>Acceptance of the product is confirmed by payment for the order to the courier service.</li>
+                    </ul>
+
+                    <h4>4. Returns and Warranty</h4>
+                    <ul>
+                        <li>The Customer has the right to refuse a product at the moment of delivery/receipt.</li>
+                        <li>Returning a product of **proper quality** is possible only if the item **has not been worn** and the original packaging and tag with a seal are preserved. The return is carried out at the Customer's expense. Refund is issued minus the compensation of delivery expenses incurred by the store.</li>
+                        <li>Items purchased are covered by an **18-month warranty**. If a hidden defect appears, the Customer may contact the Online Store for repair. Warranty service costs (delivery and repair) are paid by the Online Store.</li>
+                        <li>The Customer is **not required** to compensate the Online Store for costs if the product is found to be of **improper quality**.</li>
+                    </ul>
+                </div>
+
+                <div class="tab-pane fade" id="v-pills-privacy" role="tabpanel" aria-labelledby="v-pills-privacy-tab" tabindex="0">
+                    <h3 class="mt-0 diordiiev-color">Privacy Policy (Personal Data Processing)</h3>
+                    <p>This Regulation defines the procedure for processing and protecting the personal data of our Customers in accordance with the Law of Ukraine "On Personal Data Protection."</p>
+
+                    <h4>1. General Provisions</h4>
+                    <ul>
+                        <li>**Personal Data:** Information about an identified or identifiable natural person (e.g., name, address, email, phone).</li>
+                        <li>**Purpose of Processing:** Data is collected to ensure civil legal relations (order placement, delivery, warranty service) and to comply with the current legislation of Ukraine.</li>
+                        <li>**Consent:** Consent is provided by the individual when registering civil legal relations (placing an order). Consent may be a paper document, an electronic document, or a mark on an electronic page (online order).</li>
+                    </ul>
+
+                    <h4>2. Protection and Disclosure</h4>
+                    <ul>
+                        <li>Personal data is protected by system, software, and hardware means against loss, theft, destruction, or unauthorized copying, meeting international and national standards.</li>
+                        <li>Personal data is not stored longer than necessary to fulfill the stated purposes.</li>
+                        <li>**Disclosure to Third Parties:** Data access is granted only with the subject's consent or as required by law (e.g., to courier services like Nova Poshta/Ukrposhta for delivery). Access is denied if the third party refuses to ensure compliance with the Law of Ukraine "On Personal Data Protection."</li>
+                    </ul>
+
+                    <h4>3. Rights of the Data Subject</h4>
+                    <p>The personal data subject has the right to:</p>
+                    <ul>
+                        <li>Know the location and purpose of the personal data base.</li>
+                        <li>Access their personal data and receive confirmation (within 30 days) of its processing.</li>
+                        <li>Submit objections and request modification or **destruction** of inaccurate or illegally processed data.</li>
+                        <li>Protect data from unlawful processing and address state authorities regarding data protection.</li>
+                    </ul>
+                </div>
+
+                <div class="tab-pane fade" id="v-pills-returns" role="tabpanel" aria-labelledby="v-pills-returns-tab" tabindex="0">
+                    <h3 class="mt-0 diordiiev-color">Returning Policy</h3>
+                    <p>Since each item is uniquely handcrafted, we generally do not accept returns or exchanges unless the item arrives **damaged or defective**. Please inspect your order upon reception and contact us immediately if the item is faulty, so that we can evaluate the issue and make it right.</p>
                     <p>Returns based on simple change of mind are considered on a case-by-case basis and may be subject to a restocking fee. Custom or personalized items cannot be returned.</p>
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-shipping" role="tabpanel" aria-labelledby="v-pills-shipping-tab" tabindex="0">
-                    <h3 class="mt-0 diordiev-color">Shipping & Delivery</h3>
-                    <p>All items are made-to-order. Our current processing time is 3-5 business days before shipping. Delivery times vary based on the destination. We provide tracking information for all orders once they are shipped.</p>
+                    <h3 class="mt-0 diordiiev-color">Shipping & Delivery</h3>
+                    <p>All items are made-to-order. Our current processing time is **3-5 business days** before shipping. Delivery times vary based on the destination. We provide tracking information for all orders once they are shipped.</p>
                     <p>We are not responsible for delays caused by the postal service or customs procedures. Please ensure your shipping address is correct at the time of purchase to avoid delays.</p>
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-care" role="tabpanel" aria-labelledby="v-pills-care-tab" tabindex="0">
-                    <h3 class="mt-0 diordiev-color">Product Care Guidelines</h3>
-                    <p>To ensure the longevity of your handcrafted goods, avoid prolonged exposure to direct sunlight, extreme humidity, or water. For wooden items, a light rub with natural wood oil periodically will maintain the finish and color.</p>
+                    <h3 class="mt-0 diordiiev-color">Product Care Guidelines</h3>
+                    <p>To ensure the longevity of your handcrafted goods, **avoid prolonged exposure to direct sunlight, extreme humidity, or water**. For wooden items, a light rub with natural wood oil periodically will maintain the finish and color.</p>
                     <p>Candles should be burned on a heat-resistant surface and kept away from drafts. Following these simple care tips will help keep your purchase beautiful for years to come.</p>
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-custom" role="tabpanel" aria-labelledby="v-pills-custom-tab" tabindex="0">
-                    <h3 class="mt-0 diordiev-color">Custom Orders</h3>
-                    <p>We love creating unique pieces just for you! If you have a specific design or personalization request, please contact us. Custom orders require a non-refundable deposit before work begins.</p>
+                    <h3 class="mt-0 diordiiev-color">Custom Orders</h3>
+                    <p>We love creating unique pieces just for you! If you have a specific design or personalization request, please contact us. Custom orders require a **non-refundable deposit** before work begins.</p>
                     <p>Final approval of the design mock-up is required before production starts. Once production has begun, changes cannot be guaranteed and may incur additional charges.</p>
                 </div>
             </div>
@@ -166,7 +249,7 @@
 <section class="help-section text-center py-5">
     <div class="container">
         <h1>Questions About Your Order?</h1>
-        <p class="lead diordiev-color">Contact us directly</p>
+        <p class="lead diordiiev-color">Contact us directly</p>
         <hr>
         <div class="row mt-4 justify-content-center">
 
@@ -174,7 +257,7 @@
                 <div class="card help-card h-100">
                     <div class="card-body">
                         <div class="card-icon mb-3">
-                            <i class="bi bi-whatsapp"></i>
+                            <i class="fa-brands fa-whatsapp"></i>
                         </div>
                         <h5 class="card-title">WhatsApp</h5>
                         <p class="card-text">contact in WhatsApp</p>
@@ -187,7 +270,7 @@
                 <div class="card help-card h-100 email-card" onclick="copyEmailToClipboard('andriicorporation@gmail.com')">
                     <div class="card-body">
                         <div class="card-icon mb-3">
-                            <i class="bi bi-envelope-fill"></i>
+                            <i class="fa-solid fa-envelope"></i>
                         </div>
                         <h5 class="card-title">Email</h5>
                         <p class="card-text mb-2" id="email-address">andriicorporation@gmail.com</p>
@@ -202,7 +285,7 @@
                 <div class="card help-card h-100">
                     <div class="card-body">
                         <div class="card-icon mb-3">
-                            <i class="bi bi-telegram"></i>
+                            <i class="fa-brands fa-telegram"></i>
                         </div>
                         <h5 class="card-title">Telegram</h5>
                         <p class="card-text">Contact in Telegram</p>
@@ -277,6 +360,14 @@
              alert("Email copied: andriicorporation@gmail.com");
         }
     }
+
+    // Встановлення активної вкладки за замовчуванням при завантаженні (тепер це User Agreement)
+    document.addEventListener('DOMContentLoaded', function() {
+        var defaultTab = document.getElementById('v-pills-agreement-tab');
+        if (defaultTab) {
+            defaultTab.click();
+        }
+    });
 </script>
 
 {% endblock %}

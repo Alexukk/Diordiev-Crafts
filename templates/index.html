@@ -1,29 +1,31 @@
 {% extends "base.html" %}
 
-{% block title %}Diordiev Crafts - Handcrafted Goods{% endblock %}
+{% block title %}Diordiiev Crafts - Handcrafted Goods{% endblock %}
 
 {% block content %}
 
     <section class="hero-andrews-wood">
         <div class="container hero-andrews-wood-content">
-            <h1>Diordiev Crafts</h1>
+            <h1>Diordiiev Crafts</h1>
             <p>Accessories which fits everyone</p>
-            <a href="{{ url_for('shop') }}" class="button hero-andrews-wood-button">Shop now</a>
+            <a href="{{ url_for('shop') }}" class="button hero-andrews-wood-button"><i class="fa-solid fa-arrow-right-long me-2"></i>Shop now</a>
         </div>
     </section>
 
     <section class="collection-section">
         <div class="container">
-            <h2>Our Collection</h2>
+            <h2><i class="fa-solid fa-layer-group me-2"></i>Our Collection</h2>
             <div class="categories-grid">
                 <a href="{{url_for('shop', type='Boxes')}}" class="category-item">
                     <img src="/static/img/boxes.png" alt="Wooden boxes">
-                    <h4>Wooden boxes</h4>
+                    <h4>Wooden Boxes</h4>
                 </a>
+
                 <a href="{{url_for('shop', type='Bracelets')}}" class="category-item">
-                    <img src="/static/img/bracelets.png" alt="Bracelets">
-                    <h4>Bracelets</h4>
+                    <img src="/static/img/bracelets.png" alt="Jewelry">
+                    <h4>Jewelry</h4>
                 </a>
+
                 <a href="{{url_for('shop')}}" class="category-item">
                     <img src="/static/img/candles.png" alt="All products">
                     <h4>All products</h4>
@@ -37,12 +39,12 @@
 
     <section class="about-section">
         <div class="container">
-            <h2 class="section-title">Our Story</h2>
+            <h2 class="section-title"><i class="fa-solid fa-book-open me-2"></i>Little story about big family</h2>
             <div class="about-content">
                 <img src="/static/img/working_space.png" alt="Craftsman working">
                 <div class="about-text">
-                    <p>Diordiev Crafts was born from a passion for creating beautiful, meaningful objects with a personal touch. Each item is meticulously handcrafted, using high-quality materials to ensure it is not just a product, but a piece of art that brings joy and warmth into your home.</p>
-                    <p>From the intricate details of our wooden boxes to the soothing scents of our candles, we believe in the magic of handmade goods. Thank you for supporting our craft!</p>
+                    <p>Diordiiev Crafts was born from a passion for creating beautiful, meaningful objects with a personal touch. Each item is meticulously handcrafted, using high-quality materials to ensure it is not just a product, but a piece of art that brings joy and warmth into your home.</p>
+                    <p>From the intricate details of our wooden vases to the soothing scents of our candles, we believe in the magic of handmade goods. Thank you for supporting our craft!</p>
                 </div>
             </div>
         </div>
@@ -51,7 +53,7 @@
     <section class="call-to-action">
         <div class="container">
             <p>Ready to find your perfect piece?</p>
-            <a href="/shop" class="button">Explore the Full Collection</a>
+            <a href="/shop" class="button"><i class="fa-solid fa-store me-2"></i>Explore the Full Collection</a>
         </div>
     </section>
 
@@ -79,7 +81,7 @@ const loadAnnouncement = () => {
                         <div class="toast show border-${data.color}" role="alert" aria-live="assertive" aria-atomic="true" id="announcementToast">
 
                             <div class="toast-header bg-${data.color} text-white">
-                                <strong class="me-auto">Don't Miss Out!</strong>
+                                <strong class="me-auto"><i class="fa-solid fa-bullhorn me-1"></i>Don't Miss Out!</strong>
                                 <small></small>
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
                             </div>

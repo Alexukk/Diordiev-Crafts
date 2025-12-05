@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Thank You! - Diordiev Crafts{% endblock %}
+{% block title %}Thank You! - Diordiiev Crafts{% endblock %}
 
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 {% endblock %}
 
 {% block content %}
@@ -37,10 +37,11 @@
         justify-content: center;
     }
 
-    /* Стиль для самого сердечка, щоб краще відцентрувати Unicode-символ */
+    /* Стиль для самого сердечка (Font Awesome), щоб краще відцентрувати */
     .heart-symbol {
-        font-size: 3.5rem; /* Трохи збільшимо розмір символу для кращого вигляду */
-        line-height: 1; /* Вирівнювання тексту */
+        /* FIXED: Using Font Awesome class instead of Unicode */
+        font-size: 2.5rem; /* FA icons are smaller by default, adjusting size */
+        line-height: 1;
     }
 
     /* Стиль для номера замовлення */
@@ -56,12 +57,13 @@
     }
 
     .contact-info {
-        background-color: #fff3cd;
-        color: #664d03;
+        /* FIXED: Corrected brand name */
+        background-color: #f7f3f2; /* Light background from Diordiiev styles */
+        color: #5A4744;
         padding: 15px;
         border-radius: 8px;
         margin-top: 30px;
-        border: 1px solid #ffecb5;
+        border: 1px solid #7A5C5820; /* Subtle brand border */
     }
 
     /* ================================================= */
@@ -118,7 +120,7 @@
     <div class="thank-you-container shadow">
 
         <div class="check-icon-container">
-            <span class="heart-symbol">🤍</span>
+            <i class="fa-solid fa-heart heart-symbol"></i>
         </div>
 
         <h1 class="mb-3 display-5 fw-bold" style="color: #7A5C58;">Thank You!</h1>
@@ -130,11 +132,12 @@
         <div class="contact-info mt-4">
             <h5 class="fw-bold mb-2">What happens next?</h5>
             <p class="mb-0">
-                A member of the Diordiev Crafts team will contact you shortly using the contact method you selected during checkout (phone, messenger, or email) to confirm all details, calculate shipping costs, and finalize payment.
+                A member of the Diordiiev Crafts team will contact you shortly using the contact method you selected during checkout (phone, messenger, or email) to confirm all details, calculate shipping costs, and finalize payment.
             </p>
         </div>
 
         <a href="{{ url_for('shop') }}" class="diordiev-button" role="button">
+            <i class="fa-solid fa-basket-shopping"></i>
             Continue Shopping
         </a>
 

@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Edit: {{ product.title }}{% endblock %}
+{% block title %}Edit: {{ product.title }} - Diordiiev Crafts{% endblock %}
+
+
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="mb-4">Edit Product: "{{ product.title }}"</h2>
+    <h2 class="mb-4"><i class="fa-solid fa-box-open me-2"></i>Edit Product: "{{ product.title }}"</h2>
 
     <div class="card p-4 shadow-sm">
 
@@ -30,7 +32,7 @@
                 <select class="form-select" id="category" name="category" required>
                     <optgroup label="Woodenware">
                         <option value="Boxes" {% if product.category == 'Boxes' %}selected{% endif %}>Boxes</option>
-                        <option value="Stands" {% if product.category == 'Stands' %}selected{% endif %}>Stands</option>
+                        <option value="Vases" {% if product.category == 'Vases' or product.category == 'Stands' %}selected{% endif %}>Vases</option>
                         <option value="Figurines" {% if product.category == 'Figurines' %}selected{% endif %}>Figurines</option>
                     </optgroup>
 
@@ -49,10 +51,12 @@
             </div>
 
            <button type="submit" class="btn btn-primary me-2" style="background-color: #7A5C58; border-color: #7A5C58;">
+                <i class="fa-solid fa-floppy-disk me-1"></i>
                 Save Changes
             </button>
 
             <a href="{{ url_for('editProductDetails', product_id=product.id) }}" class="btn btn-secondary">
+                <i class="fa-solid fa-xmark me-1"></i>
                 Cancel
             </a>
         </form>

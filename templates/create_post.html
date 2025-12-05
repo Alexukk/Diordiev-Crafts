@@ -1,13 +1,38 @@
 {% extends "base.html" %}
 
-{% block title %}Create New Post{% endblock %}
+{% block title %}Create New Post - Admin{% endblock %}
 
 {% block content %}
+<style>
+    /* ================================================= */
+    /* FIRM BUTTON STYLES (Create Post) */
+    /* ================================================= */
+    .btn-diordiev-color {
+        /* Brand color */
+        background-color: #7A5C58;
+        border-color: #7A5C58;
+        color: white;
+        font-weight: 600;
+        min-width: 180px;
+        transition: background-color 0.2s, border-color 0.2s;
+    }
+    .btn-diordiev-color:hover {
+        background-color: #634a47;
+        border-color: #634a47;
+        color: white;
+    }
+
+    /* Input focus style consistency */
+    .form-control:focus, .form-select:focus {
+        border-color: #7A5C58;
+        box-shadow: 0 0 0 0.25rem rgba(122, 92, 88, 0.25);
+    }
+</style>
 <section class="container mt-5 py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
             <div class="card p-4 shadow-sm">
-                <h2 class="card-title text-center mb-4">Create New Post</h2>
+                <h2 class="card-title text-center mb-4"><i class="fa-solid fa-feather-pointed me-2"></i>Create New Post</h2>
                 <hr>
                 <form action="/create-post" method="POST" enctype="multipart/form-data">
 
@@ -22,12 +47,15 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="photo" class="form-label">Enter Photo link</label>
-                        <input type="file" class="form-control" id="photo" name="photo">
+                        <label for="photo" class="form-label">Upload Photo (Image File)</label>
+                        <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+                        <div class="form-text">Note: This field expects an image file upload.</div>
                     </div>
 
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary mt-3">Create Post</button>
+                        <button type="submit" class="btn btn-diordiev-color mt-3">
+                            <i class="fa-solid fa-square-plus me-1"></i>Publish Post
+                        </button>
                     </div>
                 </form>
             </div>

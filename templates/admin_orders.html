@@ -30,7 +30,7 @@
 </style>
 
 <div class="container admin-container">
-    <h2 class="mb-4">Управление заказами</h2>
+    <h2 class="mb-4"><i class="fa-solid fa-clipboard-list me-2"></i>Управление заказами</h2>
 
     <div class="table-responsive">
         <table class="table table-hover table-striped align-middle">
@@ -56,10 +56,10 @@
                         <small class="text-muted">{{ order.email }}</small>
                     </td>
                     <td>{{ order.phone }} ({{ order.contact_way }})</td>
-                    <td><b class="text-success">${{ "%.2f" | format(order.total_price) }}</b></td>
+                    <td><b class="text-success">€{{ "%.2f" | format(order.total_price) }}</b></td>
                     <td>
                         <a href="#" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#itemsModal{{ order.id }}">
-                            Посмотреть ({{ order.items.count() }})
+                            <i class="fa-solid fa-list me-1"></i>Посмотреть ({{ order.items.count() }})
                         </a>
                     </td>
                     <td>
@@ -74,7 +74,9 @@
                         </select>
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteOrder({{ order.id }})">Удалить</button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteOrder({{ order.id }})">
+                            <i class="fa-solid fa-trash-can"></i> Удалить
+                        </button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -137,7 +139,8 @@
                 const data = await response.json();
                 alert(`Ошибка при смене статуса: ${data.error}`);
                 // Возвращаем старый статус
-                selectElement.value = oldClass.split('status-')[1].trim();
+                const oldStatus = oldClass.split('status-')[1].split(' ')[0]; // Более надежный способ
+                selectElement.value = oldStatus;
             }
         } catch (error) {
             console.error('Fetch error:', error);
@@ -151,6 +154,7 @@
     // JS: УДАЛЕНИЕ ЗАКАЗА ЧЕРЕЗ AJAX
     // =================================================
     async function deleteOrder(orderId) {
+        // ИСПРАВЛЕНО: Сообщение на русский
         if (!confirm(`Вы уверены, что хотите удалить Заказ #${orderId}? Это действие является НЕОБОРОТНЫМ, и все данные будут потеряны.`)) {
             return;
         }
@@ -169,14 +173,17 @@
             if (response.ok) {
                 // Успешное удаление: удаляем строку из таблицы
                 row.remove();
-                alert(`Замовлення #${orderId} успішно видалено.`);
+                // ИСПРАВЛЕНО: Сообщение на русский
+                alert(`Заказ #${orderId} успешно удален.`);
             } else {
                 const data = await response.json();
-                alert(`Помилка видалення: ${data.error || 'Невідома помилка'}`);
+                // ИСПРАВЛЕНО: Сообщение на русский
+                alert(`Ошибка удаления: ${data.error || 'Неизвестная ошибка'}`);
             }
         } catch (error) {
             console.error('Fetch error:', error);
-            alert('Помилка мережі при видаленні замовлення.');
+            // ИСПРАВЛЕНО: Сообщение на русский
+            alert('Ошибка сети при удалении заказа.');
         } finally {
             deleteBtn.disabled = false;
         }

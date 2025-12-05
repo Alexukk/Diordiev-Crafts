@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Diordiev Crafts{% endblock %}</title>
+    <title>{% block title %}Diordiiev Crafts{% endblock %}</title>
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/png" href="/static/img/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH572XlSjZ5q+q1s7FmIq1I5s0p60N+Y7qD2oU8p60Q1vR1V77l10R91QWlXmF0V6k/2jF7FmE6WlX4G+Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
         {% block head %}{% endblock %}
@@ -19,27 +21,24 @@
             bottom: 20px;
             right: 20px;
             z-index: 1050;
-            width: 70px;
-            height: 70px;
+            width: 50px; /* Сделаем иконку меньше, так как Font Awesome выглядит крупнее */
+            height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-
+            font-size: 1.5rem; /* Размер иконки */
+            color: #fff; /* Цвет иконки */
         }
 
-        .fixed-bottom-right-btn img {
-            width: 24px;
-            height: 24px;
-            filter: invert(100%);
-        }
+        /* УДАЛЕНО: Стили для .fixed-bottom-right-btn img, так как мы используем Font Awesome */
     </style>
 
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('index') }}">Diordiev Crafts</a>
+            <a class="navbar-brand" href="{{ url_for('index') }}">Diordiiev Crafts</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -48,22 +47,22 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{url_for('shop')}}">Shop</a>
+                        <a class="nav-link active" aria-current="page" href="{{url_for('shop')}}"><i class="fa-solid fa-store me-1"></i>Shop</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('aboutUs')}}">About Us</a>
+                        <a class="nav-link" href="{{url_for('aboutUs')}}"><i class="fa-solid fa-users me-1"></i>About Us</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('privacy_policy') }}">Privacy policy</a>
+                        <a class="nav-link" href="{{ url_for('privacy_policy') }}"><i class="fa-solid fa-shield-halved me-1"></i>Privacy policy</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('Cart') }}">Cart</a>
+                        <a class="nav-link" href="{{ url_for('Cart') }}"><i class="fa-solid fa-cart-shopping me-1"></i>Cart</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('posts') }}">Our Blog</a>
+                        <a class="nav-link" href="{{ url_for('posts') }}"><i class="fa-solid fa-book-open me-1"></i>Our Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('admin_panel') }}">Admin</a>
+                        <a class="nav-link" href="{{ url_for('admin_panel') }}"><i class="fa-solid fa-screwdriver-wrench me-1"></i>Admin</a>
                     </li>
                 </ul>
             </div>
@@ -77,10 +76,10 @@
 
     <footer class="footer">
         <div class="container footer-content">
-            <p>&copy; 2025 Diordiev Crafts. All rights reserved.</p>
+            <p>&copy; 2025 Diordiiev Crafts. All rights reserved.</p>
 
             <p class="creator-info">
-                Powered by <a href="https://github.com/Alexukk" target="_blank">Alexukk</a>
+                Powered by <a href="https://github.com/Alexukk" target="_blank"><i class="fa-brands fa-github"></i>Alexukk</a>
             </p>
         </div>
     </footer>
@@ -88,15 +87,16 @@
 
 {% if request.endpoint != 'Cart' and request.endpoint != 'checkout' and request.endpoint != 'thank_you' %}
     <a href="{{ url_for('Cart') }}" class="fixed-bottom-right-btn btn btn-dark rounded-circle">
-        <img src="{{ url_for('static', filename='img/shopping-cart.png') }}" alt="Cart" title="Go to Cart">
+        <i class="fa-solid fa-cart-shopping"></i>
     </a>
 {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('Diordiev Crafts page loaded.');
+            console.log('Diordiiev Crafts page loaded.');
         });
     </script>
+    <script src="https://kit.fontawesome.com/a924c282fb.js" crossorigin="anonymous"></script>
 </body>
 </html>

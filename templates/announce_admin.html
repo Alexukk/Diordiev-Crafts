@@ -8,10 +8,23 @@
         max-width: 900px;
         margin: 50px auto;
     }
+
+    /* Добавляем фирменный стиль к кнопке */
+    .btn-diordiev-color {
+        color: #fff;
+        background-color: #7A5C58;
+        border-color: #7A5C58;
+        transition: background-color 0.2s, border-color 0.2s;
+    }
+    .btn-diordiev-color:hover {
+        color: #fff;
+        background-color: #634a47;
+        border-color: #634a47;
+    }
 </style>
 
 <div class="container admin-container mt-5">
-    <h2 class="mb-4">Manage Front Page Announcement</h2>
+    <h2 class="mb-4"><i class="fa-solid fa-bullhorn me-2"></i>Manage Front Page Announcement</h2>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -52,13 +65,15 @@
                 </label>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="background-color: #7A5C58; border-color: #7A5C58;">Save Changes</button>
+            <button type="submit" class="btn btn-diordiev-color">
+                <i class="fa-solid fa-floppy-disk me-1"></i>Save Changes
+            </button>
         </form>
     </div>
 
     <h4 class="mt-5">Live Preview:</h4>
 
-    {# Встановлюємо клас кольору тексту в залежності від кольору плашки #}
+    {# Set text color class based on the chosen color #}
     {% set text_color_class = 'text-white' if announcement.color in ['danger', 'primary'] else 'text-dark' %}
 
     {% if announcement.is_active and announcement.text %}
@@ -72,7 +87,7 @@
     {% endif %}
 
     <div class="mt-4">
-        <a href="{{ url_for('admin_panel') }}" class="btn btn-outline-secondary">← Back to Admin Panel</a>
+        <a href="{{ url_for('admin_panel') }}" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-left me-1"></i>Back to Admin Panel</a>
     </div>
 </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Shop - Diordiev Crafts{% endblock %}
+{% block title %}Shop - Diordiiev Crafts{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -8,20 +8,21 @@
         /* ================================================= */
         /* ФИРМЕННЫЙ СТИЛЬ КНОПОК И БЕЙДЖЕЙ (Без изменений) */
         /* ================================================= */
-        .btn-diordiev-color {
+        /* FIXED: Corrected color class names in CSS */
+        .btn-diordiiev-color {
             color: #fff;
             background-color: #7A5C58;
             border-color: #7A5C58;
             transition: background-color 0.2s, border-color 0.2s;
         }
 
-        .btn-diordiev-color:hover {
+        .btn-diordiiev-color:hover {
             color: #fff;
             background-color: #634a47;
             border-color: #634a47;
         }
 
-        .btn-diordiev-color:focus, .btn-diordiev-color:active {
+        .btn-diordiiev-color:focus, .btn-diordiiev-color:active {
             box-shadow: 0 0 0 0.25rem rgba(122, 92, 88, 0.5);
         }
 
@@ -166,6 +167,7 @@
             <h1 class="page-title">All Products</h1>
             <div class="dropdown">
                 <button class="sort-button">
+                    <i class="fa-solid fa-filter me-1"></i>
                     <span>Sort & Filter</span>
                     <span class="arrow">⩒</span>
                 </button>
@@ -193,8 +195,8 @@
                         <label><input type="radio" name="type" value="Beeswax"> Beeswax</label>
                         <label><input type="radio" name="type" value="Scented"> Scented</label>
                     </div>
-                    <button class="apply-filters-button w-100 mt-2 mb-2">Apply</button>
-                    <button class="reset-filters-button btn btn-outline-secondary w-100">Reset</button>
+                    <button class="apply-filters-button w-100 mt-2 mb-2"><i class="fa-solid fa-check me-1"></i>Apply</button>
+                    <button class="reset-filters-button btn btn-outline-secondary w-100"><i class="fa-solid fa-rotate me-1"></i>Reset</button>
                 </div>
             </div>
         </div>
@@ -227,12 +229,16 @@
                             <h4 class="text-success mb-0">{{ product.price }}€</h4>
 
                             {% if product.status == 'sold' %}
-                                <button class="btn btn-outline-secondary" disabled>Sold Out</button>
+                                <button class="btn btn-outline-secondary" disabled>
+                                    <i class="fa-solid fa-circle-xmark me-1"></i>
+                                    Sold Out
+                                </button>
                             {% else %}
                                 <button
-                                    class="btn btn-diordiev-color view-details-btn"
+                                    class="btn btn-diordiiev-color view-details-btn"
                                     data-product-id="{{ product.id }}"
                                 >
+                                    <i class="fa-solid fa-eye me-1"></i>
                                     Details
                                 </button>
                                 {% endif %}
@@ -269,14 +275,18 @@
 
                             <button
                                 id="modal-add-to-cart-btn"
-                                class="btn btn-diordiev-color btn-lg w-100 mt-3"
+                                class="btn btn-diordiiev-color btn-lg w-100 mt-3"
                                 data-product-id=""
                                 data-product-price=""
                                 data-product-title=""
                             >
+                                <i class="fa-solid fa-cart-shopping me-2"></i>
                                 Add to cart
                             </button>
-                            <p class="text-danger mt-2 visually-hidden" id="modal-sold-out-message">This item is currently sold out.</p>
+                            <p class="text-danger mt-2 visually-hidden" id="modal-sold-out-message">
+                                <i class="fa-solid fa-circle-xmark me-1"></i>
+                                This item is currently sold out.
+                            </p>
                         </div>
                     </div>
                 </div>
