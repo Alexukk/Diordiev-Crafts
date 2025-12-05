@@ -1,26 +1,26 @@
 {% extends "base.html" %}
 
-{% block title %}Управление заказами - Admin{% endblock %}
+{% block title %}Order Management - Admin{% endblock %}
 
 {% block content %}
 <style>
     /* ================================================= */
-    /* АДМИН-СТИЛИ */
+    /* ADMIN STYLES */
     /* ================================================= */
     .admin-container {
         max-width: 1300px;
         margin: 50px auto;
     }
 
-    /* Стили для Select (статус) */
+    /* Status Select Styles */
     .status-select {
         border-color: #7A5C58;
         box-shadow: none !important;
         cursor: pointer;
         font-weight: 500;
-        width: 130px; /* Фиксированная ширина */
+        width: 130px; /* Fixed width */
     }
-    /* Цветовая индикация статусов */
+    /* Status Color Indication */
     .status-New { background-color: #7A5C58; color: white; }
     .status-Contacted { background-color: #ffc107; color: #333; }
     .status-Completed { background-color: #28a745; color: white; }
@@ -30,20 +30,20 @@
 </style>
 
 <div class="container admin-container">
-    <h2 class="mb-4"><i class="fa-solid fa-clipboard-list me-2"></i>Управление заказами</h2>
+    <h2 class="mb-4"><i class="fa-solid fa-clipboard-list me-2"></i>Order Management</h2>
 
     <div class="table-responsive">
         <table class="table table-hover table-striped align-middle">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Дата</th>
-                    <th>Клиент</th>
-                    <th>Контакт (Связь)</th>
-                    <th>Итого</th>
-                    <th>Товары</th>
-                    <th>Статус</th>
-                    <th>Действия</th>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Contact (Method)</th>
+                    <th>Total</th>
+                    <th>Items</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,7 +59,7 @@
                     <td><b class="text-success">€{{ "%.2f" | format(order.total_price) }}</b></td>
                     <td>
                         <a href="#" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#itemsModal{{ order.id }}">
-                            <i class="fa-solid fa-list me-1"></i>Посмотреть ({{ order.items.count() }})
+                            <i class="fa-solid fa-list me-1"></i>View ({{ order.items.count() }})
                         </a>
                     </td>
                     <td>
@@ -67,15 +67,15 @@
                                 id="status-{{ order.id }}"
                                 data-order-id="{{ order.id }}"
                                 onchange="updateOrderStatus(this)">
-                            <option value="New" {% if order.status == 'New' %}selected{% endif %} class="status-New">Новый</option>
-                            <option value="Contacted" {% if order.status == 'Contacted' %}selected{% endif %} class="status-Contacted">Связались</option>
-                            <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %} class="status-Completed">Завершен</option>
-                            <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %} class="status-Cancelled">Отменен</option>
+                            <option value="New" {% if order.status == 'New' %}selected{% endif %} class="status-New">New</option>
+                            <option value="Contacted" {% if order.status == 'Contacted' %}selected{% endif %} class="status-Contacted">Contacted</option>
+                            <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %} class="status-Completed">Completed</option>
+                            <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %} class="status-Cancelled">Cancelled</option>
                         </select>
                     </td>
                     <td>
                         <button class="btn btn-sm btn-outline-danger" onclick="deleteOrder({{ order.id }})">
-                            <i class="fa-solid fa-trash-can"></i> Удалить
+                            <i class="fa-solid fa-trash-can"></i> Delete
                         </button>
                     </td>
                 </tr>
@@ -89,15 +89,15 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="itemsModalLabel{{ order.id }}">Товары в Заказе #{{ order.id }}</h5>
+                    <h5 class="modal-title" id="itemsModalLabel{{ order.id }}">Items in Order #{{ order.id }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <ul class="list-group">
                         {% for item in order.items.all() %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ item.product.title if item.product else 'Товар удален' }}
-                            <span class="badge bg-secondary rounded-pill">{{ item.amount }} шт.</span>
+                            {{ item.product.title if item.product else 'Product deleted' }}
+                            <span class="badge bg-secondary rounded-pill">{{ item.amount }} pcs.</span>
                         </li>
                         {% endfor %}
                     </ul>
@@ -110,7 +110,7 @@
 
 <script>
     // =================================================
-    // JS: СМЕНА СТАТУСА ЧЕРЕЗ AJAX
+    // JS: CHANGE STATUS VIA AJAX
     // =================================================
     async function updateOrderStatus(selectElement) {
         const orderId = selectElement.dataset.orderId;
@@ -132,30 +132,33 @@
             });
 
             if (response.ok) {
-                // Успешное обновление: меняем класс для цвета
+                // Successful update: change class for color
                 selectElement.className = `form-select status-select status-${newStatus}`;
-                alert(`Статус Заказа #${orderId} успешно изменен на "${newStatus}"!`);
+                // Translated alert message
+                alert(`Status for Order #${orderId} successfully changed to "${newStatus}"!`);
             } else {
                 const data = await response.json();
-                alert(`Ошибка при смене статуса: ${data.error}`);
-                // Возвращаем старый статус
-                const oldStatus = oldClass.split('status-')[1].split(' ')[0]; // Более надежный способ
+                // Translated alert message
+                alert(`Error changing status: ${data.error}`);
+                // Revert to old status
+                const oldStatus = oldClass.split('status-')[1].split(' ')[0];
                 selectElement.value = oldStatus;
             }
         } catch (error) {
             console.error('Fetch error:', error);
-            alert('Произошла сетевая ошибка или ошибка сервера.');
+            // Translated alert message
+            alert('A network error or server error occurred.');
         } finally {
             selectElement.disabled = false;
         }
     }
 
     // =================================================
-    // JS: УДАЛЕНИЕ ЗАКАЗА ЧЕРЕЗ AJAX
+    // JS: DELETE ORDER VIA AJAX
     // =================================================
     async function deleteOrder(orderId) {
-        // ИСПРАВЛЕНО: Сообщение на русский
-        if (!confirm(`Вы уверены, что хотите удалить Заказ #${orderId}? Это действие является НЕОБОРОТНЫМ, и все данные будут потеряны.`)) {
+        // Translated confirmation message
+        if (!confirm(`Are you sure you want to delete Order #${orderId}? This action is IRREVERSIBLE, and all data will be lost.`)) {
             return;
         }
 
@@ -164,26 +167,26 @@
         deleteBtn.disabled = true;
 
         try {
-            // Маршрут для удаления, который вы реализовали на сервере
+            // The route for deletion you implemented on the server
             const response = await fetch(`{{ url_for("admin_delete_order", order_id=0) }}`.replace('0', orderId), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             });
 
             if (response.ok) {
-                // Успешное удаление: удаляем строку из таблицы
+                // Successful deletion: remove the row from the table
                 row.remove();
-                // ИСПРАВЛЕНО: Сообщение на русский
-                alert(`Заказ #${orderId} успешно удален.`);
+                // Translated alert message
+                alert(`Order #${orderId} successfully deleted.`);
             } else {
                 const data = await response.json();
-                // ИСПРАВЛЕНО: Сообщение на русский
-                alert(`Ошибка удаления: ${data.error || 'Неизвестная ошибка'}`);
+                // Translated alert message
+                alert(`Deletion error: ${data.error || 'Unknown error'}`);
             }
         } catch (error) {
             console.error('Fetch error:', error);
-            // ИСПРАВЛЕНО: Сообщение на русский
-            alert('Ошибка сети при удалении заказа.');
+            // Translated alert message
+            alert('Network error occurred while deleting the order.');
         } finally {
             deleteBtn.disabled = false;
         }
