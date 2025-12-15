@@ -69,6 +69,7 @@ class Order(db.Model):
     status = db.Column(db.String(30), default='New')
     items = db.relationship('Order_item', backref='order', lazy='dynamic', cascade="all, delete-orphan")
     total_price = db.Column(db.Float, nullable=False, default=0.0)
+    source = db.Column(db.String(50), default='Not given')
 
 class Order_item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -233,6 +234,7 @@ def submit_order():
     except:
         return jsonify({'error': 'Invalid JSON format'}), 400
 
+    # Оновлено: 'source' не є обов'язковим, тому перевіряємо лише ключові поля
     if not all(k in data for k in ['full_name', 'phone', 'email', 'contact_way', 'cart_items']):
         return jsonify({'error': 'Missing required fields (Name, Phone, Email, Contact Way or Cart Items)'}), 400
 
@@ -243,11 +245,15 @@ def submit_order():
     contact_way = data['contact_way']
     cart_items = data['cart_items']
 
+    # НОВЕ ПОЛЕ: Отримуємо джерело. Якщо не надано, використовуємо значення за замовчуванням 'Not given'.
+    source = data.get('source', 'Not given')
+
     if not cart_items:
         return jsonify({'error': 'Cart is empty.'}), 400
 
     product_ids = [int(id) for id in cart_items.keys()]
 
+    # ПРИПУЩЕННЯ: Product.query коректно визначено
     products_map = {p.id: p for p in Product.query.filter(Product.id.in_(product_ids)).all()}
 
     order_item_list = []
@@ -265,6 +271,7 @@ def submit_order():
         item_subtotal = product.price * amount
         total_price += item_subtotal
 
+        # ПРИПУЩЕННЯ: Order_item коректно визначено
         order_item = Order_item(
             item_id=product.id,
             amount=amount,
@@ -274,15 +281,18 @@ def submit_order():
     if total_price == 0.0:
         return jsonify({'error': 'Failed to calculate total price or cart contains invalid items.'}), 400
 
+    # Створення об'єкта замовлення, включаючи нове поле 'source'
     new_order = Order(
         full_name=full_name,
         email=email,
         phone=phone,
         contact_way=contact_way,
+        source=source,  # <--- ЗБЕРІГАЄМО НОВЕ ПОЛЕ
         total_price=total_price,
     )
 
     try:
+        # ПРИПУЩЕННЯ: db.session коректно визначено
         db.session.add(new_order)
         db.session.flush()
 
@@ -291,11 +301,10 @@ def submit_order():
 
         db.session.add_all(order_item_list)
 
-
         db.session.commit()
 
-
         try:
+            # ПРИПУЩЕННЯ: notifier коректно визначено
             notifier(new_order)
         except Exception as telegram_error:
 
@@ -311,7 +320,6 @@ def submit_order():
         db.session.rollback()
         print(f"Error placing order: {e}")
         return jsonify({'error': 'Server error: Failed to save the order to the database.'}), 500
-
 
 @app.route('/thank_you')
 def thank_you():

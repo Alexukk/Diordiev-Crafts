@@ -162,6 +162,18 @@
                         </select>
                     </div>
 
+                    <div class="mb-4">
+                        <label for="source" class="form-label">How did you hear about us? (Optional)</label>
+                        <select class="form-select" id="source" name="source">
+                            <option value="Not given" selected>Not given</option>
+                            <option value="Friends/Family">Friends/Family</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+
                     <div class="alert alert-info small" role="alert">
                         <i class="fa-solid fa-circle-info me-1"></i>
                         After placing the order, we will contact you via the selected method (Telegram, WhatsApp, etc.) to confirm the order and clarify delivery details.
@@ -391,6 +403,8 @@
                 phone: document.getElementById('phone').value,
                 email: document.getElementById('email').value,
                 contact_way: document.getElementById('contact_way').value,
+                // НОВОЕ ПОЛЕ: Получаем значение поля "source"
+                source: document.getElementById('source').value,
                 cart_items: cart, // Sending cart contents
             };
 
