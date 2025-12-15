@@ -34,12 +34,14 @@
                         <option value="Boxes" {% if product.category == 'Boxes' %}selected{% endif %}>Boxes</option>
                         <option value="Vases" {% if product.category == 'Vases' or product.category == 'Stands' %}selected{% endif %}>Vases</option>
                         <option value="Figurines" {% if product.category == 'Figurines' %}selected{% endif %}>Figurines</option>
+                        <option value="Other" {% if product.category == 'Other' %}selected{% endif %}>Other</option>
                     </optgroup>
 
                     <optgroup label="Jewelry">
                         <option value="Bracelets" {% if product.category == 'Bracelets' %}selected{% endif %}>Bracelets</option>
                         <option value="Earrings" {% if product.category == 'Earrings' %}selected{% endif %}>Earrings</option>
                         <option value="Necklaces" {% if product.category == 'Necklaces' %}selected{% endif %}>Necklaces</option>
+                        <option value="Sets" {% if product.category == 'Sets' %}selected{% endif %}>Sets</option>
                     </optgroup>
 
                     <optgroup label="Candles">
