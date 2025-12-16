@@ -99,7 +99,7 @@
         }
 
         /* ================================================= */
-        /* МОДАЛЬНОЕ ОКНО И КАРУСЕЛЬ (ОБНОВЛЕНО) */
+        /* МОДАЛЬНОЕ ОКНО И КАРУСЕЛЬ */
         /* ================================================= */
         #modal-product-carousel-container {
             max-height: 500px;
@@ -116,16 +116,22 @@
             width: auto;
             display: inline-block;
             margin: auto;
-            /* Убрано cursor: zoom-in, так как открытие фотки отключено */
             transition: opacity 0.2s;
         }
 
-        /* ЦВЕТ СТРЕЛОК КАРУСЕЛИ (КОФЕЙНЫЙ #7A5C58) */
+        /* ЦВЕТ СТРЕЛОК КАРУСЕЛИ (КОФЕЙНЫЙ ТЕМНЫЙ) */
         .carousel-control-prev-icon,
         .carousel-control-next-icon {
-            filter: invert(41%) sepia(11%) saturate(940%) hue-rotate(317deg) brightness(91%) contrast(85%);
+            filter: invert(41%) sepia(11%) saturate(1500%) hue-rotate(317deg) brightness(80%) contrast(90%);
             width: 2.5rem;
             height: 2.5rem;
+        }
+
+        /* ПОЛНОЭКРАННОЕ ФОТО (MODAL 2) */
+        #fullSizeImage {
+            max-width: 95vw;
+            max-height: 90vh;
+            object-fit: contain;
         }
 
         /* АДАПТИВНОСТЬ */
@@ -236,8 +242,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-7 mb-4 mb-md-0" id="modal-product-carousel-container">
-                            <div class="text-center p-5 text-muted">Loading images...</div>
+                        <div class="col-md-7 mb-4 mb-md-0">
+                             <div id="modal-product-carousel-container">
+                                <div class="text-center p-5 text-muted">Loading images...</div>
+                             </div>
+                             <div class="text-center mt-2">
+                                <button class="btn btn-sm btn-outline-secondary" id="btn-view-full-size">
+                                    <i class="fa-solid fa-magnifying-glass-plus me-1"></i> View full size
+                                </button>
+                             </div>
                         </div>
                         <div class="col-md-5">
                             <h2 id="modal-product-title"></h2>
@@ -258,6 +271,17 @@
         </div>
     </div>
 
+    <div class="modal fade" id="fullSizeModal" tabindex="-1" aria-hidden="true" style="background: rgba(0,0,0,0.8);">
+        <div class="modal-dialog modal-fullscreen modal-dialog-centered" onclick="bootstrap.Modal.getInstance(document.getElementById('fullSizeModal')).hide()">
+            <div class="modal-content" style="background: transparent; border: none;">
+                <div class="modal-body d-flex justify-content-center align-items-center position-relative">
+                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-4" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <img src="" id="fullSizeImage" alt="Full size view">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="toast-container-custom">
         <div id="addToCartToast" class="toast align-items-center text-white border-0" style="background-color: #7A5C58;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
             <div class="d-flex">
@@ -269,18 +293,11 @@
 
     <script>
         const CART_STORAGE_KEY = 'diordiev_cart';
-        let addToCartToast;
-        let toastMessageElement;
-        let productDetailModalInstance;
+        let addToCartToast, toastMessageElement, productDetailModalInstance;
 
         function getCart() {
             const cartData = localStorage.getItem(CART_STORAGE_KEY);
             return cartData ? JSON.parse(cartData) : {};
-        }
-
-        function saveCart(cart) {
-            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-            updateCartCounter();
         }
 
         function updateCartCounter() {
@@ -289,7 +306,6 @@
             for (const id in cart) totalItems += cart[id].qty;
             const cartCounter = document.getElementById('cart-counter');
             if (cartCounter) cartCounter.textContent = totalItems > 0 ? totalItems : '';
-            return totalItems;
         }
 
         function addToCart(productId, price, title) {
@@ -297,13 +313,10 @@
             const id = String(productId);
             if (cart[id]) cart[id].qty += 1;
             else cart[id] = { id: productId, title: title, price: parseFloat(price), qty: 1 };
-            saveCart(cart);
-            const total = updateCartCounter();
-            if (toastMessageElement) toastMessageElement.textContent = `"${title}" Added to cart! (Total ${total} pcs.)`;
-            if (addToCartToast) {
-                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(addToCartToast);
-                toastBootstrap.show();
-            }
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+            updateCartCounter();
+            if (toastMessageElement) toastMessageElement.textContent = `"${title}" Added to cart!`;
+            bootstrap.Toast.getOrCreateInstance(addToCartToast).show();
         }
 
         function openProductModal(productData) {
@@ -322,38 +335,26 @@
             } else {
                 modalCartBtn.classList.remove('visually-hidden');
                 soldOutMessage.classList.add('visually-hidden');
-                modalCartBtn.dataset.productId = productData.id;
-                modalCartBtn.dataset.productPrice = productData.price;
-                modalCartBtn.dataset.productTitle = productData.title;
+                Object.assign(modalCartBtn.dataset, { productId: productData.id, productPrice: productData.price, productTitle: productData.title });
             }
 
             const carouselContainer = document.getElementById('modal-product-carousel-container');
             const photos = [productData.photo1, productData.photo2, productData.photo3].filter(p => p);
 
-            let carouselInnerHTML = '';
-            photos.forEach((photo, index) => {
-                const activeClass = index === 0 ? ' active' : '';
-                // Функция открытия в новом окне убрана по просьбе пользователя
-                carouselInnerHTML += `
-                    <div class="carousel-item${activeClass}">
-                        <img src="./static/${photo}"
-                             alt="${productData.title}">
-                    </div>`;
-            });
-
             if (photos.length === 0) {
                 carouselContainer.innerHTML = '<p class="text-center text-muted p-5">No images.</p>';
             } else {
+                let items = photos.map((p, i) => `
+                    <div class="carousel-item ${i === 0 ? 'active' : ''}">
+                        <img src="./static/${p}" class="d-block w-100" alt="Product photo">
+                    </div>`).join('');
+
                 carouselContainer.innerHTML = `
-                    <div id="modalCarousel_${productData.id}" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">${carouselInnerHTML}</div>
+                    <div id="modalCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">${items}</div>
                         ${photos.length > 1 ? `
-                            <button class="carousel-control-prev" type="button" data-bs-target="#modalCarousel_${productData.id}" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon"></span>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#modalCarousel_${productData.id}" data-bs-slide="next">
-                                <span class="carousel-control-next-icon"></span>
-                            </button>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#modalCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#modalCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
                         ` : ''}
                     </div>`;
             }
@@ -365,38 +366,37 @@
             updateCartCounter();
             addToCartToast = document.getElementById('addToCartToast');
             toastMessageElement = document.getElementById('toast-message');
-            const modalElement = document.getElementById('productDetailModal');
 
-            modalElement.addEventListener('hidden.bs.modal', () => {
-                document.getElementById('modal-product-carousel-container').innerHTML = '';
+            document.addEventListener('click', (e) => {
+                const btn = e.target.closest('.view-details-btn');
+                if (btn) {
+                    fetch(`/api/product/${btn.dataset.productId}`).then(r => r.json()).then(p => openProductModal(p));
+                }
             });
 
-            document.addEventListener('click', (event) => {
-                const button = event.target.closest('.view-details-btn');
-                if (button) {
-                    const productId = button.dataset.productId;
-                    fetch(`/api/product/${productId}`)
-                        .then(r => r.json())
-                        .then(p => openProductModal(p))
-                        .catch(e => console.error(e));
+            // ЛОГИКА ПРОСМОТРА ПОЛНОГО РАЗМЕРА
+            document.getElementById('btn-view-full-size').addEventListener('click', () => {
+                const activeImg = document.querySelector('#modalCarousel .carousel-item.active img');
+                if (activeImg) {
+                    document.getElementById('fullSizeImage').src = activeImg.src;
+                    new bootstrap.Modal(document.getElementById('fullSizeModal')).show();
                 }
             });
 
             document.getElementById('modal-add-to-cart-btn').addEventListener('click', function() {
                 addToCart(this.dataset.productId, this.dataset.productPrice, this.dataset.productTitle);
-                if (productDetailModalInstance) productDetailModalInstance.hide();
+                productDetailModalInstance.hide();
             });
 
-            // Filter logic
-            const sortBtn = document.querySelector('.sort-button');
+            // Фильтры
             const dropdown = document.querySelector('.dropdown-content');
-            sortBtn.addEventListener('click', (e) => { e.stopPropagation(); dropdown.classList.toggle('show'); });
+            document.querySelector('.sort-button').addEventListener('click', (e) => { e.stopPropagation(); dropdown.classList.toggle('show'); });
             document.addEventListener('click', (e) => { if (!dropdown.contains(e.target)) dropdown.classList.remove('show'); });
             document.querySelector('.apply-filters-button').addEventListener('click', () => {
-                const params = Array.from(dropdown.querySelectorAll('input:checked')).map(r => `${r.name}=${r.value}`);
-                window.location.href = params.length ? `/shop?${params.join('&')}` : `/shop`;
+                const p = Array.from(dropdown.querySelectorAll('input:checked')).map(r => `${r.name}=${r.value}`);
+                window.location.href = p.length ? `/shop?${p.join('&')}` : `/shop`;
             });
-            document.querySelector('.reset-filters-button').addEventListener('click', () => { window.location.href = '/shop'; });
+            document.querySelector('.reset-filters-button').addEventListener('click', () => window.location.href = '/shop');
         });
     </script>
 {% endblock %}
