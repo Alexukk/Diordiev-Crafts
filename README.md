@@ -7,7 +7,7 @@ The project includes key features such as a shopping cart, integration with an e
 
 ### 📸 Project Demonstration
 Main page:
-<img width="1896" height="904" alt="image" src="https://github.com/user-attachments/assets/9d931847-078e-4177-984b-740a61acb7fe" />
+<img width="1901" height="966" alt="image" src="https://github.com/user-attachments/assets/f0654728-2f43-4ed5-b349-5cb7d9bbf9ba" />
 
 <img width="1893" height="902" alt="image" src="https://github.com/user-attachments/assets/b9c24e00-cb54-40d0-abc9-b3b5a463a993" />
 
@@ -32,7 +32,11 @@ Shop page:
 <img width="1893" height="904" alt="image" src="https://github.com/user-attachments/assets/dca19da2-5ecb-4769-a6c8-43e89358b3c0" />
 
 Product's own view:
-<img width="1908" height="912" alt="image" src="https://github.com/user-attachments/assets/b03e7d7d-dc9d-4b87-b53c-ddd54f6cac81" />
+<img width="1894" height="903" alt="image" src="https://github.com/user-attachments/assets/0f460e86-335f-43b5-bbc8-2d4c401fc2eb" />
+
+Product's photo full-scaled view:
+<img width="1918" height="901" alt="image" src="https://github.com/user-attachments/assets/e5fecb76-dda2-44de-9ecd-bc06d5c23911" />
+
 
 Posts/Our blog page:
 <img width="1897" height="901" alt="image" src="https://github.com/user-attachments/assets/6364bf0f-8c1d-45ea-b21d-f47d4eca5696" />
@@ -73,6 +77,7 @@ Toast announcement editing page:
 
 Telegram notifier for administration:
 <img width="283" height="283" alt="image" src="https://github.com/user-attachments/assets/731f3f58-96b5-45c2-8037-7a2e3fad4db5" />
+
 
 
 
