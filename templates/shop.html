@@ -4,11 +4,9 @@
 
 {% block head %}
     {{ super() }}
-
         /* ================================================= */
-        /* ФИРМЕННЫЙ СТИЛЬ КНОПОК И БЕЙДЖЕЙ (Без изменений) */
+        /* ФИРМЕННЫЙ СТИЛЬ КНОПОК И БЕЙДЖЕЙ */
         /* ================================================= */
-        /* FIXED: Corrected color class names in CSS */
         .btn-diordiiev-color {
             color: #fff;
             background-color: #7A5C58;
@@ -36,7 +34,6 @@
             border-color: #7A5C58;
         }
 
-        /* Бейджи */
         .status-badge {
             position: absolute;
             top: 12px;
@@ -64,13 +61,11 @@
             color: #000;
         }
 
-        /* --- Тело карточки --- */
         .card-body {
             display: flex;
             flex-direction: column;
         }
 
-        /* СТИЛІ ДЛЯ ТОСТА */
         .toast-container-custom {
             position: fixed;
             bottom: 1.5rem;
@@ -79,10 +74,8 @@
         }
 
         /* ================================================= */
-        /* ФИКСАЦИЯ И АДАПТИВНОСТЬ КАРТОЧЕК */
+        /* ФИКСАЦИЯ КАРТОЧЕК */
         /* ================================================= */
-
-        /* 1. КАРТОЧКА: Фиксированный квадрат 1:1 */
         .product-img-container {
             position: relative;
             padding-top: 100%;
@@ -105,7 +98,9 @@
             transform: scale(1.05);
         }
 
-        /* 2. МОДАЛЬНОЕ ОКНО (Общие правила для ПК) */
+        /* ================================================= */
+        /* МОДАЛЬНОЕ ОКНО И КАРУСЕЛЬ (ОБНОВЛЕНО) */
+        /* ================================================= */
         #modal-product-carousel-container {
             max-height: 500px;
         }
@@ -121,47 +116,33 @@
             width: auto;
             display: inline-block;
             margin: auto;
+            /* Убрано cursor: zoom-in, так как открытие фотки отключено */
+            transition: opacity 0.2s;
         }
 
-        /* ================================================= */
-        /* АДАПТИВНЫЕ ИСПРАВЛЕНИЯ (MOBILE) */
-        /* ================================================= */
+        /* ЦВЕТ СТРЕЛОК КАРУСЕЛИ (КОФЕЙНЫЙ #7A5C58) */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            filter: invert(41%) sepia(11%) saturate(940%) hue-rotate(317deg) brightness(91%) contrast(85%);
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        /* АДАПТИВНОСТЬ */
         @media (max-width: 767.98px) {
-
-            /* Убеждаемся, что модальное окно хорошо смотрится на маленьких экранах */
-            .modal-dialog {
-                margin: 0.5rem; /* Немного отступа от краев */
-            }
-            .modal-xl {
-                max-width: none; /* Убираем ограничение XL для мобильных */
-            }
-
-            /* Уменьшаем максимальную высоту карусели, чтобы текст поместился на экране */
+            .modal-dialog { margin: 0.5rem; }
             #modal-product-carousel-container,
             #modal-product-carousel-container .carousel-item {
-                max-height: 350px; /* Немного больше, чем 300px, но меньше 500px */
+                max-height: 350px;
                 height: 350px;
             }
-
             #modal-product-carousel-container .carousel-item img {
                 max-height: 350px;
             }
-
-            /* Делаем фильтры компактнее (были сделаны в предыдущем шаге) */
-            .shop-controls {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .dropdown, .sort-button {
-                width: 100%;
-            }
         }
-
 {% endblock %}
 
 {% block content %}
-
     <section class="shop-page container">
         <div class="shop-controls">
             <h1 class="page-title">All Products</h1>
@@ -221,7 +202,6 @@
                                  alt="{{ product.title }}"
                                  data-product-id="{{ product.id }}">
                         {% endif %}
-
                     </div>
 
                     <div class="card-body">
@@ -232,18 +212,13 @@
 
                             {% if product.status == 'sold' %}
                                 <button class="btn btn-outline-secondary" disabled>
-                                    <i class="fa-solid fa-circle-xmark me-1"></i>
-                                    Sold Out
+                                    <i class="fa-solid fa-circle-xmark me-1"></i> Sold Out
                                 </button>
                             {% else %}
-                                <button
-                                    class="btn btn-diordiiev-color view-details-btn"
-                                    data-product-id="{{ product.id }}"
-                                >
-                                    <i class="fa-solid fa-eye me-1"></i>
-                                    Details
+                                <button class="btn btn-diordiiev-color view-details-btn" data-product-id="{{ product.id }}">
+                                    <i class="fa-solid fa-eye me-1"></i> Details
                                 </button>
-                                {% endif %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -252,42 +227,29 @@
         </div>
     </section>
 
-    <div class="modal fade" id="productDetailModal" tabindex="-1" aria-labelledby="productDetailModalLabel" aria-hidden="true">
+    <div class="modal fade" id="productDetailModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="productDetailModalLabel">Product Details</h5>
+                    <h5 class="modal-title">Product Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-7 mb-4 mb-md-0" id="modal-product-carousel-container">
                             <div class="text-center p-5 text-muted">Loading images...</div>
                         </div>
-
                         <div class="col-md-5">
                             <h2 id="modal-product-title"></h2>
                             <p class="text-muted small mb-3" id="modal-product-category"></p>
                             <h3 class="text-success mb-3" id="modal-product-price"></h3>
-
                             <div id="modal-product-full-text"></div>
-
                             <hr>
-
-                            <button
-                                id="modal-add-to-cart-btn"
-                                class="btn btn-diordiiev-color btn-lg w-100 mt-3"
-                                data-product-id=""
-                                data-product-price=""
-                                data-product-title=""
-                            >
-                                <i class="fa-solid fa-cart-shopping me-2"></i>
-                                Add to cart
+                            <button id="modal-add-to-cart-btn" class="btn btn-diordiiev-color btn-lg w-100 mt-3">
+                                <i class="fa-solid fa-cart-shopping me-2"></i> Add to cart
                             </button>
                             <p class="text-danger mt-2 visually-hidden" id="modal-sold-out-message">
-                                <i class="fa-solid fa-circle-xmark me-1"></i>
-                                This item is currently sold out.
+                                <i class="fa-solid fa-circle-xmark me-1"></i> This item is currently sold out.
                             </p>
                         </div>
                     </div>
@@ -296,18 +258,14 @@
         </div>
     </div>
 
-
     <div class="toast-container-custom">
-        <div id="addToCartToast" class="toast align-items-center text-white border-0"
-             style="background-color: #7A5C58;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+        <div id="addToCartToast" class="toast align-items-center text-white border-0" style="background-color: #7A5C58;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
             <div class="d-flex">
-                <div class="toast-body" id="toast-message">
-                    </div>
+                <div class="toast-body" id="toast-message"></div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     </div>
-
 
     <script>
         const CART_STORAGE_KEY = 'diordiev_cart';
@@ -315,7 +273,6 @@
         let toastMessageElement;
         let productDetailModalInstance;
 
-        // --- ЛОГИКА КОРЗИНЫ ---
         function getCart() {
             const cartData = localStorage.getItem(CART_STORAGE_KEY);
             return cartData ? JSON.parse(cartData) : {};
@@ -329,57 +286,32 @@
         function updateCartCounter() {
             const cart = getCart();
             let totalItems = 0;
-
-            for (const id in cart) {
-                totalItems += cart[id].qty;
-            }
-
+            for (const id in cart) totalItems += cart[id].qty;
             const cartCounter = document.getElementById('cart-counter');
-            if (cartCounter) {
-                cartCounter.textContent = totalItems > 0 ? totalItems : '';
-            }
+            if (cartCounter) cartCounter.textContent = totalItems > 0 ? totalItems : '';
             return totalItems;
         }
 
         function addToCart(productId, price, title) {
             let cart = getCart();
             const id = String(productId);
-
-            if (cart[id]) {
-                cart[id].qty += 1;
-            } else {
-                cart[id] = {
-                    id: productId,
-                    title: title,
-                    price: parseFloat(price),
-                    qty: 1
-                };
-            }
-
+            if (cart[id]) cart[id].qty += 1;
+            else cart[id] = { id: productId, title: title, price: parseFloat(price), qty: 1 };
             saveCart(cart);
-
             const total = updateCartCounter();
-            const message = `"${title}" Added to cart! (Total ${total} pieces.)`;
-
-            if (toastMessageElement) {
-                toastMessageElement.textContent = message;
-            }
-
-            if (addToCartToast && window.bootstrap) {
-                const toastBootstrap = bootstrap.Toast.getInstance(addToCartToast) || new bootstrap.Toast(addToCartToast);
+            if (toastMessageElement) toastMessageElement.textContent = `"${title}" Added to cart! (Total ${total} pcs.)`;
+            if (addToCartToast) {
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(addToCartToast);
                 toastBootstrap.show();
             }
         }
 
-        // --- ЛОГИКА МОДАЛЬНОГО ОКНА (ИСПРАВЛЕНО) ---
         function openProductModal(productData) {
             const modal = document.getElementById('productDetailModal');
-            if (!modal) return;
-
             document.getElementById('modal-product-title').textContent = productData.title;
             document.getElementById('modal-product-category').textContent = productData.category;
             document.getElementById('modal-product-price').textContent = `${productData.price}€`;
-            document.getElementById('modal-product-full-text').innerHTML = productData.full_text || 'No description provided.';
+            document.getElementById('modal-product-full-text').innerHTML = productData.full_text || 'No description.';
 
             const modalCartBtn = document.getElementById('modal-add-to-cart-btn');
             const soldOutMessage = document.getElementById('modal-sold-out-message');
@@ -390,7 +322,6 @@
             } else {
                 modalCartBtn.classList.remove('visually-hidden');
                 soldOutMessage.classList.add('visually-hidden');
-
                 modalCartBtn.dataset.productId = productData.id;
                 modalCartBtn.dataset.productPrice = productData.price;
                 modalCartBtn.dataset.productTitle = productData.title;
@@ -401,147 +332,71 @@
 
             let carouselInnerHTML = '';
             photos.forEach((photo, index) => {
-                const imagePath = `./static/${photo}`;
                 const activeClass = index === 0 ? ' active' : '';
+                // Функция открытия в новом окне убрана по просьбе пользователя
                 carouselInnerHTML += `
                     <div class="carousel-item${activeClass}">
-                        <img src="${imagePath}" alt="${productData.title} photo ${index + 1}">
-                    </div>
-                `;
+                        <img src="./static/${photo}"
+                             alt="${productData.title}">
+                    </div>`;
             });
 
             if (photos.length === 0) {
-                 carouselContainer.innerHTML = '<p class="text-center text-muted p-5">No images available.</p>';
+                carouselContainer.innerHTML = '<p class="text-center text-muted p-5">No images.</p>';
             } else {
-                const carouselHTML = `
-                    <div id="modalCarousel_${productData.id}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="10000">
+                carouselContainer.innerHTML = `
+                    <div id="modalCarousel_${productData.id}" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">${carouselInnerHTML}</div>
                         ${photos.length > 1 ? `
                             <button class="carousel-control-prev" type="button" data-bs-target="#modalCarousel_${productData.id}" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
+                                <span class="carousel-control-prev-icon"></span>
                             </button>
                             <button class="carousel-control-next" type="button" data-bs-target="#modalCarousel_${productData.id}" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
+                                <span class="carousel-control-next-icon"></span>
                             </button>
                         ` : ''}
-                    </div>
-                `;
-                carouselContainer.innerHTML = carouselHTML;
-
-                if (window.bootstrap && photos.length > 0) {
-                    new bootstrap.Carousel(document.getElementById(`modalCarousel_${productData.id}`), {
-                        interval: 10000
-                    });
-                }
+                    </div>`;
             }
-
-            if (!productDetailModalInstance) {
-                 productDetailModalInstance = new bootstrap.Modal(modal);
-            }
+            if (!productDetailModalInstance) productDetailModalInstance = new bootstrap.Modal(modal);
             productDetailModalInstance.show();
         }
 
-
-        // ==========================================================
-        // JS: ИНИЦИАЛИЗАЦИЯ И ОБРАБОТЧИКИ
-        // ==========================================================
         document.addEventListener('DOMContentLoaded', () => {
             updateCartCounter();
-
             addToCartToast = document.getElementById('addToCartToast');
             toastMessageElement = document.getElementById('toast-message');
-
             const modalElement = document.getElementById('productDetailModal');
 
-            // КРИТИЧНОЕ ИСПРАВЛЕНИЕ: Очищаем DOM, когда модальное окно полностью скрыто
             modalElement.addEventListener('hidden.bs.modal', () => {
-                const carouselContainer = document.getElementById('modal-product-carousel-container');
-                carouselContainer.innerHTML = '<div class="text-center p-5 text-muted">Loading images...</div>';
-
-                if (productDetailModalInstance) {
-                    productDetailModalInstance.dispose();
-                    productDetailModalInstance = null;
-                }
+                document.getElementById('modal-product-carousel-container').innerHTML = '';
             });
 
-            // --- ОБРАБОТЧИК КЛИКОВ (Кнопка Details Изображение) ---
             document.addEventListener('click', (event) => {
                 const button = event.target.closest('.view-details-btn');
-
                 if (button) {
                     const productId = button.dataset.productId;
-
-                    if (!productDetailModalInstance) {
-                        productDetailModalInstance = new bootstrap.Modal(modalElement);
-                    }
-                    productDetailModalInstance.show();
-
-                    const carouselContainer = document.getElementById('modal-product-carousel-container');
-                    carouselContainer.innerHTML = '<div class="text-center p-5 text-muted">Loading product details...</div>';
-
                     fetch(`/api/product/${productId}`)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Product not found or API error.');
-                            }
-                            return response.json();
-                        })
-                        .then(product => {
-                            openProductModal(product);
-                        })
-                        .catch(error => {
-                            console.error("Error loading product details:", error);
-                            carouselContainer.innerHTML = '<div class="text-center p-5 text-danger">Error loading details.</div>';
-                        });
+                        .then(r => r.json())
+                        .then(p => openProductModal(p))
+                        .catch(e => console.error(e));
                 }
             });
 
-
-            // Логика кнопки "Add to cart" внутри модального окна
-            const modalCartBtn = document.getElementById('modal-add-to-cart-btn');
-            modalCartBtn.addEventListener('click', () => {
-                const productId = modalCartBtn.dataset.productId;
-                const productPrice = modalCartBtn.dataset.productPrice;
-                const productTitle = modalCartBtn.dataset.productTitle;
-
-                if (productId && productPrice && productTitle) {
-                    addToCart(productId, productPrice, productTitle);
-
-                    if (productDetailModalInstance) {
-                        productDetailModalInstance.hide();
-                    }
-                }
+            document.getElementById('modal-add-to-cart-btn').addEventListener('click', function() {
+                addToCart(this.dataset.productId, this.dataset.productPrice, this.dataset.productTitle);
+                if (productDetailModalInstance) productDetailModalInstance.hide();
             });
 
-            // Логика фильтров (Без изменений)
-            const sortButton = document.querySelector('.sort-button');
-            const dropdownContent = document.querySelector('.dropdown-content');
-            const applyButton = document.querySelector('.apply-filters-button');
-            const resetButton = document.querySelector('.reset-filters-button');
-
-            sortButton.addEventListener('click', (event) => {
-                event.stopPropagation();
-                dropdownContent.classList.toggle('show');
-            });
-
-            document.addEventListener('click', (event) => {
-                if (!dropdownContent.contains(event.target) && !sortButton.contains(event.target) && dropdownContent.classList.contains('show')) {
-                    dropdownContent.classList.remove('show');
-                }
-            });
-
-            applyButton.addEventListener('click', () => {
-                const checkedRadios = dropdownContent.querySelectorAll('input[type="radio"]:checked');
-                const params = [];
-                checkedRadios.forEach(radio => params.push(`${radio.name}=${radio.value}`));
+            // Filter logic
+            const sortBtn = document.querySelector('.sort-button');
+            const dropdown = document.querySelector('.dropdown-content');
+            sortBtn.addEventListener('click', (e) => { e.stopPropagation(); dropdown.classList.toggle('show'); });
+            document.addEventListener('click', (e) => { if (!dropdown.contains(e.target)) dropdown.classList.remove('show'); });
+            document.querySelector('.apply-filters-button').addEventListener('click', () => {
+                const params = Array.from(dropdown.querySelectorAll('input:checked')).map(r => `${r.name}=${r.value}`);
                 window.location.href = params.length ? `/shop?${params.join('&')}` : `/shop`;
             });
-
-            resetButton.addEventListener('click', () => {
-                window.location.href = `/shop`;
-            });
+            document.querySelector('.reset-filters-button').addEventListener('click', () => { window.location.href = '/shop'; });
         });
     </script>
 {% endblock %}
