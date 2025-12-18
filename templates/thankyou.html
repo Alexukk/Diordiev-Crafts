@@ -23,13 +23,12 @@
         text-align: center;
     }
 
-    /* Стиль для іконки-галочки / СЕРДЕЧКА */
     .check-icon-container {
         width: 90px;
         height: 90px;
         margin: 0 auto 25px;
         border-radius: 50%;
-        background-color: #7A5C58; /* Фірмовий коричневий */
+        background-color: #7A5C58;
         color: #ffffff;
         font-size: 3rem;
         display: flex;
@@ -37,14 +36,11 @@
         justify-content: center;
     }
 
-    /* Стиль для самого сердечка (Font Awesome), щоб краще відцентрувати */
     .heart-symbol {
-        /* FIXED: Using Font Awesome class instead of Unicode */
-        font-size: 2.5rem; /* FA icons are smaller by default, adjusting size */
+        font-size: 2.5rem;
         line-height: 1;
     }
 
-    /* Стиль для номера замовлення */
     .order-number {
         font-size: 1.5rem;
         font-weight: 700;
@@ -57,13 +53,53 @@
     }
 
     .contact-info {
-        /* FIXED: Corrected brand name */
-        background-color: #f7f3f2; /* Light background from Diordiiev styles */
+        background-color: #f7f3f2;
         color: #5A4744;
         padding: 15px;
         border-radius: 8px;
         margin-top: 30px;
-        border: 1px solid #7A5C5820; /* Subtle brand border */
+        border: 1px solid #7A5C5820;
+    }
+
+    /* ================================================= */
+    /* НОВИЙ БЛОК FOLLOW US */
+    /* ================================================= */
+    .follow-upsell-box {
+        margin-top: 40px;
+        padding: 20px;
+        border: 2px dashed #7A5C5840;
+        border-radius: 12px;
+        background-color: #fffaf9;
+    }
+
+    .follow-upsell-box h4 {
+        color: #7A5C58;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .follow-upsell-box p {
+        font-size: 0.95rem;
+        color: #666;
+        margin-bottom: 15px;
+    }
+
+    .btn-follow-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #7A5C58;
+        text-decoration: none;
+        font-weight: 700;
+        padding: 10px 20px;
+        border: 1px solid #7A5C58;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-follow-link:hover {
+        background-color: #7A5C58;
+        color: #fff;
     }
 
     /* ================================================= */
@@ -79,15 +115,11 @@
         cursor: pointer;
         text-decoration: none;
         margin: 30px auto 0;
-
-        /* Кольори та фон */
         background-image: linear-gradient(rgb(140, 120, 117), rgb(122, 92, 88));
         border: none;
         color: rgb(255, 255, 255);
         font-weight: 600;
         font-size: 1.1rem;
-
-        /* Форма та тінь */
         border-radius: 50px;
         box-shadow: 1px 4px 0px #6A4F4C;
         transition-duration: .3s;
@@ -98,17 +130,10 @@
         box-shadow: 0px 1px 0px #6A4F4C;
     }
 
-    /* ================================================= */
-    /* АДАПТИВНІСТЬ */
-    /* ================================================= */
-
     @media (max-width: 768px) {
         .thank-you-container {
             margin: 20px 15px;
             padding: 30px 15px;
-        }
-        .order-number {
-            font-size: 1.3rem;
         }
         .diordiev-button {
             width: 100%;
@@ -134,6 +159,15 @@
             <p class="mb-0">
                 A member of the Diordiiev Crafts team will contact you shortly using the contact method you selected during checkout (phone, messenger, or email) to confirm all details, calculate shipping costs, and finalize payment.
             </p>
+        </div>
+
+        <div class="follow-upsell-box">
+            <h4>Stay Connected!</h4>
+            <p>Follow us for all updates, process videos, and new arrivals.</p>
+            <a href="{{ url_for('follow_us') }}" class="btn-follow-link">
+                <i class="fa-solid fa-share-nodes"></i>
+                Follow us for all updates
+            </a>
         </div>
 
         <a href="{{ url_for('shop') }}" class="diordiev-button" role="button">
