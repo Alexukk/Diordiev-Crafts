@@ -6,6 +6,13 @@ An e-commerce web application developed with Flask, designed to showcase and sel
 The project includes key features such as a shopping cart, integration with an external API (Telegram Bot for order notifications), an Admin panel, and a robust SQLite database structure.
 
 ### 📸 Project Demonstration
+
+IMPORTANT!
+New NaBar:
+<img width="1899" height="541" alt="image" src="https://github.com/user-attachments/assets/f90977d0-3b1c-47df-8367-a4f37d3da209" />
+
+
+
 Main page:
 <img width="1901" height="966" alt="image" src="https://github.com/user-attachments/assets/f0654728-2f43-4ed5-b349-5cb7d9bbf9ba" />
 
@@ -26,7 +33,12 @@ Checkout page:
 <img width="1899" height="906" alt="image" src="https://github.com/user-attachments/assets/8ae23afb-01c6-4252-a377-75cc4c8eeb3a" />
 
 After-order page:
-<img width="1896" height="896" alt="image" src="https://github.com/user-attachments/assets/731e3ea4-1f5a-4f0f-81e1-e2114079c8c8" />
+<img width="1889" height="904" alt="image" src="https://github.com/user-attachments/assets/e5c1f059-b2c2-474c-955f-263f7d3bea20" />
+
+
+Follow-us page:
+<img width="1896" height="901" alt="image" src="https://github.com/user-attachments/assets/174c6a67-e455-40a8-bdf0-e01f543405ec" />
+
 
 Shop page:
 <img width="1893" height="904" alt="image" src="https://github.com/user-attachments/assets/dca19da2-5ecb-4769-a6c8-43e89358b3c0" />
@@ -77,6 +89,7 @@ Toast announcement editing page:
 
 Telegram notifier for administration:
 <img width="283" height="283" alt="image" src="https://github.com/user-attachments/assets/731f3f58-96b5-45c2-8037-7a2e3fad4db5" />
+
 
 
 
