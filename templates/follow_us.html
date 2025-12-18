@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Follow Us - Diordiiev Crafts{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+        .follow-us-page {
+            background-color: #f4eee9; /* Светлый фон как на скрине */
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .header-container {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header-container h1 {
+            color: #7A5C58;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header-container p {
+            color: #8e7b78;
+            font-size: 1.1rem;
+        }
+
+        /* Контейнер для карточек - исправляет отображение на ПК */
+        .social-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            width: 100%;
+            max-width: 350px; /* Фиксированная ширина на ПК */
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .social-card i.main-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: #7A5C58;
+        }
+
+        .social-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .social-card .subtitle {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        /* Контейнер QR кода */
+        .qr-wrapper {
+            background: #fcfaf9;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .qr-wrapper img {
+            width: 150px;
+            height: 150px;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* Кнопки */
+        .btn-follow {
+            width: 100%;
+            padding: 12px;
+            border-radius: 50px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: opacity 0.3s;
+        }
+
+        .btn-follow:hover {
+            opacity: 0.9;
+            color: #fff;
+        }
+
+        .btn-insta {
+            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+        }
+
+        .btn-tg {
+            background-color: #0088CC;
+        }
+
+        .btn-tt {
+            background-color: #000000;
+        }
+
+        /* Адаптивность для мобилок */
+        @media (max-width: 768px) {
+            .header-container h1 {
+                font-size: 2rem;
+            }
+            .social-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            .social-card {
+                max-width: 100%;
+            }
+        }
+
+{% endblock %}
+
+{% block content %}
+<div class="follow-us-page">
+    <div class="header-container">
+        <h1>Stay Connected!</h1>
+        <p>Follow us on social media for exclusive updates, behind-the-scenes, and new arrivals.</p>
+    </div>
+
+    <div class="social-grid">
+        <div class="social-card">
+            <i class="fa-brands fa-instagram main-icon"></i>
+            <h3>Instagram</h3>
+            <div class="subtitle">Beautiful photos & stories</div>
+            <div class="qr-wrapper">
+                <img src="{{ url_for('static', filename='img/instaQR.png') }}" alt="Instagram QR">
+            </div>
+            <a href="https://www.instagram.com/diordiievcrafts?igsh=MWJ4M21mM2NkZmZxbQ==" class="btn-follow btn-insta" target="_blank">
+                <i class="fa-brands fa-instagram"></i> FOLLOW
+            </a>
+        </div>
+
+        <div class="social-card">
+            <i class="fa-brands fa-telegram main-icon"></i>
+            <h3>Telegram Channel</h3>
+            <div class="subtitle">News, announcements & community</div>
+            <div class="qr-wrapper">
+                <img src="{{ url_for('static', filename='img/telegramQR.png') }}" alt="Telegram QR">
+            </div>
+            <a href="https://t.me/diordiievcrafts_official" class="btn-follow btn-tg" target="_blank">
+                <i class="fa-brands fa-telegram"></i> JOIN CHANNEL
+            </a>
+        </div>
+
+        <div class="social-card">
+            <i class="fa-brands fa-tiktok main-icon"></i>
+            <h3>TikTok</h3>
+            <div class="subtitle">Crafting process & fun videos</div>
+            <div class="qr-wrapper">
+                <img src="{{ url_for('static', filename='img/tiktokQR.png') }}" alt="TikTok QR">
+            </div>
+            <a href="https://www.tiktok.com/@diordiievcrafts_official?_r=1&_t=ZN-92KaxUXUboo" class="btn-follow btn-tt" target="_blank">
+                <i class="fa-brands fa-tiktok"></i> WATCH VIDEOS
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

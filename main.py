@@ -747,6 +747,11 @@ def editPostDetails(post_id):
         flash(f"An error occurred {e}")
         return render_template('update_post.html', post=post)
 
+
+@app.route('/follow-us')
+def follow_us():
+    return render_template('follow_us.html')
+
 # -------------------------ADMIN logic ended--------------------------------#
 # Убедись, что твоя база данных создается при запуске приложения
 with app.app_context():
