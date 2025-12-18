@@ -4,8 +4,15 @@
 
 {% block head %}
     {{ super() }}
+        /* Плавная прокрутка */
+        html {
+            scroll-behavior: smooth;
+        }
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        /* Отступ сверху при переходе по ссылке (чтобы хедер не закрывал заголовок) */
+        #contact-us {
+            scroll-margin-top: 90px;
+        }
 
         /* Стилі для фірмового кольору */
         .diordiiev-color {
@@ -27,12 +34,12 @@
             text-align: left;
             margin-bottom: 8px;
             border-radius: 8px;
-            border: 1px solid #7A5C58; /* Додаємо рамку для контрасту */
+            border: 1px solid #7A5C58;
             transition: all 0.3s ease;
         }
 
         .nav-pills .nav-link:hover {
-            background-color: #f7f3f2; /* Light hover effect */
+            background-color: #f7f3f2;
         }
 
         .nav-pills .nav-link.active {
@@ -53,24 +60,23 @@
             border: 1px solid #7A5C58;
             border-radius: 12px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer; /* Додаємо курсор для картки Email */
+            cursor: pointer;
         }
 
         .help-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
-        /* Спеціальний hover для картки Email, щоб виділити копіювання */
+
         .help-card.email-card:hover {
              border-color: #FFC107;
         }
 
-        /* Стилі для іконок */
         .card-icon i {
             font-size: 2.5rem;
             color: #7A5C58;
         }
-        /* Увеличение размера текста политики для читабельности */
+
         .policy-text-content p, .policy-text-content li {
             font-size: 0.95rem;
             line-height: 1.6;
@@ -87,41 +93,20 @@
             padding-bottom: 5px;
         }
 
-
-        /* Перевизначення стандартних кольорів кнопок на фірмовий */
         .help-card-button {
             width: 100%;
             border-radius: 6px;
         }
 
-        /* Стилі для конкретних кнопок контактів */
-        .btn-success { /* WhatsApp */
-            background-color: #25D366;
-            border-color: #25D366;
-        }
-        .btn-success:hover {
-            background-color: #1aae53;
-            border-color: #1aae53;
-        }
+        .btn-success { background-color: #25D366; border-color: #25D366; }
+        .btn-success:hover { background-color: #1aae53; border-color: #1aae53; }
 
-        .btn-warning { /* Email - Копіювання*/
-            background-color: #FFC107;
-            border-color: #FFC107;
-        }
-        .btn-warning:hover {
-            background-color: #d4a001;
-            border-color: #d4a001;
-        }
-        .btn-info { /* Telegram */
-            background-color: #0088CC;
-            border-color: #0088CC;
-        }
-        .btn-info:hover {
-            background-color: #0077b3;
-            border-color: #0077b3;
-        }
+        .btn-warning { background-color: #FFC107; border-color: #FFC107; }
+        .btn-warning:hover { background-color: #d4a001; border-color: #d4a001; }
 
-        /* Стилі для спливаючого сповіщення */
+        .btn-info { background-color: #0088CC; border-color: #0088CC; }
+        .btn-info:hover { background-color: #0077b3; border-color: #0077b3; }
+
         #copy-notification {
             position: fixed;
             top: 20px;
@@ -130,8 +115,6 @@
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
         }
-
-
 {% endblock %}
 
 {% block content %}
@@ -143,7 +126,6 @@
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <button class="nav-link active" id="v-pills-agreement-tab" data-bs-toggle="pill" data-bs-target="#v-pills-agreement" type="button" role="tab" aria-controls="v-pills-agreement" aria-selected="true"><i class="fa-solid fa-file-contract me-2"></i>User Agreement</button>
                 <button class="nav-link" id="v-pills-privacy-tab" data-bs-toggle="pill" data-bs-target="#v-pills-privacy" type="button" role="tab" aria-controls="v-pills-privacy" aria-selected="false"><i class="fa-solid fa-user-lock me-2"></i>Privacy Policy</button>
-
                 <button class="nav-link" id="v-pills-returns-tab" data-bs-toggle="pill" data-bs-target="#v-pills-returns" type="button" role="tab" aria-controls="v-pills-returns" aria-selected="false"><i class="fa-solid fa-rotate-left me-2"></i>Returning Policy</button>
                 <button class="nav-link" id="v-pills-shipping-tab" data-bs-toggle="pill" data-bs-target="#v-pills-shipping" type="button" role="tab" aria-controls="v-pills-shipping" aria-selected="false"><i class="fa-solid fa-truck-fast me-2"></i>Shipping & Delivery</button>
                 <button class="nav-link" id="v-pills-care-tab" data-bs-toggle="pill" data-bs-target="#v-pills-care" type="button" role="tab" aria-controls="v-pills-care" aria-selected="false"><i class="fa-solid fa-hand-holding-heart me-2"></i>Product Care</button>
@@ -156,7 +138,7 @@
 
                 <div class="tab-pane fade show active" id="v-pills-agreement" role="tabpanel" aria-labelledby="v-pills-agreement-tab" tabindex="0">
                     <h3 class="mt-0 diordiiev-color">User Agreement (Public Offer)</h3>
-                    <p>Dear Customer! Before making a purchase in the **Diordiiev Crafts** online store, please read the terms of this Agreement. This document defines the conditions for purchasing goods through our website and constitutes the terms of a public offer under Art. 633 of the Civil Code of Ukraine. **By placing an order, the Customer fully agrees to the terms of this Agreement.**</p>
+                    <p>Dear Customer! Before making a purchase in the <strong>Diordiiev Crafts</strong> online store, please read the terms of this Agreement. This document defines the conditions for purchasing goods through our website and constitutes the terms of a public offer under Art. 633 of the Civil Code of Ukraine. <strong>By placing an order, the Customer fully agrees to the terms of this Agreement.</strong></p>
 
                     <h4>1. Ordering & Pricing</h4>
                     <ul>
@@ -168,14 +150,14 @@
 
                     <h4>2. Payment Terms</h4>
                     <ul>
-                        <li>Payment is made exclusively via **card-to-card transfer** (100% prepayment) to the Online Store's card details within **three business days** after order confirmation.</li>
+                        <li>Payment is made exclusively via <strong>card-to-card transfer</strong> (100% prepayment) to the Online Store's card details within <strong>three business days</strong> after order confirmation.</li>
                         <li>If payment is not received within the specified time, the Online Store reserves the right to cancel the order.</li>
                     </ul>
 
                     <h4>3. Delivery and Acceptance</h4>
                     <ul>
                         <li>Delivery is carried out via Nova Poshta (branch, locker, or courier) or Ukrposhta.</li>
-                        <li>Orders are shipped within **1–3 business days** after payment confirmation. Sundays and public holidays are not business days.</li>
+                        <li>Orders are shipped within <strong>1–3 business days</strong> after payment confirmation. Sundays and public holidays are not business days.</li>
                         <li>The Customer must inspect the goods for quantity, quality, and completeness upon receipt in the presence of the courier or at the pickup point.</li>
                         <li>Acceptance of the product is confirmed by payment for the order to the courier service.</li>
                     </ul>
@@ -183,9 +165,9 @@
                     <h4>4. Returns and Warranty</h4>
                     <ul>
                         <li>The Customer has the right to refuse a product at the moment of delivery/receipt.</li>
-                        <li>Returning a product of **proper quality** is possible only if the item **has not been worn** and the original packaging and tag with a seal are preserved. The return is carried out at the Customer's expense. Refund is issued minus the compensation of delivery expenses incurred by the store.</li>
-                        <li>Items purchased are covered by an **18-month warranty**. If a hidden defect appears, the Customer may contact the Online Store for repair. Warranty service costs (delivery and repair) are paid by the Online Store.</li>
-                        <li>The Customer is **not required** to compensate the Online Store for costs if the product is found to be of **improper quality**.</li>
+                        <li>Returning a product of <strong>proper quality</strong> is possible only if the item <strong>has not been worn</strong> and the original packaging and tag with a seal are preserved. The return is carried out at the Customer's expense. Refund is issued minus the compensation of delivery expenses incurred by the store.</li>
+                        <li>Items purchased are covered by an <strong>18-month warranty</strong>. If a hidden defect appears, the Customer may contact the Online Store for repair. Warranty service costs (delivery and repair) are paid by the Online Store.</li>
+                        <li>The Customer is <strong>not required</strong> to compensate the Online Store for costs if the product is found to be of <strong>improper quality</strong>.</li>
                     </ul>
                 </div>
 
@@ -195,16 +177,16 @@
 
                     <h4>1. General Provisions</h4>
                     <ul>
-                        <li>**Personal Data:** Information about an identified or identifiable natural person (e.g., name, address, email, phone).</li>
-                        <li>**Purpose of Processing:** Data is collected to ensure civil legal relations (order placement, delivery, warranty service) and to comply with the current legislation of Ukraine.</li>
-                        <li>**Consent:** Consent is provided by the individual when registering civil legal relations (placing an order). Consent may be a paper document, an electronic document, or a mark on an electronic page (online order).</li>
+                        <li><strong>Personal Data:</strong> Information about an identified or identifiable natural person (e.g., name, address, email, phone).</li>
+                        <li><strong>Purpose of Processing:</strong> Data is collected to ensure civil legal relations (order placement, delivery, warranty service) and to comply with the current legislation of Ukraine.</li>
+                        <li><strong>Consent:</strong> Consent is provided by the individual when registering civil legal relations (placing an order). Consent may be a paper document, an electronic document, or a mark on an electronic page (online order).</li>
                     </ul>
 
                     <h4>2. Protection and Disclosure</h4>
                     <ul>
                         <li>Personal data is protected by system, software, and hardware means against loss, theft, destruction, or unauthorized copying, meeting international and national standards.</li>
                         <li>Personal data is not stored longer than necessary to fulfill the stated purposes.</li>
-                        <li>**Disclosure to Third Parties:** Data access is granted only with the subject's consent or as required by law (e.g., to courier services like Nova Poshta/Ukrposhta for delivery). Access is denied if the third party refuses to ensure compliance with the Law of Ukraine "On Personal Data Protection."</li>
+                        <li><strong>Disclosure to Third Parties:</strong> Data access is granted only with the subject's consent or as required by law (e.g., to courier services like Nova Poshta/Ukrposhta for delivery). Access is denied if the third party refuses to ensure compliance with the Law of Ukraine "On Personal Data Protection."</li>
                     </ul>
 
                     <h4>3. Rights of the Data Subject</h4>
@@ -212,32 +194,32 @@
                     <ul>
                         <li>Know the location and purpose of the personal data base.</li>
                         <li>Access their personal data and receive confirmation (within 30 days) of its processing.</li>
-                        <li>Submit objections and request modification or **destruction** of inaccurate or illegally processed data.</li>
+                        <li>Submit objections and request modification or <strong>destruction</strong> of inaccurate or illegally processed data.</li>
                         <li>Protect data from unlawful processing and address state authorities regarding data protection.</li>
                     </ul>
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-returns" role="tabpanel" aria-labelledby="v-pills-returns-tab" tabindex="0">
                     <h3 class="mt-0 diordiiev-color">Returning Policy</h3>
-                    <p>Since each item is uniquely handcrafted, we generally do not accept returns or exchanges unless the item arrives **damaged or defective**. Please inspect your order upon reception and contact us immediately if the item is faulty, so that we can evaluate the issue and make it right.</p>
+                    <p>Since each item is uniquely handcrafted, we generally do not accept returns or exchanges unless the item arrives <strong>damaged or defective</strong>. Please inspect your order upon reception and contact us immediately if the item is faulty, so that we can evaluate the issue and make it right.</p>
                     <p>Returns based on simple change of mind are considered on a case-by-case basis and may be subject to a restocking fee. Custom or personalized items cannot be returned.</p>
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-shipping" role="tabpanel" aria-labelledby="v-pills-shipping-tab" tabindex="0">
                     <h3 class="mt-0 diordiiev-color">Shipping & Delivery</h3>
-                    <p>All items are made-to-order. Our current processing time is **3-5 business days** before shipping. Delivery times vary based on the destination. We provide tracking information for all orders once they are shipped.</p>
+                    <p>All items are made-to-order. Our current processing time is <strong>3-5 business days</strong> before shipping. Delivery times vary based on the destination. We provide tracking information for all orders once they are shipped.</p>
                     <p>We are not responsible for delays caused by the postal service or customs procedures. Please ensure your shipping address is correct at the time of purchase to avoid delays.</p>
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-care" role="tabpanel" aria-labelledby="v-pills-care-tab" tabindex="0">
                     <h3 class="mt-0 diordiiev-color">Product Care Guidelines</h3>
-                    <p>To ensure the longevity of your handcrafted goods, **avoid prolonged exposure to direct sunlight, extreme humidity, or water**. For wooden items, a light rub with natural wood oil periodically will maintain the finish and color.</p>
+                    <p>To ensure the longevity of your handcrafted goods, <strong>avoid prolonged exposure to direct sunlight, extreme humidity, or water</strong>. For wooden items, a light rub with natural wood oil periodically will maintain the finish and color.</p>
                     <p>Candles should be burned on a heat-resistant surface and kept away from drafts. Following these simple care tips will help keep your purchase beautiful for years to come.</p>
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-custom" role="tabpanel" aria-labelledby="v-pills-custom-tab" tabindex="0">
                     <h3 class="mt-0 diordiiev-color">Custom Orders</h3>
-                    <p>We love creating unique pieces just for you! If you have a specific design or personalization request, please contact us. Custom orders require a **non-refundable deposit** before work begins.</p>
+                    <p>We love creating unique pieces just for you! If you have a specific design or personalization request, please contact us. Custom orders require a <strong>non-refundable deposit</strong> before work begins.</p>
                     <p>Final approval of the design mock-up is required before production starts. Once production has begun, changes cannot be guaranteed and may incur additional charges.</p>
                 </div>
             </div>
@@ -246,9 +228,9 @@
     </div>
 </section>
 
-<section class="help-section text-center py-5">
+<section id="contact-us" class="help-section text-center py-5">
     <div class="container">
-        <h1>Questions About Your Order?</h1>
+        <h1>Have Questions About Your Order?</h1>
         <p class="lead diordiiev-color">Contact us directly</p>
         <hr>
         <div class="row mt-4 justify-content-center">
@@ -260,7 +242,7 @@
                             <i class="fa-brands fa-whatsapp"></i>
                         </div>
                         <h5 class="card-title">WhatsApp</h5>
-                        <p class="card-text">contact in WhatsApp</p>
+                        <p class="card-text">Contact via WhatsApp</p>
                         <a href="https://wa.me/+380501302726" target="_blank" class="btn btn-success help-card-button">Start chat</a>
                     </div>
                 </div>
@@ -288,7 +270,7 @@
                             <i class="fa-brands fa-telegram"></i>
                         </div>
                         <h5 class="card-title">Telegram</h5>
-                        <p class="card-text">Contact in Telegram</p>
+                        <p class="card-text">Contact via Telegram</p>
                         <a href="https://t.me/DioCrafts" target="_blank" class="btn btn-info help-card-button">Start chat</a>
                     </div>
                 </div>
@@ -308,18 +290,14 @@
 </div>
 
 <script>
-    // Функція для копіювання email та показу сповіщення
     function copyEmailToClipboard(email) {
-        // Використання сучасного API Clipboard (рекомендовано)
         if (navigator.clipboard) {
             navigator.clipboard.writeText(email).then(() => {
                 showToastNotification();
             }).catch(err => {
-                // Якщо не вдалося через API, використовуємо запасний метод
                 fallbackCopyTextToClipboard(email);
             });
         } else {
-            // Запасний метод для старих браузерів
             fallbackCopyTextToClipboard(email);
         }
     }
@@ -327,8 +305,6 @@
     function fallbackCopyTextToClipboard(text) {
         var textArea = document.createElement("textarea");
         textArea.value = text;
-
-        // Потрібно, щоб елемент був видимий для браузера
         textArea.style.position = "fixed";
         textArea.style.left = "-999999px";
         textArea.style.top = "-999999px";
@@ -344,24 +320,19 @@
         } catch (err) {
             console.error('Fallback: Oops, unable to copy', err);
         }
-
         document.body.removeChild(textArea);
     }
 
     function showToastNotification() {
-        // Ініціалізація та показ сповіщення Toast
         var toastEl = document.getElementById('copy-notification');
-        // Перевірка, чи завантажена функція Toast від Bootstrap
         if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
             var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
             toast.show();
         } else {
-             // Простий alert, якщо Bootstrap JS не завантажено
              alert("Email copied: andriicorporation@gmail.com");
         }
     }
 
-    // Встановлення активної вкладки за замовчуванням при завантаженні (тепер це User Agreement)
     document.addEventListener('DOMContentLoaded', function() {
         var defaultTab = document.getElementById('v-pills-agreement-tab');
         if (defaultTab) {
@@ -369,5 +340,4 @@
         }
     });
 </script>
-
 {% endblock %}
