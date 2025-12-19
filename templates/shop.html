@@ -6,7 +6,7 @@
     {{ super() }}
 
         /* ================================================= */
-        /* ФІРМЕННИЙ СТИЛЬ КНОПОК І БЕЙДЖЕЙ */
+        /* ФИРМЕННЫЙ СТИЛЬ КНОПОК И БЕЙДЖЕЙ */
         /* ================================================= */
         .btn-diordiiev-color {
             color: #fff;
@@ -62,6 +62,11 @@
             color: #000;
         }
 
+        .card-body {
+            display: flex;
+            flex-direction: column;
+        }
+
         .toast-container-custom {
             position: fixed;
             bottom: 1.5rem;
@@ -70,7 +75,7 @@
         }
 
         /* ================================================= */
-        /* ФІКСАЦІЯ КАРТОЧЕК */
+        /* ФИКСАЦИЯ КАРТОЧЕК */
         /* ================================================= */
         .product-img-container {
             position: relative;
@@ -95,47 +100,7 @@
         }
 
         /* ================================================= */
-        /* SURPRISE ME КНОПКА ТА АНІМАЦІЯ */
-        /* ================================================= */
-        .surprise-wrapper {
-            margin-bottom: 20px;
-        }
-
-        .btn-surprise {
-            background: linear-gradient(45deg, #7A5C58, #967a75);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(122, 92, 88, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .btn-surprise:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(122, 92, 88, 0.4);
-            color: white;
-        }
-
-        @keyframes surprisePulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(122, 92, 88, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(122, 92, 88, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(122, 92, 88, 0); }
-        }
-
-        .picking-animation {
-            animation: surprisePulse 0.3s infinite;
-        }
-
-        .highlight-card {
-            border: 3px solid #7A5C58 !important;
-            transform: scale(1.02);
-            z-index: 10;
-        }
-
-        /* ================================================= */
-        /* МОДАЛЬНЕ ОКНО І КАРУСЕЛЬ */
+        /* МОДАЛЬНОЕ ОКНО И КАРУСЕЛЬ */
         /* ================================================= */
         #modal-product-carousel-container {
             max-height: 500px;
@@ -152,8 +117,10 @@
             width: auto;
             display: inline-block;
             margin: auto;
+            transition: opacity 0.2s;
         }
 
+        /* ЦВЕТ СТРЕЛОК КАРУСЕЛИ (КОФЕЙНЫЙ ТЕМНЫЙ) */
         .carousel-control-prev-icon,
         .carousel-control-next-icon {
             filter: invert(41%) sepia(11%) saturate(1500%) hue-rotate(317deg) brightness(80%) contrast(90%);
@@ -161,12 +128,106 @@
             height: 2.5rem;
         }
 
+        /* ПОЛНОЭКРАННОЕ ФОТО (MODAL 2) */
         #fullSizeImage {
             max-width: 95vw;
             max-height: 90vh;
             object-fit: contain;
         }
 
+        /* ================================================= */
+        /* SURPRISE ME БЛОК */
+        /* ================================================= */
+        .surprise-me-block {
+            background: linear-gradient(135deg, #7A5C58 0%, #634a47 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(122, 92, 88, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .surprise-me-block::before {
+            content: '✨';
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.1;
+            top: -10px;
+            left: 20px;
+            animation: sparkle 3s ease-in-out infinite;
+        }
+
+        .surprise-me-block::after {
+            content: '🎁';
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.1;
+            bottom: -10px;
+            right: 20px;
+            animation: sparkle 3s ease-in-out infinite 1.5s;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.1; }
+            50% { transform: scale(1.2) rotate(10deg); opacity: 0.2; }
+        }
+
+        .surprise-me-block h3 {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .surprise-me-block p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .btn-surprise {
+            background-color: white;
+            color: #7A5C58;
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-surprise:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            color: #634a47;
+        }
+
+        .btn-surprise:active {
+            transform: translateY(0);
+        }
+
+        .btn-surprise.spinning {
+            animation: spin 0.5s ease-in-out;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* Анимация подсветки карточки */
+        .card.highlight-flash {
+            animation: flashHighlight 0.5s ease-in-out;
+        }
+
+        @keyframes flashHighlight {
+            0%, 100% { box-shadow: 0 .125rem .25rem rgba(0,0,0,.075); }
+            50% { box-shadow: 0 0 30px rgba(122, 92, 88, 0.8), 0 0 50px rgba(122, 92, 88, 0.5); transform: scale(1.02); }
+        }
+
+        /* АДАПТИВНОСТЬ */
         @media (max-width: 767.98px) {
             .modal-dialog { margin: 0.5rem; }
             #modal-product-carousel-container,
@@ -177,59 +238,78 @@
             #modal-product-carousel-container .carousel-item img {
                 max-height: 350px;
             }
+
+            .surprise-me-block {
+                padding: 1.5rem;
+            }
+
+            .surprise-me-block h3 {
+                font-size: 1.3rem;
+            }
+
+            .btn-surprise {
+                padding: 0.6rem 1.5rem;
+                font-size: 1rem;
+            }
         }
 {% endblock %}
 
 {% block content %}
-    <section class="shop-page container mt-4">
-        <div class="shop-controls d-flex flex-wrap justify-content-between align-items-center mb-3">
-            <div>
-                <h1 class="page-title mb-1">All Products</h1>
-                <div class="surprise-wrapper">
-                    <button id="btn-surprise" class="btn btn-surprise btn-sm">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Don't know what to pick? Surprise me!
-                    </button>
-                </div>
-            </div>
-
-            <div class="dropdown mt-2 mt-md-0">
+    <section class="shop-page container">
+        <div class="shop-controls">
+            <h1 class="page-title">All Products</h1>
+            <div class="dropdown">
                 <button class="sort-button">
                     <i class="fa-solid fa-filter me-1"></i>
                     <span>Sort & Filter</span>
                     <span class="arrow">⩒</span>
                 </button>
-                <div class="dropdown-content p-3 shadow-lg">
-                    <div class="filter-group mb-3">
-                        <p class="filter-title fw-bold mb-1">Price</p>
-                        <label class="d-block"><input type="radio" name="sort_by" value="price_asc"> Low to High</label>
-                        <label class="d-block"><input type="radio" name="sort_by" value="price_desc"> High to Low</label>
+                <div class="dropdown-content">
+                    <div class="filter-group">
+                        <p class="filter-title">Price</p>
+                        <label><input type="radio" name="sort_by" value="price_asc"> Low to High</label>
+                        <label><input type="radio" name="sort_by" value="price_desc"> High to Low</label>
                     </div>
-                    <div class="filter-group mb-3">
-                        <p class="filter-title fw-bold mb-1">Categories</p>
-                        <div class="row">
-                            <div class="col-6">
-                                <p class="small text-muted mb-0">Woodenware</p>
-                                <label class="d-block"><input type="radio" name="type" value="Boxes"> Boxes</label>
-                                <label class="d-block"><input type="radio" name="type" value="Stands"> Stands</label>
-                            </div>
-                            <div class="col-6">
-                                <p class="small text-muted mb-0">Jewelry</p>
-                                <label class="d-block"><input type="radio" name="type" value="Earrings"> Earrings</label>
-                                <label class="d-block"><input type="radio" name="type" value="Necklaces"> Necklaces</label>
-                            </div>
-                        </div>
+                    <div class="filter-group">
+                        <p class="filter-title">Woodenware</p>
+                        <label><input type="radio" name="type" value="Boxes"> Boxes</label>
+                        <label><input type="radio" name="type" value="Stands"> Stands</label>
+                        <label><input type="radio" name="type" value="Figurines"> Figurines</label>
+                        <label><input type="radio" name="type" value="Other"> Other</label>
                     </div>
-                    <button class="apply-filters-button btn btn-diordiiev-color w-100 mt-2 mb-2"><i class="fa-solid fa-check me-1"></i>Apply</button>
+                    <div class="filter-group">
+                        <p class="filter-title">Jewelry</p>
+                        <label><input type="radio" name="type" value="Bracelets"> Bracelets</label>
+                        <label><input type="radio" name="type" value="Earrings"> Earrings</label>
+                        <label><input type="radio" name="type" value="Necklaces"> Necklaces</label>
+                        <label><input type="radio" name="type" value="Sets"> Sets</label>
+                    </div>
+                    <div class="filter-group">
+                        <p class="filter-title">Candles</p>
+                        <label><input type="radio" name="type" value="Soy"> Soy</label>
+                        <label><input type="radio" name="type" value="Beeswax"> Beeswax</label>
+                        <label><input type="radio" name="type" value="Scented"> Scented</label>
+                    </div>
+                    <button class="apply-filters-button w-100 mt-2 mb-2"><i class="fa-solid fa-check me-1"></i>Apply</button>
                     <button class="reset-filters-button btn btn-outline-secondary w-100"><i class="fa-solid fa-rotate me-1"></i>Reset</button>
                 </div>
             </div>
         </div>
         <hr>
 
-        <div class="row g-4" id="products-grid">
+        <!-- SURPRISE ME БЛОК -->
+        <div class="surprise-me-block">
+            <h3>Don't know what to choose?</h3>
+            <p>Let us surprise you with a random selection!</p>
+            <button class="btn btn-surprise" id="surpriseMeBtn">
+                <i class="fa-solid fa-shuffle me-2"></i>Surprise me!
+            </button>
+        </div>
+
+        <div class="row g-4" id="productsGrid">
             {% for product in products %}
-            <div class="col-12 col-md-6 col-lg-4 product-item">
-                <div class="card h-100 shadow-sm border-0">
+            <div class="col-12 col-md-6 col-lg-4" data-product-id="{{ product.id }}" data-product-status="{{ product.status }}">
+                <div class="card h-100 shadow-sm">
                     <div class="product-img-container position-relative">
                         {% if product.status == 'sale' %}
                             <span class="status-badge badge-sale">Sale</span>
@@ -246,17 +326,17 @@
                     </div>
 
                     <div class="card-body">
-                        <h5 class="card-title mb-1 fw-bold">{{ product.title }}</h5>
+                        <h5 class="card-title mb-1">{{ product.title }}</h5>
                         <p class="text-muted small mb-2">{{ product.category }}</p>
                         <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
-                            <h4 class="text-success fw-bold mb-0">{{ product.price }}€</h4>
+                            <h4 class="text-success mb-0">{{ product.price }}€</h4>
 
                             {% if product.status == 'sold' %}
-                                <button class="btn btn-outline-secondary btn-sm" disabled>
+                                <button class="btn btn-outline-secondary" disabled>
                                     <i class="fa-solid fa-circle-xmark me-1"></i> Sold Out
                                 </button>
                             {% else %}
-                                <button class="btn btn-diordiiev-color btn-sm view-details-btn" data-product-id="{{ product.id }}">
+                                <button class="btn btn-diordiiev-color view-details-btn" data-product-id="{{ product.id }}">
                                     <i class="fa-solid fa-eye me-1"></i> Details
                                 </button>
                             {% endif %}
@@ -270,9 +350,9 @@
 
     <div class="modal fade" id="productDetailModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content border-0">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold" style="color:#7A5C58">Product Details</h5>
+                    <h5 class="modal-title">Product Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -288,15 +368,15 @@
                              </div>
                         </div>
                         <div class="col-md-5">
-                            <h2 id="modal-product-title" class="fw-bold"></h2>
+                            <h2 id="modal-product-title"></h2>
                             <p class="text-muted small mb-3" id="modal-product-category"></p>
-                            <h3 class="text-success fw-bold mb-3" id="modal-product-price"></h3>
-                            <div id="modal-product-full-text" class="mb-4"></div>
+                            <h3 class="text-success mb-3" id="modal-product-price"></h3>
+                            <div id="modal-product-full-text"></div>
                             <hr>
-                            <button id="modal-add-to-cart-btn" class="btn btn-diordiiev-color btn-lg w-100 mt-3 shadow-sm">
+                            <button id="modal-add-to-cart-btn" class="btn btn-diordiiev-color btn-lg w-100 mt-3">
                                 <i class="fa-solid fa-cart-shopping me-2"></i> Add to cart
                             </button>
-                            <p class="text-danger mt-3 visually-hidden text-center fw-bold" id="modal-sold-out-message">
+                            <p class="text-danger mt-2 visually-hidden" id="modal-sold-out-message">
                                 <i class="fa-solid fa-circle-xmark me-1"></i> This item is currently sold out.
                             </p>
                         </div>
@@ -306,10 +386,10 @@
         </div>
     </div>
 
-    <div class="modal fade" id="fullSizeModal" tabindex="-1" aria-hidden="true" style="background: rgba(0,0,0,0.9);">
+    <div class="modal fade" id="fullSizeModal" tabindex="-1" aria-hidden="true" style="background: rgba(0,0,0,0.8);">
         <div class="modal-dialog modal-fullscreen modal-dialog-centered" onclick="bootstrap.Modal.getInstance(document.getElementById('fullSizeModal')).hide()">
             <div class="modal-content" style="background: transparent; border: none;">
-                <div class="modal-body d-flex justify-content-center align-items-center position-relative p-0">
+                <div class="modal-body d-flex justify-content-center align-items-center position-relative">
                     <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-4" data-bs-dismiss="modal" aria-label="Close"></button>
                     <img src="" id="fullSizeImage" alt="Full size view">
                 </div>
@@ -318,7 +398,7 @@
     </div>
 
     <div class="toast-container-custom">
-        <div id="addToCartToast" class="toast align-items-center text-white border-0" style="background-color: #7A5C58;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2500">
+        <div id="addToCartToast" class="toast align-items-center text-white border-0" style="background-color: #7A5C58;" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
             <div class="d-flex">
                 <div class="toast-body" id="toast-message"></div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -359,7 +439,7 @@
             document.getElementById('modal-product-title').textContent = productData.title;
             document.getElementById('modal-product-category').textContent = productData.category;
             document.getElementById('modal-product-price').textContent = `${productData.price}€`;
-            document.getElementById('modal-product-full-text').innerHTML = productData.full_text || 'No description provided.';
+            document.getElementById('modal-product-full-text').innerHTML = productData.full_text || 'No description.';
 
             const modalCartBtn = document.getElementById('modal-add-to-cart-btn');
             const soldOutMessage = document.getElementById('modal-sold-out-message');
@@ -377,11 +457,11 @@
             const photos = [productData.photo1, productData.photo2, productData.photo3].filter(p => p);
 
             if (photos.length === 0) {
-                carouselContainer.innerHTML = '<p class="text-center text-muted p-5">No images available.</p>';
+                carouselContainer.innerHTML = '<p class="text-center text-muted p-5">No images.</p>';
             } else {
                 let items = photos.map((p, i) => `
                     <div class="carousel-item ${i === 0 ? 'active' : ''}">
-                        <img src="./static/${p}" class="d-block" alt="Product photo">
+                        <img src="./static/${p}" class="d-block w-100" alt="Product photo">
                     </div>`).join('');
 
                 carouselContainer.innerHTML = `
@@ -397,51 +477,104 @@
             productDetailModalInstance.show();
         }
 
-        // =================================================
-        // SURPRISE ME LOGIC
-        // =================================================
-        function runSurpriseMe() {
-            const products = document.querySelectorAll('.product-item');
-            if (products.length === 0) return;
+        function surpriseMe() {
+            console.log('Surprise Me clicked!'); // Debug
 
-            const btn = document.getElementById('btn-surprise');
-            btn.disabled = true;
-            btn.classList.add('picking-animation');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Picking...';
+            const productsGrid = document.getElementById('productsGrid');
+            if (!productsGrid) {
+                console.error('Products grid not found!');
+                return;
+            }
 
-            let count = 0;
-            const rounds = 12; // Кількість спалахів
+            const allProductCards = Array.from(productsGrid.querySelectorAll('[data-product-id]'));
+            console.log('Total product cards:', allProductCards.length); // Debug
 
-            const interval = setInterval(() => {
-                // Знімаємо підсвічування з усіх
-                products.forEach(p => p.querySelector('.card').classList.remove('highlight-card'));
+            // Фильтруем только доступные товары (не sold out)
+            const availableProducts = allProductCards.filter(card => {
+                const status = card.getAttribute('data-product-status');
+                console.log('Card status:', status); // Debug
+                return status !== 'sold';
+            });
 
-                // Вибираємо рандомний
-                const randomIdx = Math.floor(Math.random() * products.length);
-                const targetCard = products[randomIdx].querySelector('.card');
-                targetCard.classList.add('highlight-card');
+            console.log('Available products:', availableProducts.length); // Debug
 
-                count++;
-                if (count >= rounds) {
-                    clearInterval(interval);
+            if (availableProducts.length === 0) {
+                alert('Sorry, no products available at the moment!');
+                return;
+            }
 
-                    // Фінальний вибір (тільки з тих, що в наявності)
-                    const available = Array.from(document.querySelectorAll('.view-details-btn[data-product-id]'));
-                    const finalChoice = available[Math.floor(Math.random() * available.length)];
+            const surpriseBtn = document.getElementById('surpriseMeBtn');
+            if (!surpriseBtn) {
+                console.error('Surprise button not found!');
+                return;
+            }
 
-                    setTimeout(() => {
-                        targetCard.classList.remove('highlight-card'); // Чистимо останній
-                        btn.disabled = false;
-                        btn.classList.remove('picking-animation');
-                        btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Surprise me!';
+            surpriseBtn.classList.add('spinning');
+            surpriseBtn.disabled = true;
 
-                        // Відкриваємо через API
-                        fetch(`/api/product/${finalChoice.dataset.productId}`)
-                            .then(r => r.json())
-                            .then(p => openProductModal(p));
-                    }, 200);
+            // Анимация случайного мигания карточек
+            let flashCount = 0;
+            const maxFlashes = 8;
+            const flashInterval = setInterval(() => {
+                // Убираем предыдущую подсветку
+                allProductCards.forEach(card => {
+                    const cardElement = card.querySelector('.card');
+                    if (cardElement) {
+                        cardElement.classList.remove('highlight-flash');
+                    }
+                });
+
+                // Добавляем подсветку случайной карточке
+                const randomCard = availableProducts[Math.floor(Math.random() * availableProducts.length)];
+                const cardElement = randomCard.querySelector('.card');
+                if (cardElement) {
+                    cardElement.classList.add('highlight-flash');
                 }
-            }, 120);
+
+                flashCount++;
+
+                if (flashCount >= maxFlashes) {
+                    clearInterval(flashInterval);
+
+                    // Финальный выбор
+                    setTimeout(() => {
+                        const finalChoice = availableProducts[Math.floor(Math.random() * availableProducts.length)];
+                        const productId = finalChoice.getAttribute('data-product-id');
+
+                        console.log('Final product ID:', productId); // Debug
+
+                        // Прокручиваем к выбранному товару
+                        finalChoice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                        // Подсвечиваем финальный выбор
+                        const finalCard = finalChoice.querySelector('.card');
+                        if (finalCard) {
+                            finalCard.classList.add('highlight-flash');
+                        }
+
+                        // Открываем модальное окно
+                        setTimeout(() => {
+                            fetch(`/api/product/${productId}`)
+                                .then(r => {
+                                    if (!r.ok) throw new Error('Failed to fetch product');
+                                    return r.json();
+                                })
+                                .then(p => {
+                                    console.log('Product data:', p); // Debug
+                                    openProductModal(p);
+                                })
+                                .catch(err => {
+                                    console.error('Error fetching product:', err);
+                                    alert('Error loading product. Please try again.');
+                                })
+                                .finally(() => {
+                                    surpriseBtn.classList.remove('spinning');
+                                    surpriseBtn.disabled = false;
+                                });
+                        }, 600);
+                    }, 300);
+                }
+            }, 150);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -456,8 +589,7 @@
                 }
             });
 
-            document.getElementById('btn-surprise').addEventListener('click', runSurpriseMe);
-
+            // ЛОГИКА ПРОСМОТРА ПОЛНОГО РАЗМЕРА
             document.getElementById('btn-view-full-size').addEventListener('click', () => {
                 const activeImg = document.querySelector('#modalCarousel .carousel-item.active img');
                 if (activeImg) {
@@ -471,22 +603,17 @@
                 productDetailModalInstance.hide();
             });
 
-            // Filters Dropdown
+            // SURPRISE ME
+            document.getElementById('surpriseMeBtn').addEventListener('click', surpriseMe);
+
+            // Фильтры
             const dropdown = document.querySelector('.dropdown-content');
-            document.querySelector('.sort-button').addEventListener('click', (e) => {
-                e.stopPropagation();
-                dropdown.classList.toggle('show');
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!dropdown.contains(e.target)) dropdown.classList.remove('show');
-            });
-
+            document.querySelector('.sort-button').addEventListener('click', (e) => { e.stopPropagation(); dropdown.classList.toggle('show'); });
+            document.addEventListener('click', (e) => { if (!dropdown.contains(e.target)) dropdown.classList.remove('show'); });
             document.querySelector('.apply-filters-button').addEventListener('click', () => {
                 const p = Array.from(dropdown.querySelectorAll('input:checked')).map(r => `${r.name}=${r.value}`);
                 window.location.href = p.length ? `/shop?${p.join('&')}` : `/shop`;
             });
-
             document.querySelector('.reset-filters-button').addEventListener('click', () => window.location.href = '/shop');
         });
     </script>
