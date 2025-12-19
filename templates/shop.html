@@ -4,7 +4,6 @@
 
 {% block head %}
     {{ super() }}
-
         /* ================================================= */
         /* ФИРМЕННЫЙ СТИЛЬ КНОПОК И БЕЙДЖЕЙ */
         /* ================================================= */
@@ -148,6 +147,32 @@
             box-shadow: 0 4px 15px rgba(122, 92, 88, 0.3);
             position: relative;
             overflow: hidden;
+        }
+
+        .surprise-me-block .header-with-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .surprise-me-block .new-badge {
+            background-color: #28a745;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .surprise-me-block::before {
@@ -299,7 +324,10 @@
 
         <!-- SURPRISE ME БЛОК -->
         <div class="surprise-me-block">
-            <h3>Don't know what to choose?</h3>
+            <div class="header-with-badge">
+                <h3>Don't know what to choose?</h3>
+                <span class="new-badge">New!</span>
+            </div>
             <p>Let us surprise you with a random selection!</p>
             <button class="btn btn-surprise" id="surpriseMeBtn">
                 <i class="fa-solid fa-shuffle me-2"></i>Surprise me!
