@@ -52,14 +52,25 @@
             border-radius: 2px;
             pointer-events: none;
         }
-        .badge-sale {
-            background-color: rgba(220, 53, 69, 0.85);
-            color: #fff;
+        /* Стандартные статусы */
+        .badge-sale { background-color: rgba(220, 53, 69, 0.9); color: #fff; }
+        .badge-soldout { background-color: rgba(33, 37, 41, 0.9); color: #fff; }
+
+        /* НОВЫЕ СТАТУСЫ */
+        .badge-new { background-color: rgba(0, 123, 255, 0.9); color: #fff; }
+        .badge-hot { background: linear-gradient(45deg, #ff416c, #ff4b2b); color: #fff; }
+        .badge-trending { background: linear-gradient(45deg, #8e2de2, #4a00e0); color: #fff; }
+        .badge-popular { background: linear-gradient(45deg, #11998e, #38ef7d); color: #fff; }
+
+        /* Анимация для HOT */
+        .animate-hot { animation: pulse-hot 1.5s infinite; }
+        @keyframes pulse-hot {
+            0%, 100% { opacity: 1; transform: rotate(-45deg) scale(1); }
+            50% { opacity: 0.8; transform: rotate(-45deg) scale(1.05); }
         }
-        .badge-soldout {
-            background-color: rgba(255, 193, 7, 0.9);
-            color: #000;
-        }
+
+        /* Обязательно добавь это к .card, чтобы ленты не вылезали за скругления */
+        .card { overflow: hidden; }
 
         .card-body {
             display: flex;
@@ -338,13 +349,28 @@
             {% for product in products %}
             <div class="col-12 col-md-6 col-lg-4" data-product-id="{{ product.id }}" data-product-status="{{ product.status }}">
                 <div class="card h-100 shadow-sm">
-                    <div class="product-img-container position-relative">
+                   <div class="product-img-container position-relative">
+                        {# ОБРАБОТКА ВСЕХ СТАТУСОВ (РИББОНЫ) #}
                         {% if product.status == 'sale' %}
                             <span class="status-badge badge-sale">Sale</span>
                         {% elif product.status == 'sold' %}
                             <span class="status-badge badge-soldout">Sold Out</span>
+                        {% elif product.status == 'new' %}
+                            <span class="status-badge badge-new">New</span>
+                        {% elif product.status == 'hot' %}
+                            <span class="status-badge badge-hot animate-hot">Hot</span>
+                        {% elif product.status == 'trending' %}
+                            <span class="status-badge badge-trending">Trending</span>
+                        {% elif product.status == 'popular' %}
+                            <span class="status-badge badge-popular">Popular</span>
                         {% endif %}
 
+                        {% if product.photo1 %}
+                            <img src="{{ './static/' + product.photo1}}"
+                                 class="card-img-top view-details-btn"
+                                 alt="{{ product.title }}"
+                                 data-product-id="{{ product.id }}">
+                        {% endif %}
                         {% if product.photo1 %}
                             <img src="{{ './static/' + product.photo1}}"
                                  class="card-img-top view-details-btn"

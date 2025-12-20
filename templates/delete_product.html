@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Shop - Diordiev Crafts{% endblock %}
+{% block title %}Edit-Product - Diordiev Crafts{% endblock %}
 
 {% block head %}
 {{ super() }}
@@ -25,6 +25,11 @@
         background: rgba(255, 193, 7, 0.85); /* прозрачный желтый */
         color: black;
     }
+    /* Стили для новых статусов */
+    .badge-hot { background: #ff4b2b; }
+    .badge-trending { background: #8e2de2; }
+    .badge-popular { background: #11998e; }
+    .badge-new { background: #007bff; } /* Синий для новинок */
 {% endblock %}
 
 {% block content %}
@@ -40,6 +45,14 @@
                         <div class="status-badge badge-sale">SALE</div>
                     {% elif product.status == 'sold' %}
                         <div class="status-badge badge-sold">SOLD OUT</div>
+                    {% elif product.status == 'hot' %}
+                        <div class="status-badge badge-hot">HOT</div>
+                    {% elif product.status == 'trending' %}
+                        <div class="status-badge badge-trending">TRENDING</div>
+                    {% elif product.status == 'popular' %}
+                        <div class="status-badge badge-popular">POPULAR</div>
+                    {% elif product.status == 'new' %}
+                        <div class="status-badge badge-new">NEW</div>
                     {% endif %}
 
                     <img src="{{ './static/' + product.photo1}}" class="card-img-top" alt="{{ product.title }}">
@@ -61,12 +74,15 @@
                             </form>
                         </div>
 
-
                         <form action="{{ url_for('change_status', product_id=product.id) }}" method="post" class="mt-2">
                             <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
                                 <option value="common" {% if product.status == 'common' %}selected{% endif %}>Common</option>
                                 <option value="sale" {% if product.status == 'sale' %}selected{% endif %}>Sale</option>
                                 <option value="sold" {% if product.status == 'sold' %}selected{% endif %}>Sold</option>
+                                <option value="hot" {% if product.status == 'hot' %}selected{% endif %}>Hot</option>
+                                <option value="trending" {% if product.status == 'trending' %}selected{% endif %}>Trending</option>
+                                <option value="popular" {% if product.status == 'popular' %}selected{% endif %}>Popular</option>
+                                <option value="new" {% if product.status == 'new' %}selected{% endif %}>New</option>
                             </select>
                         </form>
 
