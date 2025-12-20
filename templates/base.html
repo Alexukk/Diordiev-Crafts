@@ -15,31 +15,59 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH572XlSjZ5q+q1s7FmIq1I5s0p60N+Y7qD2oU8p60Q1vR1V77l10R91QWlXmF0V6k/2jF7FmE6WlX4G+Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
-        {% block head %}{% endblock %}
+        /* Стиль для сердца-флага */
+        .ua-heart {
+            display: inline-block;
+            font-size: 0.85rem;
+            margin-left: 6px;
+            vertical-align: middle;
+            background: linear-gradient(to bottom, #0057b7 50%, #ffd700 50%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 1px rgba(0,0,0,0.1));
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover .ua-heart {
+            animation: heartBeat 1.2s infinite;
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.3); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.3); }
+            70% { transform: scale(1); }
+        }
 
         .fixed-bottom-right-btn {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 1050;
-            width: 50px; /* Сделаем иконку меньше, так как Font Awesome выглядит крупнее */
+            width: 50px;
             height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            font-size: 1.5rem; /* Размер иконки */
-            color: #fff; /* Цвет иконки */
+            font-size: 1.5rem;
+            color: #fff;
         }
 
-        /* УДАЛЕНО: Стили для .fixed-bottom-right-btn img, так как мы используем Font Awesome */
+        {% block head %}{% endblock %}
     </style>
 
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('index') }}">Diordiiev Crafts</a>
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+                Diordiiev Crafts
+                <span class="ua-heart">
+                    <i class="fa-solid fa-heart"></i>
+                </span>
+            </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -68,11 +96,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('follow_us') }}"><i class="fa-solid fa-share-nodes"></i>Follow us</a>
                     </li>
-
-
                 </ul>
             </div>
-
         </div>
     </nav>
 
