@@ -16,8 +16,90 @@
 
     <style>
         /* ================================================= */
-        /* ЭКСПЕРИМЕНТАЛЬНЫЙ СТИЛЬ СЕРДЦА */
+        /* GOOGLE TRANSLATE - ПОЛНОЕ СКРЫТИЕ БАННЕРА */
         /* ================================================= */
+
+        /* Убираем все элементы Google Translate */
+        .goog-te-banner-frame.skiptranslate,
+        .goog-te-banner-frame,
+        #goog-gt-tt,
+        .goog-te-balloon-frame,
+        .goog-tooltip,
+        .goog-tooltip:hover,
+        .goog-text-highlight {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        .goog-te-gadget-icon {
+            display: none !important;
+        }
+
+        #google_translate_element {
+            display: none !important;
+        }
+
+        .goog-text-highlight {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+
+        /* КРИТИЧЕСКИ ВАЖНО: убираем смещение body от Google */
+        body {
+            top: 0px !important;
+            position: static !important;
+        }
+
+        html.translated-ltr body,
+        html.translated-rtl body {
+            top: 0px !important;
+            margin-top: 0px !important;
+        }
+
+        /* ================================================= */
+        /* СТИЛЬ КНОПКИ ВЫБОРА ЯЗЫКА */
+        /* ================================================= */
+
+        .lang-selector {
+            margin-left: auto;
+        }
+
+        .lang-selector .dropdown-toggle {
+            background: transparent;
+            border: 1px solid #7A5C58;
+            color: #7A5C58;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .lang-selector .dropdown-toggle:hover {
+            background: #7A5C58;
+            color: #fff;
+        }
+
+        @media (max-width: 991px) {
+            .lang-selector {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+
+            .lang-selector .dropdown-toggle {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        /* ================================================= */
+        /* УКРАИНСКОЕ СЕРДЦЕ (БЕЗ ИЗМЕНЕНИЙ) */
+        /* ================================================= */
+
         .ua-heart-link {
             text-decoration: none;
             display: inline-flex;
@@ -31,17 +113,14 @@
         .ua-heart {
             font-size: 0.9rem;
             margin-left: 6px;
-            /* Двухцветный градиент */
             background: linear-gradient(to bottom, #0057b7 50%, #ffd700 50%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            /* Эффект свечения */
             filter: drop-shadow(0 0 2px rgba(0, 87, 183, 0.4));
             display: inline-block;
             animation: gentlePulse 2s infinite ease-in-out;
         }
 
-        /* Анимация мягкого дыхания */
         @keyframes gentlePulse {
             0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(0, 87, 183, 0.4)); }
             50% { transform: scale(1.15); filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.6)); }
@@ -60,7 +139,6 @@
             100% { transform: scale(1); }
         }
 
-        /* Стили для модалки Украины */
         .modal-ua-content {
             border-top: 5px solid #0057b7;
             border-bottom: 5px solid #ffd700;
@@ -80,6 +158,16 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             font-size: 1.5rem;
             color: #fff;
+        }
+
+        @media (max-width: 576px) {
+            .fixed-bottom-right-btn {
+                bottom: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
         }
 
         {% block head %}{% endblock %}
@@ -111,18 +199,33 @@
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('privacy_policy') }}#contact-us"><i class="fa-solid fa-headset me-1"></i>Contact us</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('follow_us') }}"><i class="fa-solid fa-share-nodes me-1"></i>Follow us</a></li>
                 </ul>
+
+                <!-- Кнопка выбора языка -->
+                <div class="dropdown lang-selector">
+                    <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-globe me-1"></i> Language
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="doGTranslate('en|en')">🇬🇧 English</a></li>
+                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="doGTranslate('en|uk')">🇺🇦 Українська</a></li>
+                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="doGTranslate('en|ro')">🇷🇴 Română</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
+
+    <!-- Google Translate элемент (скрыт) -->
+    <div id="google_translate_element"></div>
 
     <main>
         {% block content %}{% endblock %}
     </main>
 
- <div class="modal fade" id="uaSupportModal" tabindex="-1" aria-hidden="true">
+    <!-- Modal поддержки Украины -->
+    <div class="modal fade" id="uaSupportModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal-ua-content">
-                <div class="ua-line-top"></div>
                 <div class="modal-body text-center p-5">
                     <div class="mb-4">
                         <i class="fa-solid fa-heart-circle-check" style="font-size: 4rem; background: linear-gradient(to bottom, #0057b7 50%, #ffd700 50%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
@@ -141,7 +244,6 @@
                         </button>
                     </div>
                 </div>
-                <div class="ua-line-bottom"></div>
             </div>
         </div>
     </div>
@@ -163,5 +265,47 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/a924c282fb.js" crossorigin="anonymous"></script>
+
+    <!-- Google Translate Scripts -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,uk,ro',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        function doGTranslate(lang_pair) {
+            var lang = lang_pair.split('|')[1];
+            var teCombo = document.querySelector('.goog-te-combo');
+            if (teCombo == null || teCombo.innerHTML == null) {
+                setTimeout(function() { doGTranslate(lang_pair); }, 500);
+            } else {
+                teCombo.value = lang;
+                teCombo.dispatchEvent(new Event('change'));
+            }
+        }
+
+        // Дополнительная защита от Google баннера
+        (function() {
+            var style = document.createElement('style');
+            style.textContent = `
+                body { top: 0px !important; }
+                .skiptranslate { display: none !important; }
+                iframe.skiptranslate { display: none !important; }
+            `;
+            document.head.appendChild(style);
+
+            // Удаляем баннер если он всё равно появится
+            setInterval(function() {
+                var frames = document.querySelectorAll('.goog-te-banner-frame, iframe.skiptranslate');
+                frames.forEach(function(frame) {
+                    if (frame) frame.style.display = 'none';
+                });
+            }, 100);
+        })();
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
