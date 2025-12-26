@@ -307,5 +307,95 @@
         })();
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+/**
+ * Функция сжатия изображения на стороне клиента
+ */
+async function compressImage(file, { quality = 0.7, maxWidth = 1200 }) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                // Пропорциональное изменение размера
+                if (width > maxWidth) {
+                    height = Math.round((maxWidth / width) * height);
+                    width = maxWidth;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        // Возвращаем новый файл с тем же именем
+                        resolve(new File([blob], file.name, {
+                            type: 'image/jpeg',
+                            lastModified: Date.now(),
+                        }));
+                    }
+                }, 'image/jpeg', quality);
+            };
+            img.onerror = (err) => reject(err);
+        };
+        reader.onerror = (err) => reject(err);
+    });
+}
+
+/**
+ * Перехват отправки формы для всех страниц
+ */
+document.addEventListener('submit', async (e) => {
+    const form = e.target;
+    const fileInputs = form.querySelectorAll('input[type="file"]');
+
+    // Если в форме нет файлов или она уже обработана — пропускаем
+    if (fileInputs.length === 0 || form.dataset.compressed === "true") return;
+
+    // Останавливаем отправку, чтобы сжать фото
+    e.preventDefault();
+
+    const submitBtn = form.querySelector('[type="submit"]');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Compressing...';
+    }
+
+    try {
+        const dataTransfer = new DataTransfer();
+
+        for (const input of fileInputs) {
+            for (const file of input.files) {
+                // Сжимаем только картинки
+                if (file.type.startsWith('image/')) {
+                    const compressedFile = await compressImage(file, { quality: 0.75, maxWidth: 1400 });
+                    dataTransfer.items.add(compressedFile);
+                } else {
+                    dataTransfer.items.add(file);
+                }
+            }
+            // Подменяем файлы в инпуте на сжатые
+            input.files = dataTransfer.files;
+        }
+
+        // Помечаем форму как обработанную и отправляем
+        form.dataset.compressed = "true";
+        form.submit();
+    } catch (error) {
+        console.error('Compression error:', error);
+        form.submit(); // В случае ошибки отправляем как есть
+    }
+});
+</script>
+
 </body>
 </html>
