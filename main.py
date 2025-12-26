@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 import os
 from datetime import datetime, timezone
 from PIL import Image
-import io
 
 from bot import notifier
 from werkzeug.utils import secure_filename
@@ -16,7 +15,7 @@ app = Flask(__name__)
 app.permanent_session_lifetime = timedelta(hours=1)
 app.secret_key = os.getenv('SECRET_KEY')
 
-# --- ПІДКЛЮЧЕННЯ ДО SQLITE ЗБЕРЕЖЕНО ---
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///DiordievCrafts.db'
 db = SQLAlchemy(app)
 
@@ -25,7 +24,7 @@ PRODUCTS_FOLDER = 'static/uploads/products'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PRODUCTS_FILES'] = PRODUCTS_FOLDER
 
-# Проверяем, существует ли папка, и создаем ее, если нет
+
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
@@ -42,7 +41,6 @@ class Product(db.Model):
     category = db.Column(db.String(100), nullable=False)
     status = db.Column(db.String(30), nullable=False)
 
-    # ВИПРАВЛЕНО: Додано cascade для коректного видалення продуктів.
     order_items = db.relationship('Order_item', backref='product', lazy='dynamic',
                                   cascade="all, delete-orphan")
 
@@ -88,7 +86,6 @@ class Announcement(db.Model):
     def __repr__(self):
         return f'<Announcement {self.id}>'
 
-    # Зв'язок 'product' видалено, оскільки він визначений у класі Product з backref='product'.
 
 # -------------------------DB MODELS logic ended--------------------------------#
 
@@ -146,7 +143,7 @@ def shop():
     query = Product.query
 
     if category:
-        print(f"Filtering by category: {category}")  # Use f-string for better debugging
+        print(f"Filtering by category: {category}")
         query = query.filter_by(category=category.capitalize())
     else:
         print("No category filter applied.")
@@ -163,30 +160,25 @@ def shop():
 
 @app.route('/api/product/<int:product_id>', methods=['GET'])
 def get_product_details(product_id):
-    """
-    Повертає повні деталі продукту для відображення у модальному вікні.
-    """
+
     # 1. Знаходимо продукт, або повертаємо 404
     product = Product.query.get(product_id)
     if not product:
         return jsonify({'error': 'Product not found'}), 404
 
-    # 2. Формуємо JSON-відповідь
-    # ВАЖЛИВО: Використовуємо .text як повний опис, оскільки у моделі немає full_text
-    # Ціна повинна бути перетворена на str для безпечної передачі
     try:
         price_str = f"{product.price:.2f}"
     except:
-        price_str = str(product.price)  # Запасний варіант, якщо price не float/int
+        price_str = str(product.price)
 
     return jsonify({
         'id': product.id,
         'title': product.title,
         'category': product.category,
         'price': price_str,
-        'full_text': product.text,  # Використовуємо поле 'text' як повний опис
+        'full_text': product.text,
         'status': product.status,
-        # Повертаємо відносні шляхи до фото
+
         'photo1': product.photo1,
         'photo2': product.photo2,
         'photo3': product.photo3
@@ -213,11 +205,10 @@ def get_post_details(post_id):
     return jsonify({
         'id': post.id,
         'title': post.title,
-        'date': post.date.strftime('%Y-%m-%d'),  # Форматируем дату для JS
-        'photo': post.photo,  # Основное фото (для карусели)
-        # Предполагаем, что полное содержание находится в поле 'full_text' или 'text'
+        'date': post.date.strftime('%Y-%m-%d'),
+        'photo': post.photo,
         'full_text': post.full_text if hasattr(post, 'full_text') else post.text,
-        # Если есть дополнительные фото (опционально)
+
         'photo2': post.photo2 if hasattr(post, 'photo2') else None,
         'photo3': post.photo3 if hasattr(post, 'photo3') else None,
     }), 200
@@ -230,13 +221,13 @@ def checkout():
 
 @app.route('/submit_order', methods=['POST'])
 def submit_order():
-    # 1. Отримання даних JSON з фронтенду
+
     try:
         data = request.get_json()
     except:
         return jsonify({'error': 'Invalid JSON format'}), 400
 
-    # Оновлено: 'source' не є обов'язковим, тому перевіряємо лише ключові поля
+
     if not all(k in data for k in ['full_name', 'phone', 'email', 'contact_way', 'cart_items']):
         return jsonify({'error': 'Missing required fields (Name, Phone, Email, Contact Way or Cart Items)'}), 400
 
@@ -247,7 +238,6 @@ def submit_order():
     contact_way = data['contact_way']
     cart_items = data['cart_items']
 
-    # НОВЕ ПОЛЕ: Отримуємо джерело. Якщо не надано, використовуємо значення за замовчуванням 'Not given'.
     source = data.get('source', 'Not given')
 
     if not cart_items:
@@ -255,7 +245,7 @@ def submit_order():
 
     product_ids = [int(id) for id in cart_items.keys()]
 
-    # ПРИПУЩЕННЯ: Product.query коректно визначено
+
     products_map = {p.id: p for p in Product.query.filter(Product.id.in_(product_ids)).all()}
 
     order_item_list = []
@@ -273,7 +263,6 @@ def submit_order():
         item_subtotal = product.price * amount
         total_price += item_subtotal
 
-        # ПРИПУЩЕННЯ: Order_item коректно визначено
         order_item = Order_item(
             item_id=product.id,
             amount=amount,
@@ -283,18 +272,17 @@ def submit_order():
     if total_price == 0.0:
         return jsonify({'error': 'Failed to calculate total price or cart contains invalid items.'}), 400
 
-    # Створення об'єкта замовлення, включаючи нове поле 'source'
+
     new_order = Order(
         full_name=full_name,
         email=email,
         phone=phone,
         contact_way=contact_way,
-        source=source,  # <--- ЗБЕРІГАЄМО НОВЕ ПОЛЕ
+        source=source,
         total_price=total_price,
     )
 
     try:
-        # ПРИПУЩЕННЯ: db.session коректно визначено
         db.session.add(new_order)
         db.session.flush()
 
@@ -306,7 +294,7 @@ def submit_order():
         db.session.commit()
 
         try:
-            # ПРИПУЩЕННЯ: notifier коректно визначено
+
             notifier(new_order)
         except Exception as telegram_error:
 
@@ -410,14 +398,13 @@ def admin_announcement():
 
     announcement = Announcement.query.first()
     if not announcement:
-        # Встановлюємо default 'danger' при першому створенні
         announcement = Announcement(text='', is_active=False, color='danger')
         db.session.add(announcement)
         db.session.commit()
 
     if request.method == 'POST':
         announcement.text = request.form.get('text', '').strip()
-        announcement.color = request.form.get('color', 'danger')  # <-- ЗМІНА ТУТ: Отримуємо колір
+        announcement.color = request.form.get('color', 'danger')
 
         if not announcement.text:
             announcement.is_active = False
@@ -460,10 +447,10 @@ def get_cart_details():
             serialized_products.append({
                 'id': product.id,
                 'title': product.title,
-                'price': product.price,  # Актуальна ціна!
+                'price': product.price,
                 'category': product.category,
                 'status' : product.status,
-                'photo_url': product.photo1  # Назву файлу для подальшого використання у JS
+                'photo_url': product.photo1
             })
 
         return jsonify({'products': serialized_products}), 200
@@ -519,47 +506,39 @@ def create_product():
             category = request.form.get('category')
             status = request.form.get('status')
 
-            # Вспомогательная функция для сохранения файла С СЖАТИЕМ
+
             def save_and_get_path(file):
                 if file and file.filename:
-                    # 1. Генерация имени (оставляем твою логику без изменений)
                     filename = secure_filename(file.filename)
                     timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
                     filename_with_ts = f"{timestamp}_{filename}"
 
-                    # Полный путь для сохранения на сервере
                     full_save_path = os.path.join(app.config['PRODUCTS_FILES'], filename_with_ts)
 
-                    # --- БЛОК СЖАТИЯ ---
+
                     try:
-                        # Открываем изображение
+
                         img = Image.open(file)
 
-                        # Конвертируем в RGB (нужно для сохранения в JPEG, если был PNG)
+
                         if img.mode in ("RGBA", "P"):
                             img = img.convert("RGB")
 
-                        # Уменьшаем размер, если фото слишком огромное (например, больше 1600px)
-                        # Это сильно ускорит загрузку сайта у юзера
+
                         max_size = (1600, 1600)
                         img.thumbnail(max_size, Image.Resampling.LANCZOS)
 
-                        # Сохраняем сжатое фото
-                        # quality=75 — это стандарт «золотой середины»
                         img.save(full_save_path, "JPEG", quality=75, optimize=True)
                     except Exception as compression_error:
-                        # Если вдруг Pillow не смог прочитать файл (не картинка),
-                        # сохраняем как есть оригинальным методом
-                        print(f"Compression failed, saving original: {compression_error}")
-                        file.seek(0)  # Сброс указателя файла в начало
-                        file.save(full_save_path)
-                    # --- КОНЕЦ БЛОКА СЖАТИЯ ---
 
-                    # Возвращаем путь для БД (оставляем твою логику)
+                        print(f"Compression failed, saving original: {compression_error}")
+                        file.seek(0)
+                        file.save(full_save_path)
+
                     return os.path.join('uploads', 'products', filename_with_ts)
                 return None
 
-            # Работа с фото и БД остается прежней
+
             photo_path1 = save_and_get_path(request.files.get('photo1'))
             photo_path2 = save_and_get_path(request.files.get('photo2'))
             photo_path3 = save_and_get_path(request.files.get('photo3'))
@@ -621,14 +600,11 @@ def delete_product(product_id):
     ]
 
     try:
-        # Сначала удаляем из БД (CASCADE позаботится о Order_item)
         db.session.delete(product_to_delete)
         db.session.commit()
 
-        # Затем удаляем файлы
         for filename in photo_filenames:
             if filename:
-                # Используем правильную переменную для пути к папке продуктов
                 file_path = os.path.join('./static/', filename)
                 if os.path.exists(file_path):
                     os.remove(file_path)
@@ -688,35 +664,27 @@ def create_post():
             photo_path = None
 
             if uploaded_file and uploaded_file.filename:
-                # 1. Безопасное и уникальное имя (чтобы не затереть старые фото)
                 filename = secure_filename(uploaded_file.filename)
                 timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
                 filename_with_ts = f"{timestamp}_{filename}"
 
-                # Полный путь для сохранения
                 full_save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename_with_ts)
 
-                # 2. Блок сжатия изображения
                 try:
                     img = Image.open(uploaded_file)
 
-                    # Конвертируем в RGB для JPEG
                     if img.mode in ("RGBA", "P"):
                         img = img.convert("RGB")
 
-                    # Для блога 1200px по ширине — идеальный стандарт
                     max_size = (1200, 1200)
                     img.thumbnail(max_size, Image.Resampling.LANCZOS)
 
-                    # Сохраняем сжатую версию
                     img.save(full_save_path, "JPEG", quality=75, optimize=True)
                 except Exception as compression_error:
-                    # Если не картинка или ошибка — сохраняем оригинал
                     print(f"Post image compression failed: {compression_error}")
                     uploaded_file.seek(0)
                     uploaded_file.save(full_save_path)
 
-                # В базу сохраняем только имя файла (или путь, зависит от твоей модели Post)
                 photo_path = filename_with_ts
 
             new_post = Post(title=title, photo=photo_path, text=text)
@@ -807,7 +775,6 @@ def follow_us():
     return render_template('follow_us.html')
 
 # -------------------------ADMIN logic ended--------------------------------#
-# Убедись, что твоя база данных создается при запуске приложения
 with app.app_context():
     db.create_all()
 
