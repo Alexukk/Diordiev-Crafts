@@ -4,6 +4,8 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 from datetime import datetime, timezone
+from PIL import Image
+import io
 
 from bot import notifier
 from werkzeug.utils import secure_filename
@@ -517,21 +519,47 @@ def create_product():
             category = request.form.get('category')
             status = request.form.get('status')
 
-            # Вспомогательная функция для сохранения файла
+            # Вспомогательная функция для сохранения файла С СЖАТИЕМ
             def save_and_get_path(file):
                 if file and file.filename:
-                    # Создаём уникальное имя файла
+                    # 1. Генерация имени (оставляем твою логику без изменений)
                     filename = secure_filename(file.filename)
                     timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
                     filename_with_ts = f"{timestamp}_{filename}"
 
-                    # Сохраняем файл в правильную папку
-                    file.save(os.path.join(app.config['PRODUCTS_FILES'], filename_with_ts))
+                    # Полный путь для сохранения на сервере
+                    full_save_path = os.path.join(app.config['PRODUCTS_FILES'], filename_with_ts)
 
-                    # Возвращаем относительный путь для БД
+                    # --- БЛОК СЖАТИЯ ---
+                    try:
+                        # Открываем изображение
+                        img = Image.open(file)
+
+                        # Конвертируем в RGB (нужно для сохранения в JPEG, если был PNG)
+                        if img.mode in ("RGBA", "P"):
+                            img = img.convert("RGB")
+
+                        # Уменьшаем размер, если фото слишком огромное (например, больше 1600px)
+                        # Это сильно ускорит загрузку сайта у юзера
+                        max_size = (1600, 1600)
+                        img.thumbnail(max_size, Image.Resampling.LANCZOS)
+
+                        # Сохраняем сжатое фото
+                        # quality=75 — это стандарт «золотой середины»
+                        img.save(full_save_path, "JPEG", quality=75, optimize=True)
+                    except Exception as compression_error:
+                        # Если вдруг Pillow не смог прочитать файл (не картинка),
+                        # сохраняем как есть оригинальным методом
+                        print(f"Compression failed, saving original: {compression_error}")
+                        file.seek(0)  # Сброс указателя файла в начало
+                        file.save(full_save_path)
+                    # --- КОНЕЦ БЛОКА СЖАТИЯ ---
+
+                    # Возвращаем путь для БД (оставляем твою логику)
                     return os.path.join('uploads', 'products', filename_with_ts)
                 return None
 
+            # Работа с фото и БД остается прежней
             photo_path1 = save_and_get_path(request.files.get('photo1'))
             photo_path2 = save_and_get_path(request.files.get('photo2'))
             photo_path3 = save_and_get_path(request.files.get('photo3'))
@@ -656,16 +684,40 @@ def create_post():
             title = request.form.get('title')
             text = request.form.get('text')
 
-
             uploaded_file = request.files.get('photo')
             photo_path = None
-            if uploaded_file and uploaded_file.filename:
-                # Делаем имя файла безопасным
-                filename = secure_filename(uploaded_file.filename)
-                # Сохраняем файл в папку загрузок
-                uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-                photo_path = filename
+            if uploaded_file and uploaded_file.filename:
+                # 1. Безопасное и уникальное имя (чтобы не затереть старые фото)
+                filename = secure_filename(uploaded_file.filename)
+                timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
+                filename_with_ts = f"{timestamp}_{filename}"
+
+                # Полный путь для сохранения
+                full_save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename_with_ts)
+
+                # 2. Блок сжатия изображения
+                try:
+                    img = Image.open(uploaded_file)
+
+                    # Конвертируем в RGB для JPEG
+                    if img.mode in ("RGBA", "P"):
+                        img = img.convert("RGB")
+
+                    # Для блога 1200px по ширине — идеальный стандарт
+                    max_size = (1200, 1200)
+                    img.thumbnail(max_size, Image.Resampling.LANCZOS)
+
+                    # Сохраняем сжатую версию
+                    img.save(full_save_path, "JPEG", quality=75, optimize=True)
+                except Exception as compression_error:
+                    # Если не картинка или ошибка — сохраняем оригинал
+                    print(f"Post image compression failed: {compression_error}")
+                    uploaded_file.seek(0)
+                    uploaded_file.save(full_save_path)
+
+                # В базу сохраняем только имя файла (или путь, зависит от твоей модели Post)
+                photo_path = filename_with_ts
 
             new_post = Post(title=title, photo=photo_path, text=text)
             db.session.add(new_post)
@@ -673,8 +725,10 @@ def create_post():
 
             flash('Post created successfully!', 'success')
             return redirect(url_for('posts'))
+
         except Exception as e:
             db.session.rollback()
+            print(f"Error: {e}")
             flash(f'Error occurred while creating the post: {e}', 'error')
             return redirect(url_for('create_post'))
     else:
